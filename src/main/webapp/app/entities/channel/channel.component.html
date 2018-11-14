@@ -1,0 +1,62 @@
+<div>
+    <h2 id="page-heading">
+        <span>Channels</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-channel" [routerLink]="['/channel/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span >
+            Create new Channel
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="table-responsive" *ngIf="channels">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
+            <th jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="channelID"><span>Channel ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="name"><span>Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="teamID"><span>Team ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="isPrivate"><span>Is Private</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="purpose"><span>Purpose</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+            <tr *ngFor="let channel of channels ;trackBy: trackId">
+                <td><a [routerLink]="['/channel', channel.id, 'view' ]">{{channel.id}}</a></td>
+                <td>{{channel.channelID}}</td>
+                <td>{{channel.name}}</td>
+                <td>{{channel.teamID}}</td>
+                <td>{{channel.isPrivate}}</td>
+                <td>{{channel.purpose}}</td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/channel', channel.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/channel', channel.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'channel/'+ channel.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

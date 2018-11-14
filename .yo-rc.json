@@ -1,0 +1,27 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.pif.insatplatform"
+    },
+    "jhipsterVersion": "3.7.1",
+    "baseName": "insatplatform",
+    "packageName": "com.pif.insatplatform",
+    "packageFolder": "com/pif/insatplatform",
+    "serverPort": "8080",
+    "authenticationType": "session",
+    "clusteredHttpSession": false,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Memory",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": false,
+    "buildTool": "gradle",
+    "enableSocialSignIn": false,
+    "rememberMeKey": "MTBlZDY1OTk5Yjc2MjRkZDY3ZDkwZTE1ZWY1Nzg5MTQ0NWU0MjA4OTcxZDMyMTUzZTcxOGFhM2UwMWIyYjlkZmQ3OTljZTkwNThlYmViZDM0M2Y2OWFiM2JhNWY5ZDZkYzBhODg3ZDkwOGQyYmY1ZTFiYzFkNDhkNjhjZGFmNDE=",
+    "useSass": false,
+    "applicationType": "monolith",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "enableTranslation": false
+  }
+}

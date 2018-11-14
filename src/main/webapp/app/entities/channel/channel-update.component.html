@@ -1,0 +1,73 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-channel-heading">Create or edit a Channel</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!channel.id">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="channel.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_channelID">Channel ID</label>
+                    <input type="text" class="form-control" name="channelID" id="field_channelID"
+                        [(ngModel)]="channel.channelID" required/>
+                    <div [hidden]="!(editForm.controls.channelID?.dirty && editForm.controls.channelID?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.channelID?.errors?.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_name">Name</label>
+                    <input type="text" class="form-control" name="name" id="field_name"
+                        [(ngModel)]="channel.name" required/>
+                    <div [hidden]="!(editForm.controls.name?.dirty && editForm.controls.name?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.name?.errors?.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_teamID">Team ID</label>
+                    <input type="text" class="form-control" name="teamID" id="field_teamID"
+                        [(ngModel)]="channel.teamID" required/>
+                    <div [hidden]="!(editForm.controls.teamID?.dirty && editForm.controls.teamID?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.teamID?.errors?.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_isPrivate">Is Private</label>
+                    <input type="checkbox" class="form-control" name="isPrivate" id="field_isPrivate"
+                        [(ngModel)]="channel.isPrivate" />
+                    <div [hidden]="!(editForm.controls.isPrivate?.dirty && editForm.controls.isPrivate?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.isPrivate?.errors?.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_purpose">Purpose</label>
+                    <input type="text" class="form-control" name="purpose" id="field_purpose"
+                        [(ngModel)]="channel.purpose" />
+                </div>
+
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

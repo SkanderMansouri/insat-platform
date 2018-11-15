@@ -35,7 +35,8 @@ public class IntegrationServiceImpl implements IntegrationService {
      */
     @Override
     public Integration save(Integration integration) {
-        log.debug("Request to save Integration : {}", integration);        return integrationRepository.save(integration);
+        log.debug("Request to save Integration : {}", integration);
+        return integrationRepository.save(integration);
     }
 
     /**

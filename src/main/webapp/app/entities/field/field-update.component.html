@@ -1,0 +1,71 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-field-heading">Create or edit a Field</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!field.id">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="field.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_section">Section</label>
+                    <input type="text" class="form-control" name="section" id="field_section"
+                        [(ngModel)]="field.section" required/>
+                    <div [hidden]="!(editForm.controls.section?.dirty && editForm.controls.section?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.section?.errors?.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_year">Year</label>
+                    <input type="number" class="form-control" name="year" id="field_year"
+                        [(ngModel)]="field.year" required min="1" jhiMin="1" max="5" jhiMax="5"/>
+                    <div [hidden]="!(editForm.controls.year?.dirty && editForm.controls.year?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.year?.errors?.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.year?.errors?.min">
+                            This field should be at least 1.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.year?.errors?.max">
+                            This field cannot be more than 5.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.year?.errors?.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_belongs">Belongs</label>
+                    <select class="form-control" id="field_belongs" name="belongs" [(ngModel)]="field.belongs"  required>
+                        <option *ngIf="!editForm.value.belongs" [ngValue]="null" selected></option>
+                        <option [ngValue]="userOption.id === field.belongs?.id ? field.belongs : userOption" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.belongs?.dirty && editForm.controls.belongs?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.belongs?.errors?.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

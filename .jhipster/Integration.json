@@ -1,0 +1,53 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "userIdSlackUserRelationship",
+            "otherEntityName": "slackUser",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "integration"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "accessToken",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "scope",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "teamId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "teamName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "botId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "botAccessToken",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "userId",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "teamUrl",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20181115175051",
+    "dto": "no",
+    "searchEngine": false,
+    "service": "serviceImpl",
+    "entityTableName": "integration",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}

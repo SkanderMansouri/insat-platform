@@ -10,6 +10,7 @@
 node/
 node_tmp/
 node_modules/
+package-lock.json
 
 ######################
 # SASS

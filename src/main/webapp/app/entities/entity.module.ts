@@ -1,13 +1,17 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-import { InsatplatformSlackUserModule } from './slack-user/slack-user.module';
-import { InsatplatformIntegrationModule } from './integration/integration.module';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { InsatplatformSlackChannelModule } from './slack-channel/slack-channel.module';
+import { InsatplatformFieldModule } from "./field/field.module";
+import { InsatplatformSlackUserModule } from "./slack-user/slack-user.module";
+import { InsatplatformIntegrationModule } from "./integration/integration.module";
+
+
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
 @NgModule({
   // prettier-ignore
   imports: [
+        InsatplatformFieldModule,
         InsatplatformSlackUserModule,
         InsatplatformIntegrationModule,
         InsatplatformSlackChannelModule,

@@ -370,6 +370,14 @@
             <artifactId>spring-security-data</artifactId>
         </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
+        
+        <!-- https://mvnrepository.com/artifact/com.github.seratch/jslack -->
+        <dependency>
+            <groupId>com.github.seratch</groupId>
+            <artifactId>jslack</artifactId>
+            <version>1.1.6</version>
+        </dependency>
+
 
         <!-- jslack-library-dependency -->
         <dependency>

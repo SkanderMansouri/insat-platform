@@ -47,8 +47,6 @@ public class Integration implements Serializable {
     @Column(name = "team_url")
     private String teamUrl;
 
-    @OneToMany(mappedBy = "integration")
-    private Set<SlackUser> userIdSlackUserRelationships = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -163,18 +161,6 @@ public class Integration implements Serializable {
         this.teamUrl = teamUrl;
     }
 
-    public Set<SlackUser> getUserIdSlackUserRelationships() {
-        return userIdSlackUserRelationships;
-    }
-
-    public Integration userIdSlackUserRelationships(Set<SlackUser> slackUsers) {
-        this.userIdSlackUserRelationships = slackUsers;
-        return this;
-    }
-
-    public void setUserIdSlackUserRelationships(Set<SlackUser> slackUsers) {
-        this.userIdSlackUserRelationships = slackUsers;
-    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override

@@ -1,0 +1,68 @@
+<div>
+    <h2 id="page-heading">
+        <span>Integrations</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-integration" [routerLink]="['/integration/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span >
+            Create new Integration
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="table-responsive" *ngIf="integrations">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span>ID</span></th>
+            <th><span>Access Token</span></th>
+            <th><span>Scope</span></th>
+            <th><span>Team Id</span></th>
+            <th><span>Team Name</span></th>
+            <th><span>Bot Id</span></th>
+            <th><span>Bot Access Token</span></th>
+            <th><span>User Id</span></th>
+            <th><span>Team Url</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let integration of integrations ;trackBy: trackId">
+                <td><a [routerLink]="['/integration', integration.id, 'view' ]">{{integration.id}}</a></td>
+                <td>{{integration.accessToken}}</td>
+                <td>{{integration.scope}}</td>
+                <td>{{integration.teamId}}</td>
+                <td>{{integration.teamName}}</td>
+                <td>{{integration.botId}}</td>
+                <td>{{integration.botAccessToken}}</td>
+                <td>{{integration.userId}}</td>
+                <td>{{integration.teamUrl}}</td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/integration', integration.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/integration', integration.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'integration/'+ integration.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

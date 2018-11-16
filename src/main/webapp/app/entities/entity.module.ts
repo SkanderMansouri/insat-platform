@@ -1,5 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
-
+import { InsatplatformFieldModule } from "./field/field.module";
 import { InsatplatformSlackUserModule } from "./slack-user/slack-user.module";
 import { InsatplatformIntegrationModule } from "./integration/integration.module";
 import { InsatplatformSlackChannelModule } from "./slack-channel/slack-channel.module";
@@ -8,6 +8,7 @@ import { InsatplatformSlackChannelModule } from "./slack-channel/slack-channel.m
 @NgModule({
   // prettier-ignore
   imports: [
+        InsatplatformFieldModule,
         InsatplatformSlackUserModule,
         InsatplatformIntegrationModule,
         InsatplatformSlackChannelModule,

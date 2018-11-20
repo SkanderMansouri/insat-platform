@@ -8,6 +8,8 @@
             "entities": {
                 "main": "Entités",
                 "integration": "Integration",
+                "field": "Field",
+                "slackUser": "Slack User",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

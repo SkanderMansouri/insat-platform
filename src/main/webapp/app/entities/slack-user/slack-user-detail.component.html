@@ -1,0 +1,43 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="slackUser">
+            <h2><span jhiTranslate="insatApp.slackUser.detail.title">Slack User</span> {{slackUser.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="insatApp.slackUser.teamId">Team Id</span></dt>
+                <dd>
+                    <span>{{slackUser.teamId}}</span>
+                </dd>
+                <dt><span jhiTranslate="insatApp.slackUser.slackId">Slack Id</span></dt>
+                <dd>
+                    <span>{{slackUser.slackId}}</span>
+                </dd>
+                <dt><span jhiTranslate="insatApp.slackUser.userName">User Name</span></dt>
+                <dd>
+                    <span>{{slackUser.userName}}</span>
+                </dd>
+                <dt><span jhiTranslate="insatApp.slackUser.email">Email</span></dt>
+                <dd>
+                    <span>{{slackUser.email}}</span>
+                </dd>
+                <dt><span jhiTranslate="insatApp.slackUser.isBot">Is Bot</span></dt>
+                <dd>
+                    <span>{{slackUser.isBot}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/slack-user', slackUser.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+{
+    "insatApp": {
+        "slackUser": {
+            "home": {
+                "title": "SlackUsers",
+                "createLabel": "Créer un nouveau Slack User",
+                "createOrEditLabel": "Créer ou éditer un Slack User",
+                "search": "Recherche pour Slack User"
+            },
+            "created": "Un nouveau Slack User a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Slack User avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Slack User avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Slack User {{ id }} ?"
+            },
+            "detail": {
+                "title": "Slack User"
+            },
+            "teamId": "Team Id",
+            "slackId": "Slack Id",
+            "userName": "User Name",
+            "email": "Email",
+            "isBot": "Is Bot"
+        }
+    }
+}

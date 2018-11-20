@@ -1,0 +1,22 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "year",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "section",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20181120104736",
+    "dto": "no",
+    "searchEngine": "elasticsearch",
+    "service": "serviceImpl",
+    "entityTableName": "field",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}

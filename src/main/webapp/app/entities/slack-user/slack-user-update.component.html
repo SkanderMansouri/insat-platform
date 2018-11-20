@@ -1,0 +1,49 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-slack-user-heading" jhiTranslate="insatApp.slackUser.home.createOrEditLabel">Create or edit a Slack User</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!slackUser.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="slackUser.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="insatApp.slackUser.teamId" for="field_teamId">Team Id</label>
+                    <input type="text" class="form-control" name="teamId" id="field_teamId"
+                        [(ngModel)]="slackUser.teamId" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="insatApp.slackUser.slackId" for="field_slackId">Slack Id</label>
+                    <input type="text" class="form-control" name="slackId" id="field_slackId"
+                        [(ngModel)]="slackUser.slackId" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="insatApp.slackUser.userName" for="field_userName">User Name</label>
+                    <input type="text" class="form-control" name="userName" id="field_userName"
+                        [(ngModel)]="slackUser.userName" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="insatApp.slackUser.email" for="field_email">Email</label>
+                    <input type="text" class="form-control" name="email" id="field_email"
+                        [(ngModel)]="slackUser.email" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="insatApp.slackUser.isBot" for="field_isBot">Is Bot</label>
+                    <input type="checkbox" class="form-control" name="isBot" id="field_isBot"
+                        [(ngModel)]="slackUser.isBot" />
+                </div>
+
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -36,6 +36,11 @@ public class Integration implements Serializable {
     @Column(name = "team_url")
     private String teamUrl;
 
+   @ManyToOne
+   @JoinColumn(name = "user_id",referencedColumnName = "id")
+   private User user ;
+
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;

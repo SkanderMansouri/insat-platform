@@ -8,6 +8,7 @@
     <include file="config/liquibase/changelog/20181120103018_added_entity_Integration.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20181120104736_added_entity_Field.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20181120105113_added_entity_SlackUser.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181120210000_added_FK_ManyToOne_Integration_User.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20181121074014_added_entity_SlackChannel.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->

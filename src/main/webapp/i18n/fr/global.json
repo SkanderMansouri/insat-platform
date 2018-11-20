@@ -10,6 +10,7 @@
                 "integration": "Integration",
                 "field": "Field",
                 "slackUser": "Slack User",
+                "club": "Club",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

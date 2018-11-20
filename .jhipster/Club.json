@@ -1,0 +1,26 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "president",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "field",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20181120122039",
+    "dto": "mapstruct",
+    "searchEngine": "elasticsearch",
+    "service": "serviceImpl",
+    "entityTableName": "club",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}

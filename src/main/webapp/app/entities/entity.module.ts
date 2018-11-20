@@ -3,6 +3,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { InsatIntegrationModule } from './integration/integration.module';
 import { InsatFieldModule } from './field/field.module';
 import { InsatSlackUserModule } from './slack-user/slack-user.module';
+import { InsatClubModule } from './club/club.module';
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
 @NgModule({
@@ -11,6 +12,7 @@ import { InsatSlackUserModule } from './slack-user/slack-user.module';
         InsatIntegrationModule,
         InsatFieldModule,
         InsatSlackUserModule,
+        InsatClubModule,
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
     declarations: [],

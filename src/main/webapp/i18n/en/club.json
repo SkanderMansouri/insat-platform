@@ -1,0 +1,24 @@
+{
+    "insatApp": {
+        "club": {
+            "home": {
+                "title": "Clubs",
+                "createLabel": "Create a new Club",
+                "createOrEditLabel": "Create or edit a Club",
+                "search": "Search for Club"
+            },
+            "created": "A new Club is created with identifier {{ param }}",
+            "updated": "A Club is updated with identifier {{ param }}",
+            "deleted": "A Club is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Club {{ id }}?"
+            },
+            "detail": {
+                "title": "Club"
+            },
+            "name": "Name",
+            "president": "President",
+            "field": "Field"
+        }
+    }
+}

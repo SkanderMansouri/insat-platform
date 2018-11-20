@@ -1,0 +1,39 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "accessToken",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "teamId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "scope",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldName": "score",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "teamName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "teamUrl",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20181120103018",
+    "dto": "no",
+    "searchEngine": "elasticsearch",
+    "service": "serviceImpl",
+    "entityTableName": "integration",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

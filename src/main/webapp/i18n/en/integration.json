@@ -1,0 +1,27 @@
+{
+    "insatApp": {
+        "integration": {
+            "home": {
+                "title": "Integrations",
+                "createLabel": "Create a new Integration",
+                "createOrEditLabel": "Create or edit a Integration",
+                "search": "Search for Integration"
+            },
+            "created": "A new Integration is created with identifier {{ param }}",
+            "updated": "A Integration is updated with identifier {{ param }}",
+            "deleted": "A Integration is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Integration {{ id }}?"
+            },
+            "detail": {
+                "title": "Integration"
+            },
+            "accessToken": "Access Token",
+            "teamId": "Team Id",
+            "scope": "Scope",
+            "score": "Score",
+            "teamName": "Team Name",
+            "teamUrl": "Team Url"
+        }
+    }
+}

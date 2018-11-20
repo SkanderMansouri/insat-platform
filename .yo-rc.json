@@ -1,0 +1,39 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "insat.company.platform",
+      "nativeLanguage": "en"
+    },
+    "jhipsterVersion": "5.7.0",
+    "applicationType": "monolith",
+    "baseName": "insat",
+    "packageName": "insat.company.platform",
+    "packageFolder": "insat/company/platform",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": false,
+    "websocket": "spring-websocket",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Memory",
+    "prodDatabaseType": "mysql",
+    "searchEngine": "elasticsearch",
+    "messageBroker": "kafka",
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": true,
+    "jwtSecretKey": "ZDRiMzBhZDFlNTBkMDMyOWJjZWZiNDA3YmQ1OGVjNjYzNzcyYWEyOGI1MjhiYzhiMzE1NTc3MjIyYzhiZTIxZmRjNzAwMzFkNTM4NTgxN2U2MjFjNjJiNDA1NmI0MGIzNzJkZWZjZTNmNjU0Y2FmMGM2ZWJmMTFhNTJlNWEwM2E=",
+    "clientFramework": "angularX",
+    "useSass": false,
+    "clientPackageManager": "npm",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "otherModules": [],
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": [
+      "en",
+      "fr"
+    ]
+  }
+}

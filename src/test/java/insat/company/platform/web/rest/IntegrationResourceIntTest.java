@@ -94,7 +94,7 @@ public class IntegrationResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final IntegrationResource integrationResource = new IntegrationResource(integrationService);
+        final IntegrationResource integrationResource = new IntegrationResource(integrationService, userRepository);
         this.restIntegrationMockMvc = MockMvcBuilders.standaloneSetup(integrationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

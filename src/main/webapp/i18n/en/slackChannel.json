@@ -1,0 +1,25 @@
+{
+    "insatApp": {
+        "slackChannel": {
+            "home": {
+                "title": "Slack Channels",
+                "createLabel": "Create a new Slack Channel",
+                "createOrEditLabel": "Create or edit a Slack Channel",
+                "search": "Search for Slack Channel"
+            },
+            "created": "A new Slack Channel is created with identifier {{ param }}",
+            "updated": "A Slack Channel is updated with identifier {{ param }}",
+            "deleted": "A Slack Channel is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Slack Channel {{ id }}?"
+            },
+            "detail": {
+                "title": "Slack Channel"
+            },
+            "channelId": "Channel Id",
+            "name": "Name",
+            "teamId": "Team Id",
+            "isPrivate": "Is Private"
+        }
+    }
+}

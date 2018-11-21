@@ -2,6 +2,8 @@ package insat.company.platform.service;
 
 import insat.company.platform.domain.Integration;
 
+import insat.company.platform.domain.User;
+import insat.company.platform.service.dto.IntegrationDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,6 +13,14 @@ import java.util.Optional;
  * Service Interface for managing Integration.
  */
 public interface IntegrationService {
+
+    /**
+     * Save a integration.
+     *
+     * @param integration the entity to save
+     * @return the persisted entity
+     */
+    Integration save(IntegrationDTO integration, User user);
 
     /**
      * Save a integration.

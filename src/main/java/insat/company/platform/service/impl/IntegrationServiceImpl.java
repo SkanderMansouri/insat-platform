@@ -1,9 +1,11 @@
 package insat.company.platform.service.impl;
 
+import insat.company.platform.domain.User;
 import insat.company.platform.service.IntegrationService;
 import insat.company.platform.domain.Integration;
 import insat.company.platform.repository.IntegrationRepository;
 import insat.company.platform.repository.search.IntegrationSearchRepository;
+import insat.company.platform.service.dto.IntegrationDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +49,14 @@ public class IntegrationServiceImpl implements IntegrationService {
         integrationSearchRepository.save(result);
         return result;
     }
+    @Override
+    public Integration save(IntegrationDTO integrationDTO , User user ) {
+        log.debug("Request to save Integration : {}", integrationDTO);
+        Integration result = integrationRepository.save(new Integration(integrationDTO, user));
+        integrationSearchRepository.save(result);
+        return result;
+    }
+
 
     /**
      * Get all the integrations.

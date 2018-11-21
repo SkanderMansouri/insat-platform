@@ -2,6 +2,8 @@ package insat.company.platform.service;
 
 import insat.company.platform.domain.Integration;
 
+import insat.company.platform.domain.User;
+import insat.company.platform.service.dto.IntegrationDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -20,6 +22,7 @@ public interface IntegrationService {
      */
     Integration save(Integration integration);
 
+    Integration save(IntegrationDTO integrationDTO , User user);
     /**
      * Get all the integrations.
      *

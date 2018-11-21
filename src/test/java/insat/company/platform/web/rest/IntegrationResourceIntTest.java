@@ -4,6 +4,7 @@ import insat.company.platform.InsatApp;
 
 import insat.company.platform.domain.Integration;
 import insat.company.platform.repository.IntegrationRepository;
+import insat.company.platform.repository.UserRepository;
 import insat.company.platform.repository.search.IntegrationSearchRepository;
 import insat.company.platform.service.IntegrationService;
 import insat.company.platform.web.rest.errors.ExceptionTranslator;
@@ -13,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.OverrideAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -65,6 +67,9 @@ public class IntegrationResourceIntTest {
     private IntegrationRepository integrationRepository;
 
     @Autowired
+    private UserRepository userRepository ;
+
+    @Autowired
     private IntegrationService integrationService;
 
     /**
@@ -94,7 +99,7 @@ public class IntegrationResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final IntegrationResource integrationResource = new IntegrationResource(integrationService);
+        final IntegrationResource integrationResource = new IntegrationResource(integrationService, userRepository);
         this.restIntegrationMockMvc = MockMvcBuilders.standaloneSetup(integrationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

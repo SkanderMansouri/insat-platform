@@ -2,7 +2,10 @@ package insat.company.platform.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import insat.company.platform.domain.Integration;
+import insat.company.platform.domain.User;
+import insat.company.platform.repository.UserRepository;
 import insat.company.platform.service.IntegrationService;
+import insat.company.platform.service.dto.IntegrationDTO;
 import insat.company.platform.web.rest.errors.BadRequestAlertException;
 import insat.company.platform.web.rest.util.HeaderUtil;
 import insat.company.platform.web.rest.util.PaginationUtil;
@@ -22,9 +25,6 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Integration.
@@ -39,25 +39,26 @@ public class IntegrationResource {
 
     private final IntegrationService integrationService;
 
-    public IntegrationResource(IntegrationService integrationService) {
+    private final UserRepository userRepository;
+
+    public IntegrationResource(IntegrationService integrationService, UserRepository userRepository) {
         this.integrationService = integrationService;
+        this.userRepository = userRepository;
     }
 
     /**
      * POST  /integrations : Create a new integration.
      *
-     * @param integration the integration to create
+     * @param integrationDTO the integration to create
      * @return the ResponseEntity with status 201 (Created) and with body the new integration, or with status 400 (Bad Request) if the integration has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/integrations")
     @Timed
-    public ResponseEntity<Integration> createIntegration(@RequestBody Integration integration) throws URISyntaxException {
-        log.debug("REST request to save Integration : {}", integration);
-        if (integration.getId() != null) {
-            throw new BadRequestAlertException("A new integration cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        Integration result = integrationService.save(integration);
+    public ResponseEntity<Integration> createIntegration(@RequestBody IntegrationDTO integrationDTO) throws URISyntaxException {
+        log.debug("REST request to save Integration : {}", integrationDTO);
+        User user = userRepository.findOneWithAuthoritiesById(integrationDTO.getUserId()).get();
+        Integration result = integrationService.save(integrationDTO,user);
         return ResponseEntity.created(new URI("/api/integrations/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);

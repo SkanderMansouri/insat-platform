@@ -4,6 +4,7 @@ import insat.company.platform.InsatApp;
 
 import insat.company.platform.domain.Integration;
 import insat.company.platform.repository.IntegrationRepository;
+import insat.company.platform.repository.UserRepository;
 import insat.company.platform.repository.search.IntegrationSearchRepository;
 import insat.company.platform.service.IntegrationService;
 import insat.company.platform.web.rest.errors.ExceptionTranslator;
@@ -66,6 +67,9 @@ public class IntegrationResourceIntTest {
 
     @Autowired
     private IntegrationService integrationService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * This repository is mocked in the insat.company.platform.repository.search test package.

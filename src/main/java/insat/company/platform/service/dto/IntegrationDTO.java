@@ -2,6 +2,7 @@ package insat.company.platform.service.dto;
 
 public class IntegrationDTO {
 
+    private Long id;
     private String teamId;
     private String teamName;
     private String scope;
@@ -46,5 +47,13 @@ public class IntegrationDTO {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -3,6 +3,7 @@ package insat.company.platform.domain;
 
 import javax.persistence.*;
 
+import insat.company.platform.service.dto.IntegrationDTO;
 import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.util.Objects;
@@ -39,6 +40,18 @@ public class Integration implements Serializable {
    @ManyToOne
    @JoinColumn(name = "user_id",referencedColumnName = "id")
    private User user ;
+
+   public Integration(){}
+
+   public Integration(IntegrationDTO integrationDTO, User user){
+       this.user = user;
+       this.id = integrationDTO.getId();
+       this.teamName = integrationDTO.getTeamName();
+       this.teamId = integrationDTO.getTeamId();
+       this.scope = integrationDTO.getScope();
+       this.accessToken = "";
+       this.teamUrl = integrationDTO.getTeamUrl();
+   }
 
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

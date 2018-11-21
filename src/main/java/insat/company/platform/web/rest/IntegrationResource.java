@@ -58,7 +58,7 @@ public class IntegrationResource {
     public ResponseEntity<Integration> createIntegration(@RequestBody IntegrationDTO integrationDTO) throws URISyntaxException {
         log.debug("REST request to save Integration : {}", integrationDTO);
         User user = userRepository.findOneWithAuthoritiesById(integrationDTO.getUserId()).get();
-        Integration result = integrationService.save(integrationDTO,user);
+        Integration result = integrationService.save(integrationDTO, user);
         return ResponseEntity.created(new URI("/api/integrations/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -77,7 +77,7 @@ public class IntegrationResource {
     @Timed
     public ResponseEntity<Integration> updateIntegration(@RequestBody Integration integration) throws URISyntaxException {
         log.debug("REST request to update Integration : {}", integration);
-        if (integration.getId() == null) {
+        if (integration.getTeamId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         Integration result = integrationService.save(integration);
@@ -133,7 +133,7 @@ public class IntegrationResource {
      * SEARCH  /_search/integrations?query=:query : search for the integration corresponding
      * to the query.
      *
-     * @param query the query of the integration search
+     * @param query    the query of the integration search
      * @param pageable the pagination information
      * @return the result of the search
      */

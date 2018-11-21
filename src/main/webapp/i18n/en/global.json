@@ -9,6 +9,7 @@
                 "main": "Entities",
                 "integration": "Integration",
                 "slackUser": "Slack User",
+                "slackChannel": "Slack Channel",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

@@ -16,7 +16,9 @@
 
 
     <changeSet id="20181120210000-1" author="Meriem">
-
+        <addColumn tableName="integration">
+            <column name="USER" type="varchar(255)"></column>
+        </addColumn>
         <addForeignKeyConstraint baseTableName="integration" baseColumnNames="user"
                                  constraintName="FK_ManyToOneIntegrationUser" referencedTableName="jhi_user"
                                  referencedColumnNames="Id"/>

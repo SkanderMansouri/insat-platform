@@ -51,6 +51,10 @@ public class UserDTO {
 
     private Instant lastModifiedDate;
 
+    private String section;
+
+    private String year;
+
     private Set<String> authorities;
 
     public UserDTO() {
@@ -79,6 +83,21 @@ public class UserDTO {
         return id;
     }
 
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
     public void setId(Long id) {
         this.id = id;
     }

@@ -3,6 +3,7 @@ package insat.company.platform.web.rest;
 import insat.company.platform.InsatApp;
 import insat.company.platform.config.Constants;
 import insat.company.platform.domain.Authority;
+import insat.company.platform.domain.Field;
 import insat.company.platform.domain.User;
 import insat.company.platform.repository.AuthorityRepository;
 import insat.company.platform.repository.UserRepository;
@@ -160,6 +161,8 @@ public class AccountResourceIntTest {
     @Transactional
     public void testRegisterValid() throws Exception {
         ManagedUserVM validUser = new ManagedUserVM();
+        validUser.setSection("GL");
+        validUser.setYear("3");
         validUser.setLogin("test-register-valid");
         validUser.setPassword("password");
         validUser.setFirstName("Alice");
@@ -183,6 +186,8 @@ public class AccountResourceIntTest {
     @Transactional
     public void testRegisterInvalidLogin() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
+        invalidUser.setSection("GL");
+        invalidUser.setYear("3");
         invalidUser.setLogin("funky-log!n");// <-- invalid
         invalidUser.setPassword("password");
         invalidUser.setFirstName("Funky");
@@ -207,6 +212,8 @@ public class AccountResourceIntTest {
     @Transactional
     public void testRegisterInvalidEmail() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
+        invalidUser.setSection("GL");
+        invalidUser.setYear("3");
         invalidUser.setLogin("bob");
         invalidUser.setPassword("password");
         invalidUser.setFirstName("Bob");
@@ -231,6 +238,8 @@ public class AccountResourceIntTest {
     @Transactional
     public void testRegisterInvalidPassword() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
+        invalidUser.setSection("GL");
+        invalidUser.setYear("3");
         invalidUser.setLogin("bob");
         invalidUser.setPassword("123");// password with only 3 digits
         invalidUser.setFirstName("Bob");
@@ -255,6 +264,8 @@ public class AccountResourceIntTest {
     @Transactional
     public void testRegisterNullPassword() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
+        invalidUser.setSection("GL");
+        invalidUser.setYear("3");
         invalidUser.setLogin("bob");
         invalidUser.setPassword(null);// invalid null password
         invalidUser.setFirstName("Bob");
@@ -280,6 +291,8 @@ public class AccountResourceIntTest {
     public void testRegisterDuplicateLogin() throws Exception {
         // First registration
         ManagedUserVM firstUser = new ManagedUserVM();
+        firstUser.setSection("GL");
+        firstUser.setYear("3");
         firstUser.setLogin("alice");
         firstUser.setPassword("password");
         firstUser.setFirstName("Alice");
@@ -291,6 +304,8 @@ public class AccountResourceIntTest {
 
         // Duplicate login, different email
         ManagedUserVM secondUser = new ManagedUserVM();
+        secondUser.setSection(firstUser.getSection());
+        secondUser.setYear(firstUser.getYear());
         secondUser.setLogin(firstUser.getLogin());
         secondUser.setPassword(firstUser.getPassword());
         secondUser.setFirstName(firstUser.getFirstName());
@@ -336,6 +351,8 @@ public class AccountResourceIntTest {
     public void testRegisterDuplicateEmail() throws Exception {
         // First user
         ManagedUserVM firstUser = new ManagedUserVM();
+        firstUser.setSection("GL");
+        firstUser.setYear("3");
         firstUser.setLogin("test-register-duplicate-email");
         firstUser.setPassword("password");
         firstUser.setFirstName("Alice");
@@ -357,6 +374,8 @@ public class AccountResourceIntTest {
 
         // Duplicate email, different login
         ManagedUserVM secondUser = new ManagedUserVM();
+        secondUser.setSection(firstUser.getSection());
+        secondUser.setYear(firstUser.getYear());
         secondUser.setLogin("test-register-duplicate-email-2");
         secondUser.setPassword(firstUser.getPassword());
         secondUser.setFirstName(firstUser.getFirstName());
@@ -382,6 +401,8 @@ public class AccountResourceIntTest {
         // Duplicate email - with uppercase email address
         ManagedUserVM userWithUpperCaseEmail = new ManagedUserVM();
         userWithUpperCaseEmail.setId(firstUser.getId());
+        userWithUpperCaseEmail.setSection(firstUser.getSection());
+        userWithUpperCaseEmail.setYear(firstUser.getYear());
         userWithUpperCaseEmail.setLogin("test-register-duplicate-email-3");
         userWithUpperCaseEmail.setPassword(firstUser.getPassword());
         userWithUpperCaseEmail.setFirstName(firstUser.getFirstName());
@@ -417,6 +438,8 @@ public class AccountResourceIntTest {
     @Transactional
     public void testRegisterAdminIsIgnored() throws Exception {
         ManagedUserVM validUser = new ManagedUserVM();
+        validUser.setSection("GL");
+        validUser.setYear("3");
         validUser.setLogin("badguy");
         validUser.setPassword("password");
         validUser.setFirstName("Bad");

@@ -73,6 +73,33 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="form-control-label" for="section" jhiTranslate="global.form.section">Section</label>
+                   <input type="text" class="form-control" id="section" name="section" placeholder="{{'global.form.section.placeholder' | translate}}"
+                           [(ngModel)]="registerAccount.section" required>
+                    <!--<select class="form-control" id="section" name="section" placeholder="{{'global.form.section.placeholder' | translate}}"
+                            [(ngModel)]="registerAccount.section" required >
+                        <option value="MPI">MPI</option>
+                        <option value="CBA">CBA</option>
+                        <option value="GL">GL</option>
+                        <option value="IMI">IMI</option>
+                        <option value="IIA">IIA</option>
+                        <option value="RT">RT</option>
+                    </select>-->
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="year" jhiTranslate="global.form.year">Year</label>
+                   <input type="text" class="form-control" id="year" name="year" placeholder="{{'global.form.year.placeholder' | translate}}"
+                           [(ngModel)]="registerAccount.year" required>
+                   <!-- <select class="form-control" id="year" name="year" placeholder="{{'global.form.year.placeholder' | translate}}"
+                            [(ngModel)]="registerAccount.year" required >
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>-->
+                </div>
+                <div class="form-group">
                     <label class="form-control-label" for="password" jhiTranslate="global.form.newpassword">New password</label>
                     <input type="password" class="form-control" id="password" name="password" #password="ngModel" placeholder="{{'global.form.newpassword.placeholder' | translate}}"
                             [(ngModel)]="registerAccount.password" minlength=4 maxlength=50 required>

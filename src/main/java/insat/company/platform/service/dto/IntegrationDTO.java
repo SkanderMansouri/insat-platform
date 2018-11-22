@@ -9,6 +9,8 @@ public class IntegrationDTO {
     private String teamUrl;
     private Long userId;
 
+
+
     public String getTeamId() {
         return teamId;
     }

@@ -36,6 +36,7 @@
             <th jhiSortBy="score"><span jhiTranslate="insatApp.integration.score">Score</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="teamName"><span jhiTranslate="insatApp.integration.teamName">Team Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="teamUrl"><span jhiTranslate="insatApp.integration.teamUrl">Team Url</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="teamUrl"><span jhiTranslate="insatApp.integration.userId">User Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -48,6 +49,7 @@
                 <td>{{integration.score}}</td>
                 <td>{{integration.teamName}}</td>
                 <td>{{integration.teamUrl}}</td>
+                <td>{{integration.userId}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

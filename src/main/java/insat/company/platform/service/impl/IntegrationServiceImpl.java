@@ -58,10 +58,6 @@ public class IntegrationServiceImpl implements IntegrationService {
     }
 
 
-    @Override
-    public Integration save(IntegrationDTO integrationDTO, User user) {
-        return save(new Integration(integrationDTO, user));
-    }
 
     /**
      * Get all the integrations.

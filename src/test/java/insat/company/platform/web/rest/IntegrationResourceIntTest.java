@@ -67,13 +67,11 @@ public class IntegrationResourceIntTest {
     private IntegrationRepository integrationRepository;
 
     @Autowired
-    private UserRepository userRepository ;
+    private UserRepository userRepository;
 
     @Autowired
     private IntegrationService integrationService;
 
-    @Autowired
-    private UserRepository userRepository;
 
     /**
      * This repository is mocked in the insat.company.platform.repository.search test package.
@@ -112,7 +110,7 @@ public class IntegrationResourceIntTest {
 
     /**
      * Create an entity for this test.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
@@ -337,4 +335,5 @@ public class IntegrationResourceIntTest {
         integration1.setId(null);
         assertThat(integration1).isNotEqualTo(integration2);
     }
+
 }

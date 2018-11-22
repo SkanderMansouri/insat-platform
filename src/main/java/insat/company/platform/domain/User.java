@@ -83,6 +83,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "reset_date")
     private Instant resetDate = null;
 
+    @ManyToOne
+    @JoinColumn(name = "field_id", referencedColumnName = "id")
+    private Field field;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -188,6 +192,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setLangKey(String langKey) {
         this.langKey = langKey;
+    }
+
+    public Field getField() {
+        return field;
+    }
+
+    public void setField(Field field) {
+        this.field = field;
     }
 
     public Set<Authority> getAuthorities() {

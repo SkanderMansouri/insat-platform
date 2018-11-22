@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FieldRepository extends JpaRepository<Field, Long> {
 
+    Field findOneByYearAndSection(Long year, String section);
 }

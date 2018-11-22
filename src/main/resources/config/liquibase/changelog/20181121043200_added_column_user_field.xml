@@ -15,24 +15,20 @@
     <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
 
     <!--
-        Added the entity Field.
+        Added the entity Integration.
     -->
-    <changeSet id="20181120104736-1" author="jhipster">
-        <createTable tableName="field">
-            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
-                <constraints primaryKey="true" nullable="false"/>
+    <changeSet id="20181121043200-1" author="jhipster">
+        <addColumn tableName="jhi_user">
+            <column name="field_id" type="bigint">
+                <constraints  nullable="true"/>
             </column>
-            <column name="jhi_year" type="bigint">
-                <constraints nullable="true" />
-            </column>
+        </addColumn>
 
-            <column name="section" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-
-            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
-        </createTable>
-
+        <addForeignKeyConstraint baseColumnNames="field_id"
+                                 baseTableName="jhi_user"
+                                 constraintName="fk_user_field"
+                                 referencedColumnNames="id"
+                                 referencedTableName="field"/>
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

@@ -72,6 +72,9 @@ public class IntegrationResourceIntTest {
     @Autowired
     private IntegrationService integrationService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     /**
      * This repository is mocked in the insat.company.platform.repository.search test package.
      *

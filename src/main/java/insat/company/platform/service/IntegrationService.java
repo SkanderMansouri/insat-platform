@@ -20,6 +20,14 @@ public interface IntegrationService {
      * @param integration the entity to save
      * @return the persisted entity
      */
+    Integration save(IntegrationDTO integration, User user);
+
+    /**
+     * Save a integration.
+     *
+     * @param integration the entity to save
+     * @return the persisted entity
+     */
     Integration save(Integration integration);
 
     Integration save(IntegrationDTO integrationDTO , User user);

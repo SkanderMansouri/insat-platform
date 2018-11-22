@@ -58,6 +58,11 @@ public class IntegrationServiceImpl implements IntegrationService {
     }
 
 
+    @Override
+    public Integration save(IntegrationDTO integrationDTO, User user) {
+        return save(new Integration(integrationDTO, user));
+    }
+
     /**
      * Get all the integrations.
      *
@@ -100,7 +105,7 @@ public class IntegrationServiceImpl implements IntegrationService {
     /**
      * Search for the integration corresponding to the query.
      *
-     * @param query the query of the search
+     * @param query    the query of the search
      * @param pageable the pagination information
      * @return the list of entities
      */
@@ -108,5 +113,6 @@ public class IntegrationServiceImpl implements IntegrationService {
     @Transactional(readOnly = true)
     public Page<Integration> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Integrations for query {}", query);
-        return integrationSearchRepository.search(queryStringQuery(query), pageable);    }
+        return integrationSearchRepository.search(queryStringQuery(query), pageable);
+    }
 }

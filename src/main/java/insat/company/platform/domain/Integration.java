@@ -41,6 +41,18 @@ public class Integration implements Serializable {
    @JoinColumn(name = "user_id",referencedColumnName = "id")
    private User user ;
 
+   public Integration(){}
+
+   public Integration(IntegrationDTO integrationDTO, User user){
+       this.user = user;
+       this.id = integrationDTO.getId();
+       this.teamName = integrationDTO.getTeamName();
+       this.teamId = integrationDTO.getTeamId();
+       this.scope = integrationDTO.getScope();
+       this.accessToken = "";
+       this.teamUrl = integrationDTO.getTeamUrl();
+   }
+
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Integration(IntegrationDTO integrationDTO , User user ){

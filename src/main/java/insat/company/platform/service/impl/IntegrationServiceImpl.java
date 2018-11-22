@@ -49,6 +49,14 @@ public class IntegrationServiceImpl implements IntegrationService {
         integrationSearchRepository.save(result);
         return result;
     }
+    @Override
+    public Integration save(IntegrationDTO integrationDTO , User user ) {
+        log.debug("Request to save Integration : {}", integrationDTO);
+        Integration result = integrationRepository.save(new Integration(integrationDTO, user));
+        integrationSearchRepository.save(result);
+        return result;
+    }
+
 
     @Override
     public Integration save(IntegrationDTO integrationDTO, User user) {

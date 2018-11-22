@@ -55,6 +55,18 @@ public class Integration implements Serializable {
 
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public Integration(IntegrationDTO integrationDTO , User user ){
+        this.id=integrationDTO.getId();
+        this.user=user ;
+        this.accessToken="";
+        this.teamName=integrationDTO.getTeamName();
+        this.scope=integrationDTO.getScope();
+        this.teamId=integrationDTO.getTeamId();
+        this.teamUrl=integrationDTO.getTeamUrl();
+    }
+
+    public Integration (){}
+
     public Long getId() {
         return id;
     }

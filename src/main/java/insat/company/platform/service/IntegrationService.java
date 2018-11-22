@@ -30,6 +30,7 @@ public interface IntegrationService {
      */
     Integration save(Integration integration);
 
+    Integration save(IntegrationDTO integrationDTO , User user);
     /**
      * Get all the integrations.
      *

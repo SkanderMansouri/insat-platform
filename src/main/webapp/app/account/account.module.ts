@@ -13,6 +13,7 @@ import {
     SettingsComponent,
     accountState
 } from './';
+import { SlackOauthComponent } from './slack-oauth/slack-oauth.component';
 
 @NgModule({
     imports: [InsatSharedModule, RouterModule.forChild(accountState)],
@@ -23,7 +24,8 @@ import {
         PasswordStrengthBarComponent,
         PasswordResetInitComponent,
         PasswordResetFinishComponent,
-        SettingsComponent
+        SettingsComponent,
+        SlackOauthComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

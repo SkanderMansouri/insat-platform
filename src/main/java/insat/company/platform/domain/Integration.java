@@ -41,9 +41,6 @@ public class Integration implements Serializable {
    @JoinColumn(name = "user_id",referencedColumnName = "id")
    private User user ;
 
-    /**
-     *
-     */
    public Integration(){}
 
    public Integration(IntegrationDTO integrationDTO, User user){
@@ -52,14 +49,8 @@ public class Integration implements Serializable {
        this.teamName = integrationDTO.getTeamName();
        this.teamId = integrationDTO.getTeamId();
        this.scope = integrationDTO.getScope();
-       this.accessToken = "";
        this.teamUrl = integrationDTO.getTeamUrl();
    }
-
-
-
-
-
 
     public Long getId() {
         return id;

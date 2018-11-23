@@ -1,0 +1,24 @@
+{
+    "insatApp": {
+        "club": {
+            "home": {
+                "title": "Clubs",
+                "createLabel": "Créer un nouveau Club",
+                "createOrEditLabel": "Créer ou éditer un Club",
+                "search": "Recherche pour Club"
+            },
+            "created": "Un nouveau Club a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Club avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Club avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Club {{ id }} ?"
+            },
+            "detail": {
+                "title": "Club"
+            },
+            "name": "Name",
+            "domain": "Domain",
+            "president": "President"
+        }
+    }
+}

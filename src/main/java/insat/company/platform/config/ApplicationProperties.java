@@ -11,4 +11,22 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
 
+    private String slackClientId;
+    private String slackClientSecret;
+
+    public String getSlackClientId() {
+        return slackClientId;
+    }
+
+    public void setSlackClientId(String slackClientId) {
+        this.slackClientId = slackClientId;
+    }
+
+    public String getSlackClientSecret() {
+        return slackClientSecret;
+    }
+
+    public void setSlackClientSecret(String slackClientSecret) {
+        this.slackClientSecret = slackClientSecret;
+    }
 }

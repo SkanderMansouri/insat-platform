@@ -69,6 +69,8 @@
         <sonar-maven-plugin.version>3.5.0.1254</sonar-maven-plugin.version>
         <openapi-generator-maven-plugin.version>3.3.0</openapi-generator-maven-plugin.version>
         <git-commit-id-plugin.version>2.2.5</git-commit-id-plugin.version>
+        <javax-json.version>1.1.2</javax-json.version>
+
 
         <!-- Sonar properties -->
         <sonar.host.url>http://localhost:9001</sonar.host.url>
@@ -126,6 +128,12 @@
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+            <version>${javax-json.version}</version>
         </dependency>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>

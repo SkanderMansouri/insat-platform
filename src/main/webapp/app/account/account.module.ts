@@ -13,6 +13,7 @@ import {
     SettingsComponent,
     accountState
 } from './';
+import { InviteComponent } from './invite/invite.component';
 
 @NgModule({
     imports: [InsatSharedModule, RouterModule.forChild(accountState)],
@@ -23,7 +24,8 @@ import {
         PasswordStrengthBarComponent,
         PasswordResetInitComponent,
         PasswordResetFinishComponent,
-        SettingsComponent
+        SettingsComponent,
+        InviteComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

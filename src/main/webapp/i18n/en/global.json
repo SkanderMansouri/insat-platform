@@ -16,6 +16,7 @@
             "account": {
                 "main": "Account",
                 "settings": "Settings",
+                "invite": "invite user",
                 "password": "Password",
                 "sessions": "Sessions",
                 "login": "Sign in",

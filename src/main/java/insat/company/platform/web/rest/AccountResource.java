@@ -160,6 +160,23 @@ public class AccountResource {
        );
     }
 
+
+    /**
+     * POST   /account/invite : Send an email to invite a user
+     * @param mail the mail of the user
+     * @throws EmailAlreadyUsedException 400 (Bad Request) if the new Email is already Used
+     */
+    @PostMapping(path = "/account/invite")
+    @Timed
+    public void requestInviteEmail(@RequestBody String mail) {
+
+        if (userService.VerifyEmail(mail)) {
+            mailService.sendInvitationMail(mail);
+        } else {
+            throw new EmailAlreadyUsedException();
+        }
+    }
+
     /**
      * POST   /account/reset-password/finish : Finish to reset the password of the user
      *

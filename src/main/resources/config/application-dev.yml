@@ -81,7 +81,7 @@ spring:
         cache: false
 
 server:
-    port: 8181
+    port: 8080
 
 # ===================================================================
 # JHipster specific properties
@@ -114,7 +114,7 @@ jhipster:
                 token-validity-in-seconds-for-remember-me: 2592000
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: insat@localhost
-        base-url: http://127.0.0.1:8181
+        base-url: http://127.0.0.1:8080
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx:
             enabled: true

@@ -98,13 +98,20 @@ public class UserService {
     }
 
     public User registerUser(UserDTO userDTO, String password) {
-        Field fieldToGetorToSave  = Optional.ofNullable(fieldRepository.findOneByYearAndSection(Long.valueOf(userDTO.getYear()),userDTO.getSection()))
+        /*Field fieldToGetorToSave  = Optional.ofNullable(fieldRepository.findOneByYearAndSection(Long.valueOf(userDTO.getYear()),userDTO.getSection()))
             .orElseGet(() -> {
                 Field newField = new Field();
                 newField.setYear(Long.valueOf(userDTO.getYear()));
                 newField.setSection(userDTO.getSection());
                 return fieldRepository.save(newField);
-            });
+            });*/
+        Field fieldToGetorToSave = fieldRepository.findOneByYearAndSection(Long.valueOf(userDTO.getYear()),userDTO.getSection()).orElseGet(() -> {
+            Field newField = new Field();
+            newField.setYear(Long.valueOf(userDTO.getYear()));
+            newField.setSection(userDTO.getSection());
+            return fieldRepository.save(newField);
+        });
+
         userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {

@@ -228,8 +228,8 @@ public class UserService {
             })
             .map(UserDTO::new);
     }
-    public Boolean VerifyEmail(String email) {
-        return(userRepository.findOneByEmail(email)==null);
+    public Optional<User> VerifyEmail(String email) {
+        return(userRepository.findOneByEmailIgnoreCase(email));
     }
 
     public void deleteUser(String login) {

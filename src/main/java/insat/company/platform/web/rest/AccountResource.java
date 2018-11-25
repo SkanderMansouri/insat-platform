@@ -170,10 +170,10 @@ public class AccountResource {
     @Timed
     public void requestInviteEmail(@RequestBody String mail) {
 
-        if (userService.VerifyEmail(mail)) {
-            mailService.sendInvitationMail(mail);
-        } else {
+        if (userService.VerifyEmail(mail).isPresent()) {
             throw new EmailAlreadyUsedException();
+        } else {
+            mailService.sendInvitationMail(mail);
         }
     }
 

@@ -24,7 +24,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
@@ -58,41 +57,21 @@ public class IntegrationResource {
     @Timed
     public ResponseEntity<Integration> createIntegration(@RequestBody IntegrationDTO integrationDTO) throws URISyntaxException {
         log.debug("REST request to save Integration : {}", integrationDTO);
-        try{
-            User user = userRepository.findOneWithAuthoritiesById(integrationDTO.getUserId()).get();
-            Integration result = integrationService.save(integrationDTO, user);
-            return ResponseEntity.created(new URI("/api/integrations/" + result.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-                .body(result);
-        }catch (NoSuchElementException ex){
-            return ResponseEntity.badRequest()
-                .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "400", "integration creation failed"))
-                .build();
-        }
- /*
-        if (user == null) {
+        //User user = userRepository.findOneWithAuthoritiesById(integrationDTO.getUserId()).get();
+      return  Optional.ofNullable(userRepository.findOneWithAuthoritiesById(integrationDTO.getUserId()).get())
+                .map(user->{
+                    Integration result = integrationService.save(integrationDTO, user);
 
-        } else {
+                    try {
+                        return ResponseEntity.created(new URI("/api/integrations/" + result.getId()))
+                            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                            .body(result);
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                        return null ;
+                    }
 
-        }
-
-        return Optional.ofNullable(userRepository.findOneWithAuthoritiesById(integrationDTO.getUserId()).get())
-            .map(user -> {
-
-                try {
-
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-                    return ResponseEntity.badRequest()
-                        .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, result.getId().toString(), "integration creation failed"))
-                        .body(result);
-
-                }
-            }).orElseGet(() -> {
-
-            });
-*/
-
+                }).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     /**

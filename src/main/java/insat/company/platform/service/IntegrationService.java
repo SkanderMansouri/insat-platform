@@ -48,9 +48,11 @@ public interface IntegrationService {
      * Search for the integration corresponding to the query.
      *
      * @param query the query of the search
-     * 
+     *
      * @param pageable the pagination information
      * @return the list of entities
      */
     Page<Integration> search(String query, Pageable pageable);
+
+    Integration findOneByTeamId(String teamId);
 }

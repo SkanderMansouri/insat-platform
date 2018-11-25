@@ -7,6 +7,7 @@ import insat.company.platform.web.rest.errors.BadRequestAlertException;
 import insat.company.platform.web.rest.util.HeaderUtil;
 import insat.company.platform.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.swagger.annotations.AuthorizationScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;

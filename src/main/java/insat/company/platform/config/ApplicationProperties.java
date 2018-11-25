@@ -13,6 +13,7 @@ public class ApplicationProperties {
 
     private String slackClientId;
     private String slackClientSecret;
+    private String slackRedirectUri;
 
     public String getSlackClientId() {
         return slackClientId;
@@ -28,5 +29,9 @@ public class ApplicationProperties {
 
     public void setSlackClientSecret(String slackClientSecret) {
         this.slackClientSecret = slackClientSecret;
+    }
+
+    public String getSlackRedirectUri() {
+        return slackRedirectUri;
     }
 }

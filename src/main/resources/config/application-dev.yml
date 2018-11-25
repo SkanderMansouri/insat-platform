@@ -142,3 +142,4 @@ jhipster:
 application:
     slackClientId: "455020953126.478775144338"
     slackClientSecret: "6e2ac85e80dfca4a820e05e3c72e664b"
+    slackRedirectUri: "https://bd635327.ngrok.io/#/integration"

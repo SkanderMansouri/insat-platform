@@ -75,6 +75,13 @@ public class IntegrationServiceImpl implements IntegrationService {
         return integrationRepository.findById(id);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Integration findOneByTeamId(String teamId) {
+        log.debug("Request to get Integration by teamId : {}", teamId);
+        return integrationRepository.findOneByTeamId(teamId);
+    }
+
     /**
      * Delete the integration by id.
      *

@@ -15,7 +15,6 @@ import insat.company.platform.web.rest.errors.ExceptionTranslator;
 import insat.company.platform.web.rest.vm.KeyAndPasswordVM;
 import insat.company.platform.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,13 +32,17 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -808,4 +811,17 @@ public class AccountResourceIntTest {
                 .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
             .andExpect(status().isInternalServerError());
     }
+
+    //TODO : Make the test for requestInviteEmail with already existing email address
+    /*
+    @Test(expected = EmailAlreadyUsedException.class)
+    public void requestInviteEmail() throws Exception {
+        String email = "admin@localhost";
+        restMvc.perform(
+            post("/api/account/invite")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(email)))
+                .andExpect(status().isOk());
+    }
+    */
 }

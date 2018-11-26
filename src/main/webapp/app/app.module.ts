@@ -20,6 +20,7 @@ import { InsatEntityModule } from './entities/entity.module';
 import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ActiveMenuDirective, ErrorComponent } from './layouts';
+import { SlackUsersListComponent } from './entities/slack-user/slack-users-list.component';
 
 @NgModule({
     imports: [
@@ -40,7 +41,15 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
         // jhipster-needle-angular-add-module JHipster will add new module here
         InsatEntityModule
     ],
-    declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
+    declarations: [
+        JhiMainComponent,
+        NavbarComponent,
+        ErrorComponent,
+        PageRibbonComponent,
+        ActiveMenuDirective,
+        FooterComponent,
+        SlackUsersListComponent
+    ],
     providers: [
         {
             provide: HTTP_INTERCEPTORS,

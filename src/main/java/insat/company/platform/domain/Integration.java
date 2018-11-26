@@ -5,6 +5,7 @@ import javax.persistence.*;
 
 import insat.company.platform.service.dto.IntegrationDTO;
 import org.springframework.data.elasticsearch.annotations.Document;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -37,20 +38,21 @@ public class Integration implements Serializable {
     @Column(name = "team_url")
     private String teamUrl;
 
-   @ManyToOne
-   @JoinColumn(name = "user_id",referencedColumnName = "id")
-   private User user ;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
-   public Integration(){}
+    public Integration() {
+    }
 
-   public Integration(IntegrationDTO integrationDTO, User user){
-       this.user = user;
-       this.id = integrationDTO.getId();
-       this.teamName = integrationDTO.getTeamName();
-       this.teamId = integrationDTO.getTeamId();
-       this.scope = integrationDTO.getScope();
-       this.teamUrl = integrationDTO.getTeamUrl();
-   }
+    public Integration(IntegrationDTO integrationDTO, User user) {
+        this.user = user;
+        this.id = integrationDTO.getId();
+        this.teamName = integrationDTO.getTeamName();
+        this.teamId = integrationDTO.getTeamId();
+        this.scope = integrationDTO.getScope();
+        this.teamUrl = integrationDTO.getTeamUrl();
+    }
 
     public Long getId() {
         return id;
@@ -121,6 +123,11 @@ public class Integration implements Serializable {
         return this;
     }
 
+    public Integration user(User user) {
+        this.user = user;
+        return this;
+    }
+
     public void setTeamUrl(String teamUrl) {
         this.teamUrl = teamUrl;
     }
@@ -155,6 +162,7 @@ public class Integration implements Serializable {
             ", scope='" + getScope() + "'" +
             ", teamName='" + getTeamName() + "'" +
             ", teamUrl='" + getTeamUrl() + "'" +
+            ", user='" + getUser().toString() + "'" +
             "}";
     }
 

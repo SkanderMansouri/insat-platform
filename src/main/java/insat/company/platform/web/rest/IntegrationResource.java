@@ -57,21 +57,17 @@ public class IntegrationResource {
     @Timed
     public ResponseEntity<Integration> createIntegration(@RequestBody IntegrationDTO integrationDTO) throws URISyntaxException {
         log.debug("REST request to save Integration : {}", integrationDTO);
-        //User user = userRepository.findOneWithAuthoritiesById(integrationDTO.getUserId()).get();
-      return  Optional.ofNullable(userRepository.findOneWithAuthoritiesById(integrationDTO.getUserId()).get())
-                .map(user->{
-                    Integration result = integrationService.save(integrationDTO, user);
-
-                    try {
-                        return ResponseEntity.created(new URI("/api/integrations/" + result.getId()))
-                            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-                            .body(result);
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
-                        return null ;
-                    }
-
-                }).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+        Optional<User> optUser = userRepository.findOneWithAuthoritiesById(integrationDTO.getUserId());
+        if (optUser.isPresent()) {
+            User user = optUser.get();
+            Integration result = integrationService.save(integrationDTO, user);
+            return ResponseEntity.created(new URI("/api/integrations/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     /**

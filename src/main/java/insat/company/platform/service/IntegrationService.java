@@ -17,6 +17,15 @@ public interface IntegrationService {
     /**
      * Save a integration.
      *
+     * @param integrationDTO the entity to save
+     * @param user   to save
+     * @return the persisted entity
+     */
+    Integration save(IntegrationDTO integrationDTO, User user);
+
+    /**
+     * Save a integration.
+     *
      * @param integration the entity to save
      * @return the persisted entity
      */
@@ -30,7 +39,6 @@ public interface IntegrationService {
      */
     Integration save(Integration integration);
 
-    Integration save(IntegrationDTO integrationDTO , User user);
     /**
      * Get all the integrations.
      *

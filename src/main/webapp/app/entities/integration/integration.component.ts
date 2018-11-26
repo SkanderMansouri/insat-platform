@@ -9,6 +9,8 @@ import { Principal } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { IntegrationService } from './integration.service';
+import { ConfigService } from '../../services/config.service';
+import { IConfig } from '../../shared/model/config.model';
 
 @Component({
     selector: 'jhi-integration',
@@ -30,6 +32,8 @@ export class IntegrationComponent implements OnInit, OnDestroy {
     predicate: any;
     previousPage: any;
     reverse: any;
+    slackClientId: any;
+    code: any;
 
     constructor(
         private integrationService: IntegrationService,
@@ -38,9 +42,13 @@ export class IntegrationComponent implements OnInit, OnDestroy {
         private principal: Principal,
         private activatedRoute: ActivatedRoute,
         private router: Router,
-        private eventManager: JhiEventManager
+        private eventManager: JhiEventManager,
+        private configService: ConfigService
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
+        this.activatedRoute.queryParams.subscribe(params => {
+            this.code = params['code'];
+        });
         this.routeData = this.activatedRoute.data.subscribe(data => {
             this.page = data.pagingParams.page;
             this.previousPage = data.pagingParams.page;
@@ -135,6 +143,12 @@ export class IntegrationComponent implements OnInit, OnDestroy {
             this.currentAccount = account;
         });
         this.registerChangeInIntegrations();
+        this.configService
+            .get()
+            .subscribe(
+                (res: HttpResponse<string>) => (this.slackClientId = res.body.slackClientId),
+                (res: HttpErrorResponse) => this.onError(res.message)
+            );
     }
 
     ngOnDestroy() {

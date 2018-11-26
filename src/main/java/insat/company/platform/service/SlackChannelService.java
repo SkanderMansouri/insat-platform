@@ -1,6 +1,6 @@
 package insat.company.platform.service;
 
-import insat.company.platform.domain.Integration;
+import insat.company.platform.domain.SlackChannel;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,51 +8,49 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 /**
- * Service Interface for managing Integration.
+ * Service Interface for managing SlackChannel.
  */
-public interface IntegrationService {
+public interface SlackChannelService {
 
     /**
-     * Save a integration.
+     * Save a slackChannel.
      *
-     * @param integration the entity to save
+     * @param slackChannel the entity to save
      * @return the persisted entity
      */
-    Integration save(Integration integration);
+    SlackChannel save(SlackChannel slackChannel);
 
     /**
-     * Get all the integrations.
+     * Get all the slackChannels.
      *
      * @param pageable the pagination information
      * @return the list of entities
      */
-    Page<Integration> findAll(Pageable pageable);
+    Page<SlackChannel> findAll(Pageable pageable);
 
 
     /**
-     * Get the "id" integration.
+     * Get the "id" slackChannel.
      *
      * @param id the id of the entity
      * @return the entity
      */
-    Optional<Integration> findOne(Long id);
+    Optional<SlackChannel> findOne(Long id);
 
     /**
-     * Delete the "id" integration.
+     * Delete the "id" slackChannel.
      *
      * @param id the id of the entity
      */
     void delete(Long id);
 
     /**
-     * Search for the integration corresponding to the query.
+     * Search for the slackChannel corresponding to the query.
      *
      * @param query the query of the search
-     *
+     * 
      * @param pageable the pagination information
      * @return the list of entities
      */
-    Page<Integration> search(String query, Pageable pageable);
-
-    Integration findOneByTeamId(String teamId);
+    Page<SlackChannel> search(String query, Pageable pageable);
 }

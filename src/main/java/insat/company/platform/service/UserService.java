@@ -12,8 +12,9 @@ import insat.company.platform.security.AuthoritiesConstants;
 import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.dto.UserDTO;
 import insat.company.platform.service.util.RandomUtil;
-import insat.company.platform.web.rest.errors.*;
-
+import insat.company.platform.web.rest.errors.EmailAlreadyUsedException;
+import insat.company.platform.web.rest.errors.InvalidPasswordException;
+import insat.company.platform.web.rest.errors.LoginAlreadyUsedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -98,13 +99,6 @@ public class UserService {
     }
 
     public User registerUser(UserDTO userDTO, String password) {
-        /*Field fieldToGetorToSave  = Optional.ofNullable(fieldRepository.findOneByYearAndSection(Long.valueOf(userDTO.getYear()),userDTO.getSection()))
-            .orElseGet(() -> {
-                Field newField = new Field();
-                newField.setYear(Long.valueOf(userDTO.getYear()));
-                newField.setSection(userDTO.getSection());
-                return fieldRepository.save(newField);
-            });*/
         Field fieldToGetorToSave = fieldRepository.findOneByYearAndSection(Long.valueOf(userDTO.getYear()),userDTO.getSection()).orElseGet(() -> {
             Field newField = new Field();
             newField.setYear(Long.valueOf(userDTO.getYear()));

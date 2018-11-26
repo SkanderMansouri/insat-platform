@@ -86,6 +86,10 @@ export const slackUserRoute: Routes = [
         resolve: {
             slackUser: SlackUserResolve
         },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'insatApp.slackUser.home.title'
+        },
         canActivate: [UserRouteAccessService]
     }
 ];

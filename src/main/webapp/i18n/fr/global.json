@@ -128,6 +128,8 @@
         "internalServerError": "Erreur interne du serveur",
         "server.not.reachable": "Serveur inaccessible",
         "url.not.found": "Non trouvé",
+        "url.bad.request": "Bad request",
+        "400": "Utilisateur not trouvé",
         "NotNull": "Le champ {{fieldName}} ne peut pas être vide !",
         "Size": "Le champ {{fieldName}} ne respecte pas les critères minimum et maximum !",
         "userexists": "Login déjà utilisé !",

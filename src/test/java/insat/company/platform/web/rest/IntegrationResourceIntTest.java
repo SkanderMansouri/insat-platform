@@ -88,9 +88,6 @@ public class IntegrationResourceIntTest {
     @Autowired
     private IntegrationService integrationService;
 
-    @Autowired
-    private UserRepository userRepository;
-
     /**
      * This repository is mocked in the insat.company.platform.repository.search test package.
      *
@@ -208,6 +205,7 @@ public class IntegrationResourceIntTest {
         List<Integration> integrationList = integrationRepository.findAll();
         assertThat(integrationList).hasSize(databaseSizeBeforeCreate);
     }
+
 /*
     @Test
     @Transactional

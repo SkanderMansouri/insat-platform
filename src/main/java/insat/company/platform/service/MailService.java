@@ -107,7 +107,7 @@ public class MailService {
         Context context = new Context(locale);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process("mail/invitationEmail", context);
-        String subject = messageSource.getMessage("email.reset.title", null, locale);
+        String subject = messageSource.getMessage("email.invitation.title", null, locale);
         sendEmail(email, subject, content, false, true);
 
     }

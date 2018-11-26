@@ -74,8 +74,8 @@ spring:
 
         host:  smtp.gmail.com
         port: 587
-        username:
-        password:
+        username: jhipstertest1997@gmail.com
+        password: jhipstertest2018
         protocol: smtp
         tls: true
         properties.mail.smtp:
@@ -147,7 +147,4 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-application:
-    slackClientId: "455020953126.478775144338"
-    slackClientSecret: "6e2ac85e80dfca4a820e05e3c72e664b"
-    slackRedirectUri: "https://bd635327.ngrok.io/#/integration"
+# application:

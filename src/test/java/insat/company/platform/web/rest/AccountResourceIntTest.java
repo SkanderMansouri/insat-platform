@@ -808,4 +808,14 @@ public class AccountResourceIntTest {
                 .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
             .andExpect(status().isInternalServerError());
     }
+    @Test
+    @Transactional
+    public void testInvitationMail() throws Exception {
+        restMvc.perform(
+            post("/api/account/invite")
+                .content("admin@localhost"))
+            .andExpect(status().isBadRequest());
+    }
+
+
 }

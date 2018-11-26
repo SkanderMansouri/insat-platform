@@ -10,8 +10,9 @@ import insat.company.platform.security.AuthoritiesConstants;
 import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.dto.UserDTO;
 import insat.company.platform.service.util.RandomUtil;
-import insat.company.platform.web.rest.errors.*;
-
+import insat.company.platform.web.rest.errors.EmailAlreadyUsedException;
+import insat.company.platform.web.rest.errors.InvalidPasswordException;
+import insat.company.platform.web.rest.errors.LoginAlreadyUsedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;

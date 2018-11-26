@@ -34,4 +34,8 @@ public class ApplicationProperties {
     public String getSlackRedirectUri() {
         return slackRedirectUri;
     }
+
+    public void setSlackRedirectUri(String slackRedirectUri) {
+        this.slackRedirectUri = slackRedirectUri;
+    }
 }

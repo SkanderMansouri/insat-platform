@@ -10,8 +10,9 @@ import { SlackUserService } from './slack-user.service';
 import { SlackUserComponent } from './slack-user.component';
 import { SlackUserDetailComponent } from './slack-user-detail.component';
 import { SlackUserUpdateComponent } from './slack-user-update.component';
-import { SlackUserDeletePopupComponent } from './slack-user-delete-dialog.component';
 import { ISlackUser } from 'app/shared/model/slack-user.model';
+import { SlackUsersListComponent } from './slack-users-list.component';
+import { SlackUserDeletePopupComponent } from './slack-user-delete-dialog.component';
 
 @Injectable({ providedIn: 'root' })
 export class SlackUserResolve implements Resolve<ISlackUser> {
@@ -76,6 +77,14 @@ export const slackUserRoute: Routes = [
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'insatApp.slackUser.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    },
+    {
+        path: 'list/slack/users',
+        component: SlackUsersListComponent,
+        resolve: {
+            slackUser: SlackUserResolve
         },
         canActivate: [UserRouteAccessService]
     }

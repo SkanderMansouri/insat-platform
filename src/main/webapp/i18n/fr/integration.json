@@ -21,7 +21,8 @@
             "scope": "Scope",
             "score": "Score",
             "teamName": "Team Name",
-            "teamUrl": "Team Url"
+            "teamUrl": "Team Url",
+            "userId": "User Id"
         }
     }
 }

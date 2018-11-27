@@ -60,7 +60,8 @@ describe('Service Tests', () => {
                         scope: 'BBBBBB',
                         score: 'BBBBBB',
                         teamName: 'BBBBBB',
-                        teamUrl: 'BBBBBB'
+                        teamUrl: 'BBBBBB',
+                        userId: 'BBBBBB'
                     },
                     elemDefault
                 );
@@ -82,7 +83,8 @@ describe('Service Tests', () => {
                         scope: 'BBBBBB',
                         score: 'BBBBBB',
                         teamName: 'BBBBBB',
-                        teamUrl: 'BBBBBB'
+                        teamUrl: 'BBBBBB',
+                        userId: '1'
                     },
                     elemDefault
                 );

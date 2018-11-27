@@ -6,6 +6,7 @@ export interface IIntegration {
     score?: string;
     teamName?: string;
     teamUrl?: string;
+    userId?: string;
 }
 
 export class Integration implements IIntegration {
@@ -16,6 +17,7 @@ export class Integration implements IIntegration {
         public scope?: string,
         public score?: string,
         public teamName?: string,
-        public teamUrl?: string
+        public teamUrl?: string,
+        public userId?: string
     ) {}
 }

@@ -1,9 +1,11 @@
 package insat.company.platform.service.impl;
 
+import insat.company.platform.domain.User;
 import insat.company.platform.service.IntegrationService;
 import insat.company.platform.domain.Integration;
 import insat.company.platform.repository.IntegrationRepository;
 import insat.company.platform.repository.search.IntegrationSearchRepository;
+import insat.company.platform.service.dto.IntegrationDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +46,13 @@ public class IntegrationServiceImpl implements IntegrationService {
     public Integration save(Integration integration) {
         log.debug("Request to save Integration : {}", integration);
         Integration result = integrationRepository.save(integration);
+        integrationSearchRepository.save(result);
+        return result;
+    }
+    @Override
+    public Integration save(IntegrationDTO integrationDTO , User user ) {
+        log.debug("Request to save Integration : {}", integrationDTO);
+        Integration result = integrationRepository.save(new Integration(integrationDTO, user));
         integrationSearchRepository.save(result);
         return result;
     }
@@ -97,7 +106,7 @@ public class IntegrationServiceImpl implements IntegrationService {
     /**
      * Search for the integration corresponding to the query.
      *
-     * @param query the query of the search
+     * @param query    the query of the search
      * @param pageable the pagination information
      * @return the list of entities
      */
@@ -105,5 +114,6 @@ public class IntegrationServiceImpl implements IntegrationService {
     @Transactional(readOnly = true)
     public Page<Integration> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Integrations for query {}", query);
-        return integrationSearchRepository.search(queryStringQuery(query), pageable);    }
+        return integrationSearchRepository.search(queryStringQuery(query), pageable);
+    }
 }

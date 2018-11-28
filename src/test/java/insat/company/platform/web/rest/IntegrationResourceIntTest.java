@@ -3,16 +3,22 @@ package insat.company.platform.web.rest;
 import insat.company.platform.InsatApp;
 
 import insat.company.platform.domain.Integration;
+import insat.company.platform.domain.User;
 import insat.company.platform.repository.IntegrationRepository;
+import insat.company.platform.repository.UserRepository;
 import insat.company.platform.repository.search.IntegrationSearchRepository;
 import insat.company.platform.service.IntegrationService;
+import insat.company.platform.service.dto.IntegrationDTO;
 import insat.company.platform.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.OverrideAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -46,23 +52,38 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = InsatApp.class)
 public class IntegrationResourceIntTest {
 
-    private static final String DEFAULT_ACCESS_TOKEN = "AAAAAAAAAA";
+    private static final String DEFAULT_ACCESS_TOKEN = "";
     private static final String UPDATED_ACCESS_TOKEN = "BBBBBBBBBB";
 
-    private static final String DEFAULT_TEAM_ID = "AAAAAAAAAA";
+    private static final String DEFAULT_TEAM_ID = "teamid";
+    private static final String DEFAULT_TEAM_ID_NOT_FOUND_USER = "teamid";
     private static final String UPDATED_TEAM_ID = "BBBBBBBBBB";
 
-    private static final String DEFAULT_SCOPE = "AAAAAAAAAA";
+    private static final String DEFAULT_SCOPE = "scope";
+    private static final String DEFAULT_SCOPE_NOT_FOUND_USER = "scope";
     private static final String UPDATED_SCOPE = "BBBBBBBBBB";
 
-    private static final String DEFAULT_TEAM_NAME = "AAAAAAAAAA";
+    private static final String DEFAULT_TEAM_NAME = "our team";
+    private static final String DEFAULT_TEAM_NAME_NOT_FOUND_USER = "our team";
     private static final String UPDATED_TEAM_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_TEAM_URL = "AAAAAAAAAA";
+    private static final String DEFAULT_TEAM_URL = "teamurl";
+    private static final String DEFAULT_TEAM_URL_NOT_FOUND_USER = "teamurl";
     private static final String UPDATED_TEAM_URL = "BBBBBBBBBB";
+
+    private static final long DEFAULT_USER_ID = 4L;
+    private static final long DEFAULT_NOT_FOUND_ID_USER = -1L;
+    private static final long UPDATED_USER_ID = 4L;
+
+    private final Logger log = LoggerFactory.getLogger(IntegrationResource.class);
+
+    private static User user;
 
     @Autowired
     private IntegrationRepository integrationRepository;
+
+    @Autowired
+    private UserRepository userRepository ;
 
     @Autowired
     private IntegrationService integrationService;
@@ -91,10 +112,13 @@ public class IntegrationResourceIntTest {
 
     private Integration integration;
 
+    private IntegrationDTO integrationDTO;
+    private IntegrationDTO integrationDTO_userIdNotFound;
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final IntegrationResource integrationResource = new IntegrationResource(integrationService);
+        final IntegrationResource integrationResource = new IntegrationResource(integrationService, userRepository);
         this.restIntegrationMockMvc = MockMvcBuilders.standaloneSetup(integrationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -104,50 +128,85 @@ public class IntegrationResourceIntTest {
 
     /**
      * Create an entity for this test.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
     public static Integration createEntity(EntityManager em) {
-        Integration integration = new Integration()
-            .accessToken(DEFAULT_ACCESS_TOKEN)
-            .teamId(DEFAULT_TEAM_ID)
-            .scope(DEFAULT_SCOPE)
-            .teamName(DEFAULT_TEAM_NAME)
-            .teamUrl(DEFAULT_TEAM_URL);
+        Integration integration = new Integration();
         return integration;
     }
 
+    public static IntegrationDTO createDTOEntity(EntityManager em, Long userId) {
+        IntegrationDTO integrationDTO = new IntegrationDTO();
+        integrationDTO.setScope(DEFAULT_SCOPE);
+        integrationDTO.setTeamId(DEFAULT_TEAM_ID);
+        integrationDTO.setUserId(userId);
+        integrationDTO.setTeamName(DEFAULT_TEAM_NAME);
+        integrationDTO.setTeamUrl(DEFAULT_TEAM_URL);
+        return integrationDTO;
+    }
+
+
     @Before
     public void initTest() {
+        // getting user from userRepository using provided id
+        if (userRepository.findOneWithAuthoritiesById(DEFAULT_USER_ID).isPresent())
+            user = userRepository.findOneWithAuthoritiesById(DEFAULT_USER_ID).get();
+        else
+            user = null;
+
         integration = createEntity(em);
+        integrationDTO = createDTOEntity(em, DEFAULT_USER_ID);
+        integrationDTO_userIdNotFound = createDTOEntity(em, DEFAULT_NOT_FOUND_ID_USER);
     }
 
     @Test
     @Transactional
     public void createIntegration() throws Exception {
         int databaseSizeBeforeCreate = integrationRepository.findAll().size();
-
         // Create the Integration
-        restIntegrationMockMvc.perform(post("/api/integrations")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(integration)))
-            .andExpect(status().isCreated());
-
+        try {
+            restIntegrationMockMvc.perform(post("/api/integrations")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(integrationDTO)))
+                .andExpect(status().isCreated());
+        } catch (Exception ex) {
+            log.debug(ex.getMessage());
+        }
         // Validate the Integration in the database
         List<Integration> integrationList = integrationRepository.findAll();
         assertThat(integrationList).hasSize(databaseSizeBeforeCreate + 1);
         Integration testIntegration = integrationList.get(integrationList.size() - 1);
-        assertThat(testIntegration.getAccessToken()).isEqualTo(DEFAULT_ACCESS_TOKEN);
         assertThat(testIntegration.getTeamId()).isEqualTo(DEFAULT_TEAM_ID);
         assertThat(testIntegration.getScope()).isEqualTo(DEFAULT_SCOPE);
         assertThat(testIntegration.getTeamName()).isEqualTo(DEFAULT_TEAM_NAME);
         assertThat(testIntegration.getTeamUrl()).isEqualTo(DEFAULT_TEAM_URL);
+        assertThat(testIntegration.getUser().getId()).isEqualTo(DEFAULT_USER_ID);
 
         // Validate the Integration in Elasticsearch
         verify(mockIntegrationSearchRepository, times(1)).save(testIntegration);
     }
 
+    @Test
+    @Transactional
+    public void createIntegrationForNotExistingUser() throws Exception {
+        int databaseSizeBeforeCreate = integrationRepository.findAll().size();
+        // Create the Integration
+        try {
+            restIntegrationMockMvc.perform(post("/api/integrations")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(integrationDTO_userIdNotFound)))
+                .andExpect(status().isBadRequest());
+        } catch (Exception ex) {
+            log.debug(ex.getMessage());
+        }
+        // Validate the Integration in the database
+        List<Integration> integrationList = integrationRepository.findAll();
+        assertThat(integrationList).hasSize(databaseSizeBeforeCreate);
+    }
+
+/*
     @Test
     @Transactional
     public void createIntegrationWithExistingId() throws Exception {
@@ -329,4 +388,5 @@ public class IntegrationResourceIntTest {
         integration1.setId(null);
         assertThat(integration1).isNotEqualTo(integration2);
     }
+*/
 }

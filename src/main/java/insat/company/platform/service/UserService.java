@@ -2,16 +2,19 @@ package insat.company.platform.service;
 
 import insat.company.platform.config.Constants;
 import insat.company.platform.domain.Authority;
+import insat.company.platform.domain.Field;
 import insat.company.platform.domain.User;
 import insat.company.platform.repository.AuthorityRepository;
+import insat.company.platform.repository.FieldRepository;
 import insat.company.platform.repository.UserRepository;
 import insat.company.platform.repository.search.UserSearchRepository;
 import insat.company.platform.security.AuthoritiesConstants;
 import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.dto.UserDTO;
 import insat.company.platform.service.util.RandomUtil;
-import insat.company.platform.web.rest.errors.*;
-
+import insat.company.platform.web.rest.errors.EmailAlreadyUsedException;
+import insat.company.platform.web.rest.errors.InvalidPasswordException;
+import insat.company.platform.web.rest.errors.LoginAlreadyUsedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -38,6 +41,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final FieldRepository fieldRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final UserSearchRepository userSearchRepository;
@@ -46,8 +51,9 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserSearchRepository userSearchRepository, AuthorityRepository authorityRepository, CacheManager cacheManager) {
+    public UserService(UserRepository userRepository, FieldRepository fieldRepository, PasswordEncoder passwordEncoder, UserSearchRepository userSearchRepository, AuthorityRepository authorityRepository, CacheManager cacheManager) {
         this.userRepository = userRepository;
+        this.fieldRepository = fieldRepository;
         this.passwordEncoder = passwordEncoder;
         this.userSearchRepository = userSearchRepository;
         this.authorityRepository = authorityRepository;
@@ -93,6 +99,13 @@ public class UserService {
     }
 
     public User registerUser(UserDTO userDTO, String password) {
+        Field fieldToGetorToSave = fieldRepository.findOneByYearAndSection(Long.valueOf(userDTO.getYear()),userDTO.getSection()).orElseGet(() -> {
+            Field newField = new Field();
+            newField.setYear(Long.valueOf(userDTO.getYear()));
+            newField.setSection(userDTO.getSection());
+            return fieldRepository.save(newField);
+        });
+
         userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
@@ -122,6 +135,7 @@ public class UserService {
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
+        newUser.setField(fieldToGetorToSave);
         userRepository.save(newUser);
         userSearchRepository.save(newUser);
         this.clearUserCaches(newUser);

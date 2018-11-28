@@ -46,7 +46,11 @@
             "confirmpassword": "New password confirmation",
             "confirmpassword.placeholder": "Confirm the new password",
             "email": "Email",
-            "email.placeholder": "Your email"
+            "section": "Section",
+            "year": "Year",
+            "email.placeholder": "Your email",
+            "section.placeholder": "Your section",
+            "year.placeholder": "Your year"
         },
         "messages": {
             "info": {

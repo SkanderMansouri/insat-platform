@@ -47,7 +47,11 @@
             "confirmpassword": "Confirmation du nouveau mot de passe",
             "confirmpassword.placeholder": "Confirmation du nouveau mot de passe",
             "email": "Email",
-            "email.placeholder": "Votre email"
+            "section": "Section",
+            "year": "Année",
+            "email.placeholder": "Votre email",
+            "section.placeholder": "Votre section",
+            "year.placeholder": "Votre année"
         },
         "messages": {
             "info": {

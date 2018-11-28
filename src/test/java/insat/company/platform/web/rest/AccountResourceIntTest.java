@@ -3,8 +3,10 @@ package insat.company.platform.web.rest;
 import insat.company.platform.InsatApp;
 import insat.company.platform.config.Constants;
 import insat.company.platform.domain.Authority;
+import insat.company.platform.domain.Field;
 import insat.company.platform.domain.User;
 import insat.company.platform.repository.AuthorityRepository;
+import insat.company.platform.repository.FieldRepository;
 import insat.company.platform.repository.UserRepository;
 import insat.company.platform.security.AuthoritiesConstants;
 import insat.company.platform.service.MailService;
@@ -53,6 +55,9 @@ public class AccountResourceIntTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private FieldRepository fieldRepository;
 
     @Autowired
     private AuthorityRepository authorityRepository;
@@ -160,6 +165,8 @@ public class AccountResourceIntTest {
     @Transactional
     public void testRegisterValid() throws Exception {
         ManagedUserVM validUser = new ManagedUserVM();
+        validUser.setSection("GL");
+        validUser.setYear("3");
         validUser.setLogin("test-register-valid");
         validUser.setPassword("password");
         validUser.setFirstName("Alice");
@@ -169,6 +176,7 @@ public class AccountResourceIntTest {
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
         assertThat(userRepository.findOneByLogin("test-register-valid").isPresent()).isFalse();
+        assertThat(fieldRepository.findOneByYearAndSection(Long.valueOf("3"),"GL").isPresent()).isFalse();
 
         restMvc.perform(
             post("/api/register")
@@ -177,12 +185,15 @@ public class AccountResourceIntTest {
             .andExpect(status().isCreated());
 
         assertThat(userRepository.findOneByLogin("test-register-valid").isPresent()).isTrue();
+        assertThat(fieldRepository.findOneByYearAndSection(Long.valueOf("3"),"GL").isPresent()).isTrue();
     }
 
     @Test
     @Transactional
     public void testRegisterInvalidLogin() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
+        invalidUser.setSection("GL");
+        invalidUser.setYear("3");
         invalidUser.setLogin("funky-log!n");// <-- invalid
         invalidUser.setPassword("password");
         invalidUser.setFirstName("Funky");
@@ -200,13 +211,17 @@ public class AccountResourceIntTest {
             .andExpect(status().isBadRequest());
 
         Optional<User> user = userRepository.findOneByEmailIgnoreCase("funky@example.com");
+        Optional<Field> field = fieldRepository.findOneByYearAndSection(Long.valueOf("3"),"GL");
         assertThat(user.isPresent()).isFalse();
+        assertThat(field.isPresent()).isFalse();
     }
 
     @Test
     @Transactional
     public void testRegisterInvalidEmail() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
+        invalidUser.setSection("GL");
+        invalidUser.setYear("3");
         invalidUser.setLogin("bob");
         invalidUser.setPassword("password");
         invalidUser.setFirstName("Bob");
@@ -224,13 +239,17 @@ public class AccountResourceIntTest {
             .andExpect(status().isBadRequest());
 
         Optional<User> user = userRepository.findOneByLogin("bob");
+        Optional<Field> field = fieldRepository.findOneByYearAndSection(Long.valueOf("3"),"GL");
         assertThat(user.isPresent()).isFalse();
+        assertThat(field.isPresent()).isFalse();
     }
 
     @Test
     @Transactional
     public void testRegisterInvalidPassword() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
+        invalidUser.setSection("GL");
+        invalidUser.setYear("3");
         invalidUser.setLogin("bob");
         invalidUser.setPassword("123");// password with only 3 digits
         invalidUser.setFirstName("Bob");
@@ -248,13 +267,17 @@ public class AccountResourceIntTest {
             .andExpect(status().isBadRequest());
 
         Optional<User> user = userRepository.findOneByLogin("bob");
+        Optional<Field> field = fieldRepository.findOneByYearAndSection(Long.valueOf("3"),"GL");
         assertThat(user.isPresent()).isFalse();
+        assertThat(field.isPresent()).isFalse();
     }
 
     @Test
     @Transactional
     public void testRegisterNullPassword() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
+        invalidUser.setSection("GL");
+        invalidUser.setYear("3");
         invalidUser.setLogin("bob");
         invalidUser.setPassword(null);// invalid null password
         invalidUser.setFirstName("Bob");
@@ -272,7 +295,66 @@ public class AccountResourceIntTest {
             .andExpect(status().isBadRequest());
 
         Optional<User> user = userRepository.findOneByLogin("bob");
+        Optional<Field> field = fieldRepository.findOneByYearAndSection(Long.valueOf("3"),"GL");
         assertThat(user.isPresent()).isFalse();
+        assertThat(field.isPresent()).isFalse();
+    }
+
+    @Test
+    @Transactional
+    public void testRegisterDuplicateField() throws Exception {
+        // First registration
+        ManagedUserVM firstUser = new ManagedUserVM();
+        firstUser.setSection("GL");
+        firstUser.setYear("3");
+        firstUser.setLogin("alice");
+        firstUser.setPassword("password");
+        firstUser.setFirstName("Alice");
+        firstUser.setLastName("Something");
+        firstUser.setEmail("alice@example.com");
+        firstUser.setImageUrl("http://placehold.it/50x50");
+        firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
+        firstUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+
+        // First user
+        restMvc.perform(
+            post("/api/register")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(firstUser)))
+            .andExpect(status().isCreated());
+
+        // Duplicate Field
+        ManagedUserVM secondUser = new ManagedUserVM();
+        secondUser.setSection(firstUser.getSection());
+        secondUser.setYear(firstUser.getYear());
+        secondUser.setLogin("alice1");
+        secondUser.setPassword("password1");
+        secondUser.setFirstName("Alice1");
+        secondUser.setLastName("something1");
+        secondUser.setEmail("alice1@example.com");
+        secondUser.setImageUrl(firstUser.getImageUrl());
+        secondUser.setLangKey(firstUser.getLangKey());
+        secondUser.setCreatedBy(firstUser.getCreatedBy());
+        secondUser.setCreatedDate(firstUser.getCreatedDate());
+        secondUser.setLastModifiedBy(firstUser.getLastModifiedBy());
+        secondUser.setLastModifiedDate(firstUser.getLastModifiedDate());
+        secondUser.setAuthorities(new HashSet<>(firstUser.getAuthorities()));
+
+        // Second user
+        restMvc.perform(
+            post("/api/register")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(secondUser)))
+            .andExpect(status().isCreated());
+
+        Optional<User> testSecondUser = userRepository.findOneByEmailIgnoreCase("alice1@example.com");
+        Optional<User> testUser = userRepository.findOneByEmailIgnoreCase("alice@example.com");
+        Optional<Field> field = fieldRepository.findOneByYearAndSection(Long.valueOf("3"),"GL");
+        assertThat(testSecondUser.isPresent()).isTrue();
+        assertThat(testUser.isPresent()).isTrue();
+        assertThat(field.isPresent()).isTrue();
+        assertThat(testSecondUser.get().getField().getId().equals(testUser.get().getField().getId())).isTrue();
+
     }
 
     @Test
@@ -280,6 +362,8 @@ public class AccountResourceIntTest {
     public void testRegisterDuplicateLogin() throws Exception {
         // First registration
         ManagedUserVM firstUser = new ManagedUserVM();
+        firstUser.setSection("GL");
+        firstUser.setYear("3");
         firstUser.setLogin("alice");
         firstUser.setPassword("password");
         firstUser.setFirstName("Alice");
@@ -291,6 +375,8 @@ public class AccountResourceIntTest {
 
         // Duplicate login, different email
         ManagedUserVM secondUser = new ManagedUserVM();
+        secondUser.setSection(firstUser.getSection());
+        secondUser.setYear(firstUser.getYear());
         secondUser.setLogin(firstUser.getLogin());
         secondUser.setPassword(firstUser.getPassword());
         secondUser.setFirstName(firstUser.getFirstName());
@@ -319,7 +405,9 @@ public class AccountResourceIntTest {
             .andExpect(status().isCreated());
 
         Optional<User> testUser = userRepository.findOneByEmailIgnoreCase("alice2@example.com");
+        Optional<Field> field = fieldRepository.findOneByYearAndSection(Long.valueOf("3"),"GL");
         assertThat(testUser.isPresent()).isTrue();
+        assertThat(field.isPresent()).isTrue();
         testUser.get().setActivated(true);
         userRepository.save(testUser.get());
 
@@ -336,6 +424,8 @@ public class AccountResourceIntTest {
     public void testRegisterDuplicateEmail() throws Exception {
         // First user
         ManagedUserVM firstUser = new ManagedUserVM();
+        firstUser.setSection("GL");
+        firstUser.setYear("3");
         firstUser.setLogin("test-register-duplicate-email");
         firstUser.setPassword("password");
         firstUser.setFirstName("Alice");
@@ -353,10 +443,14 @@ public class AccountResourceIntTest {
             .andExpect(status().isCreated());
 
         Optional<User> testUser1 = userRepository.findOneByLogin("test-register-duplicate-email");
+        Optional<Field> field = fieldRepository.findOneByYearAndSection(Long.valueOf("3"),"GL");
         assertThat(testUser1.isPresent()).isTrue();
+        assertThat(field.isPresent()).isTrue();
 
         // Duplicate email, different login
         ManagedUserVM secondUser = new ManagedUserVM();
+        secondUser.setSection(firstUser.getSection());
+        secondUser.setYear(firstUser.getYear());
         secondUser.setLogin("test-register-duplicate-email-2");
         secondUser.setPassword(firstUser.getPassword());
         secondUser.setFirstName(firstUser.getFirstName());
@@ -382,6 +476,8 @@ public class AccountResourceIntTest {
         // Duplicate email - with uppercase email address
         ManagedUserVM userWithUpperCaseEmail = new ManagedUserVM();
         userWithUpperCaseEmail.setId(firstUser.getId());
+        userWithUpperCaseEmail.setSection(firstUser.getSection());
+        userWithUpperCaseEmail.setYear(firstUser.getYear());
         userWithUpperCaseEmail.setLogin("test-register-duplicate-email-3");
         userWithUpperCaseEmail.setPassword(firstUser.getPassword());
         userWithUpperCaseEmail.setFirstName(firstUser.getFirstName());
@@ -417,6 +513,8 @@ public class AccountResourceIntTest {
     @Transactional
     public void testRegisterAdminIsIgnored() throws Exception {
         ManagedUserVM validUser = new ManagedUserVM();
+        validUser.setSection("GL");
+        validUser.setYear("3");
         validUser.setLogin("badguy");
         validUser.setPassword("password");
         validUser.setFirstName("Bad");
@@ -434,7 +532,9 @@ public class AccountResourceIntTest {
             .andExpect(status().isCreated());
 
         Optional<User> userDup = userRepository.findOneByLogin("badguy");
+        Optional<Field> field = fieldRepository.findOneByYearAndSection(Long.valueOf("3"),"GL");
         assertThat(userDup.isPresent()).isTrue();
+        assertThat(field.isPresent()).isTrue();
         assertThat(userDup.get().getAuthorities()).hasSize(1)
             .containsExactly(authorityRepository.findById(AuthoritiesConstants.USER).get());
     }

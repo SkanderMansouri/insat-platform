@@ -1,22 +1,21 @@
 package insat.company.platform.domain;
 
-import insat.company.platform.config.Constants;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import insat.company.platform.config.Constants;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
-import javax.validation.constraints.Email;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
-import java.time.Instant;
 
 /**
  * A user.
@@ -28,6 +27,7 @@ import java.time.Instant;
 public class User extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -96,6 +96,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
+
+    @ManyToMany(mappedBy = "club")
+    private Set<Club> clubs = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -210,6 +213,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.authorities = authorities;
     }
 
+    public Set<Club> getClubs() {
+        return clubs;
+    }
+
+    public void setClubs(Set<Club> clubs) {
+        this.clubs = clubs;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -222,6 +233,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
         User user = (User) o;
         return !(user.getId() == null || getId() == null) && Objects.equals(getId(), user.getId());
     }
+
 
     @Override
     public int hashCode() {

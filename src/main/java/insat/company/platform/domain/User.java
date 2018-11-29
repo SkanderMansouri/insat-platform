@@ -97,7 +97,12 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
 
-    @ManyToMany(mappedBy = "club")
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+        name = "club_member",
+        joinColumns = {@JoinColumn(name = "members_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "clubs_id", referencedColumnName = "id")})
     private Set<Club> clubs = new HashSet<>();
 
     public Long getId() {

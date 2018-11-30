@@ -11,7 +11,9 @@
     <include file="config/liquibase/changelog/20181120210000_added_FK_ManyToOne_Integration_User.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20181121074014_added_entity_SlackChannel.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20181121043200_added_column_user_field.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20181121074014_added_entity_SlackChannel.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181127213957_added_entity_Club.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20181127213957_added_entity_constraints_Club.xml"
+             relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

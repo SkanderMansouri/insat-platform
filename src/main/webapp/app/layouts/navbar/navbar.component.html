@@ -19,6 +19,16 @@
                 </a>
             </li>
 
+            <li *ngSwitchCase="true" class="nav-item" routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link" routerLink="list/clubs">
+                    <span>
+                        <fa-icon icon="list" fixedWidth="true"></fa-icon>
+                        <span>List-clubs</span>
+                    </span>
+                </a>
+            </li>
+
             <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
                     <span>

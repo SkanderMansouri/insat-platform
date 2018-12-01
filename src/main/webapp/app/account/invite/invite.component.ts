@@ -1,5 +1,4 @@
 import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
-import { EMAIL_ALREADY_USED_TYPE, EMAIL_NOT_FOUND_TYPE } from 'app/shared';
 import { InviteService } from 'app/account/invite/invite.service';
 
 @Component({
@@ -33,7 +32,7 @@ export class InviteComponent implements OnInit, AfterViewInit {
             },
             response => {
                 this.success = null;
-                if (response.status === 400 && response.error.type === EMAIL_ALREADY_USED_TYPE) {
+                if (response.status === 400) {
                     this.errorEmailExists = 'ERROR';
                 } else {
                     this.error = 'ERROR';

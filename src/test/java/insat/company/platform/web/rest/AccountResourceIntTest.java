@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -41,8 +42,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -911,17 +911,48 @@ public class AccountResourceIntTest {
                 .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
             .andExpect(status().isInternalServerError());
     }
-
-    //TODO : Make the test for requestInviteEmail with already existing email address
-    /*
-    @Test(expected = EmailAlreadyUsedException.class)
-    public void requestInviteEmail() throws Exception {
-        String email = "admin@localhost";
+    @Test
+    @Transactional
+    public void shouldReturnBadRequestWhenEmailExists() throws Exception {
+        String email = "test@mail.com";
+        User user = new User();
+        user.setPassword(RandomStringUtils.random(60));
+        user.setLogin("test");
+        user.setEmail(email);
+        user.setResetDate(Instant.now().plusSeconds(60));
+        user.setResetKey("reset key too small");
+        userRepository.saveAndFlush(user);
         restMvc.perform(
             post("/api/account/invite")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(email)))
-                .andExpect(status().isOk());
+                .content(email))
+            .andExpect(status().isBadRequest());
+        verify(mockMailService,times(0)).sendInvitationMail(eq(email));
     }
-    */
+
+    @Test
+    @Transactional
+    public void shouldReturnOkWhenEmailDoesntExist() throws Exception {
+        String email = "mail@mail.com";
+        doNothing().when(mockMailService).sendInvitationMail(email);
+        restMvc.perform(
+            post("/api/account/invite")
+                .content(email))
+            .andExpect(status().isOk());
+        verify(mockMailService,times(1)).sendInvitationMail(eq(email));
+    }
+
+    @Test
+    @Transactional
+    public void shouldReturnUnauthorizedWhenUserIsNotAuthenticated() throws Exception {
+        SecurityContextHolder.getContext().setAuthentication(null);
+        String email = "mail@mail.com";
+        restMvc.perform(
+            post("/api/account/invite")
+                .content(email))
+            .andExpect(status().isUnauthorized());
+        verify(mockUserService,times(0)).getUserByEmail(eq(email));
+        verify(mockMailService,times(0)).sendInvitationMail(eq(email));
+
+    }
+
 }

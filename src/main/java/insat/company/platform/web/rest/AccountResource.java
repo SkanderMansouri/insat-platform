@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -162,19 +163,23 @@ public class AccountResource {
 
 
     /**
-     * POST   /account/invite : Send an email to invite a user
+     * POST /account/invite/: Send an email to invite a user
      * @param mail the mail of the user
-     * @throws EmailAlreadyUsedException 400 (Bad Request) if the new Email is already Used
      */
     @PostMapping(path = "/account/invite")
     @Timed
-    public void requestInviteEmail(@RequestBody String mail) {
-
-        if (userService.VerifyEmail(mail).isPresent()) {
-            throw new EmailAlreadyUsedException();
-        } else {
-            mailService.sendInvitationMail(mail);
+    public ResponseEntity<?> requestInviteEmail(@RequestBody String mail) {
+        log.info("REST request to invite user with mail {}",mail);
+        if(!SecurityUtils.isAuthenticated()){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+        return userService.getUserByEmail(mail)
+           .map(userWithSameEmail ->  {
+               return new ResponseEntity<Void>(HttpStatus.valueOf(400)); })
+        .orElseGet(()-> {
+            mailService.sendInvitationMail(mail);
+            return new ResponseEntity<>(HttpStatus.OK);
+        });
     }
 
     /**

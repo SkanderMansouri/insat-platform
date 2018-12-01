@@ -187,7 +187,7 @@ public class MailServiceIntTest {
     }
 
     @Test
-    public void sendInvitationMail() throws MessagingException, IOException {
+    public void souldSendAnInvitationMailSuccessfully() throws MessagingException, IOException {
         String email = "test@localhost";
         mailService.sendInvitationMail(email);
         verify(javaMailSender).send(messageCaptor.capture());

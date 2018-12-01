@@ -242,8 +242,8 @@ public class UserService {
             })
             .map(UserDTO::new);
     }
-    public Optional<User> VerifyEmail(String email) {
-        return(userRepository.findOneByEmailIgnoreCase(email));
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findOneByEmailIgnoreCase(email);
     }
 
     public void deleteUser(String login) {

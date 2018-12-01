@@ -5,7 +5,6 @@ import insat.company.platform.domain.Integration;
 import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.IntegrationService;
 import insat.company.platform.service.SlackApiService;
-import insat.company.platform.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,7 +28,7 @@ public class WebEventsResource {
     private final IntegrationService integrationService;
     private final SlackApiService slackApiService;
 
-    public WebEventsResource(IntegrationService integrationService, SlackApiService slackApiService, UserService userService) {
+    public WebEventsResource(IntegrationService integrationService, SlackApiService slackApiService) {
         this.integrationService = integrationService;
         this.slackApiService = slackApiService;
     }

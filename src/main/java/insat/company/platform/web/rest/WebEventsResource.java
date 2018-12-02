@@ -1,20 +1,22 @@
 package insat.company.platform.web.rest;
 
-<<<<<<< HEAD
 import com.codahale.metrics.annotation.Timed;
 import insat.company.platform.domain.Integration;
+import insat.company.platform.domain.SlackChannel;
 import insat.company.platform.security.SecurityUtils;
+import insat.company.platform.service.ChannelCreatedService;
 import insat.company.platform.service.IntegrationService;
 import insat.company.platform.service.SlackApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import java.io.StringReader;
 import java.util.Optional;
 
 /**
@@ -79,6 +81,7 @@ public class WebEventsResource {
             if (type.equalsIgnoreCase(URL_VERIFICATION)) {
                 String challenge = object.getString("challenge");
                 return new ResponseEntity<>(challenge, HttpStatus.OK);
+            }
 
                 if (type.equalsIgnoreCase(CHANNEL_CREATED)) {
                     JsonObject channelJson = event.getJsonObject("channel");
@@ -95,4 +98,4 @@ public class WebEventsResource {
                 return ResponseEntity.notFound().build();
             }
         }
-    }
+

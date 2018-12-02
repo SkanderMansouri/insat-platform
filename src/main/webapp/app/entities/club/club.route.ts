@@ -78,7 +78,10 @@ export const clubRoute: Routes = [
         path: 'list/clubs',
         component: ClubsListComponent,
         resolve: {
-            club: ClubResolve
+            club: ClubResolve,
+            data: {
+                authorities: ['ROLE_USER']
+            }
         },
         canActivate: [UserRouteAccessService]
     }

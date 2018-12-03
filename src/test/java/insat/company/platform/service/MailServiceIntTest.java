@@ -1,7 +1,7 @@
 package insat.company.platform.service;
-import insat.company.platform.config.Constants;
 
 import insat.company.platform.InsatApp;
+import insat.company.platform.config.Constants;
 import insat.company.platform.domain.User;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.Before;
@@ -19,11 +19,13 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
+import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -182,6 +184,18 @@ public class MailServiceIntTest {
     public void testSendEmailWithException() throws Exception {
         doThrow(MailSendException.class).when(javaMailSender).send(any(MimeMessage.class));
         mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", false, false);
+    }
+
+    @Test
+    public void souldSendAnInvitationMailSuccessfully() throws MessagingException, IOException {
+        String email = "test@localhost";
+        mailService.sendInvitationMail(email);
+        verify(javaMailSender).send(messageCaptor.capture());
+        MimeMessage message = messageCaptor.getValue();
+        assertThat(message.getAllRecipients()[0].toString()).isEqualTo(email);
+        assertThat(message.getFrom()[0].toString()).isEqualTo(jHipsterProperties.getMail().getFrom());
+        assertThat(message.getContent().toString()).isNotEmpty();
+        assertThat(message.getDataHandler().getContentType()).isEqualTo("text/html;charset=UTF-8");
     }
 
 }

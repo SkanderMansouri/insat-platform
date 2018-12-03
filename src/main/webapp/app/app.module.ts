@@ -21,7 +21,6 @@ import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { ActiveMenuDirective, ErrorComponent, FooterComponent, JhiMainComponent, NavbarComponent, PageRibbonComponent } from './layouts';
 import { SlackUsersListComponent } from './entities/slack-user/slack-users-list.component';
-import { ClubsListComponent } from './entities/club/clubs-list.component';
 
 @NgModule({
     imports: [
@@ -49,8 +48,7 @@ import { ClubsListComponent } from './entities/club/clubs-list.component';
         PageRibbonComponent,
         ActiveMenuDirective,
         FooterComponent,
-        SlackUsersListComponent,
-        ClubsListComponent
+        SlackUsersListComponent
     ],
     providers: [
         {

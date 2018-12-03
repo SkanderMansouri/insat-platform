@@ -9,7 +9,6 @@ import { ClubService } from './club.service';
 import { ClubComponent } from './club.component';
 import { ClubDetailComponent } from './club-detail.component';
 import { ClubUpdateComponent } from './club-update.component';
-import { ClubsListComponent } from './clubs-list.component';
 import { ClubDeletePopupComponent } from './club-delete-dialog.component';
 
 @Injectable({ providedIn: 'root' })
@@ -71,17 +70,6 @@ export const clubRoute: Routes = [
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'insatApp.club.home.title'
-        },
-        canActivate: [UserRouteAccessService]
-    },
-    {
-        path: 'list/clubs',
-        component: ClubsListComponent,
-        resolve: {
-            club: ClubResolve,
-            data: {
-                authorities: ['ROLE_USER']
-            }
         },
         canActivate: [UserRouteAccessService]
     }

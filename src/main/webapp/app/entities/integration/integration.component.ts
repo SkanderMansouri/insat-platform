@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
+import { JhiAlertService, JhiEventManager, JhiParseLinks } from 'ng-jhipster';
 
 import { IIntegration } from 'app/shared/model/integration.model';
 import { Principal } from 'app/core';
@@ -10,7 +10,6 @@ import { Principal } from 'app/core';
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { IntegrationService } from './integration.service';
 import { ConfigService } from '../../services/config.service';
-import { IConfig } from '../../shared/model/config.model';
 
 @Component({
     selector: 'jhi-integration',
@@ -146,7 +145,7 @@ export class IntegrationComponent implements OnInit, OnDestroy {
         this.configService
             .get()
             .subscribe(
-                (res: HttpResponse<string>) => (this.slackClientId = res.body.slackClientId),
+                (res: HttpResponse<>) => (this.slackClientId = res.body.slackClientId),
                 (res: HttpErrorResponse) => this.onError(res.message)
             );
     }

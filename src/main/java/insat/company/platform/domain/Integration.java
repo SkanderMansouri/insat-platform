@@ -1,11 +1,10 @@
 package insat.company.platform.domain;
 
 
-import javax.persistence.*;
-
 import insat.company.platform.service.dto.IntegrationDTO;
 import org.springframework.data.elasticsearch.annotations.Document;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 

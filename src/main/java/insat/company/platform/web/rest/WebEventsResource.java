@@ -30,6 +30,7 @@ public class WebEventsResource {
     private final String URL_VERIFICATION = "url_verification";
     private final String CHANNEL_CREATED = "channel_created";
     private final ChannelCreatedService channelCreatedService;
+
     private final IntegrationService integrationService;
     private final SlackApiService slackApiService;
 

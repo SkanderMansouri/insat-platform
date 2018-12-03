@@ -3,6 +3,7 @@ package insat.company.platform.web.rest;
 import insat.company.platform.InsatApp;
 import insat.company.platform.domain.Integration;
 import insat.company.platform.repository.IntegrationRepository;
+import insat.company.platform.service.ChannelCreatedService;
 import insat.company.platform.service.IntegrationService;
 import insat.company.platform.service.SlackApiService;
 import insat.company.platform.web.rest.errors.ExceptionTranslator;
@@ -53,6 +54,9 @@ public class WebEventsResourceIntTest {
     @Autowired
     private ExceptionTranslator exceptionTranslator;
 
+    @Mock
+    private ChannelCreatedService channelCreatedService;
+
     private MockMvc restWebEventMvc;
 
 
@@ -62,7 +66,7 @@ public class WebEventsResourceIntTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        this.webEventsResource = new WebEventsResource(integrationService,slackApiService);
+        this.webEventsResource = new WebEventsResource(integrationService,slackApiService,channelCreatedService);
 
         this.restWebEventMvc = MockMvcBuilders.standaloneSetup(webEventsResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)

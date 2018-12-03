@@ -175,7 +175,7 @@ public class AccountResource {
         }
         return userService.getUserByEmail(mail)
            .map(userWithSameEmail ->  {
-               return new ResponseEntity<Void>(HttpStatus.valueOf(400)); })
+               return new ResponseEntity<>(HttpStatus.BAD_REQUEST); })
         .orElseGet(()-> {
             mailService.sendInvitationMail(mail);
             return new ResponseEntity<>(HttpStatus.OK);

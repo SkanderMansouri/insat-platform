@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -158,6 +159,27 @@ public class AccountResource {
            userService.requestPasswordReset(mail)
                .orElseThrow(EmailNotFoundException::new)
        );
+    }
+
+
+    /**
+     * POST /account/invite/: Send an email to invite a user
+     * @param mail the mail of the user
+     */
+    @PostMapping(path = "/account/invite")
+    @Timed
+    public ResponseEntity<?> requestInviteEmail(@RequestBody String mail) {
+        log.info("REST request to invite user with mail {}",mail);
+        if(!SecurityUtils.isAuthenticated()){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        return userService.getUserByEmail(mail)
+           .map(userWithSameEmail ->  {
+               return new ResponseEntity<>(HttpStatus.BAD_REQUEST); })
+        .orElseGet(()-> {
+            mailService.sendInvitationMail(mail);
+            return new ResponseEntity<>(HttpStatus.OK);
+        });
     }
 
     /**

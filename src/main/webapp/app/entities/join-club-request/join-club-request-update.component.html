@@ -1,0 +1,81 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-join-club-request-heading" jhiTranslate="insatApp.joinClubRequest.home.createOrEditLabel">Create or edit a Join Club Request</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!joinClubRequest.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="joinClubRequest.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="insatApp.joinClubRequest.requestTime" for="field_requestTime">Request Time</label>
+                    <div class="input-group">
+                        <input id="field_requestTime" type="text" class="form-control" name="requestTime" ngbDatepicker  #requestTimeDp="ngbDatepicker" [(ngModel)]="joinClubRequest.requestTime"
+                        required/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="requestTimeDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                    </div>
+                    <div [hidden]="!(editForm.controls.requestTime?.dirty && editForm.controls.requestTime?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.requestTime?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="insatApp.joinClubRequest.status" for="field_status">Status</label>
+                    <select class="form-control" name="status" [(ngModel)]="joinClubRequest.status" id="field_status"  required>
+                        <option value="PENDING">{{'insatApp.StatusEnumeration.PENDING' | translate}}</option>
+                        <option value="ACCEPTED">{{'insatApp.StatusEnumeration.ACCEPTED' | translate}}</option>
+                        <option value="REJECTED">{{'insatApp.StatusEnumeration.REJECTED' | translate}}</option>
+                        <option value="DELETED">{{'insatApp.StatusEnumeration.DELETED' | translate}}</option>
+                    </select>
+                    <div [hidden]="!(editForm.controls.status?.dirty && editForm.controls.status?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.status?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="insatApp.joinClubRequest.user" for="field_user">User</label>
+                    <select class="form-control" id="field_user" name="user" [(ngModel)]="joinClubRequest.user"  required>
+                        <option *ngIf="!editForm.value.user" [ngValue]="null" selected></option>
+                        <option [ngValue]="userOption.id === joinClubRequest.user?.id ? joinClubRequest.user : userOption" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.user?.dirty && editForm.controls.user?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.user?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="insatApp.joinClubRequest.club" for="field_club">Club</label>
+                    <select class="form-control" id="field_club" name="club" [(ngModel)]="joinClubRequest.club"  required>
+                        <option *ngIf="!editForm.value.club" [ngValue]="null" selected></option>
+                        <option [ngValue]="clubOption.id === joinClubRequest.club?.id ? joinClubRequest.club : clubOption" *ngFor="let clubOption of clubs; trackBy: trackClubById">{{clubOption.id}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.club?.dirty && editForm.controls.club?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.club?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="joinClubRequest">
+            <h2><span jhiTranslate="insatApp.joinClubRequest.detail.title">Join Club Request</span> {{joinClubRequest.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="insatApp.joinClubRequest.requestTime">Request Time</span></dt>
+                <dd>
+                    <span>{{joinClubRequest.requestTime}}</span>
+                </dd>
+                <dt><span jhiTranslate="insatApp.joinClubRequest.status">Status</span></dt>
+                <dd>
+                    <span jhiTranslate="{{'insatApp.StatusEnumeration.' + joinClubRequest.status}}">{{joinClubRequest.status}}</span>
+                </dd>
+                <dt><span jhiTranslate="insatApp.joinClubRequest.user">User</span></dt>
+                <dd>
+                    {{joinClubRequest.user?.login}}
+                </dd>
+                <dt><span jhiTranslate="insatApp.joinClubRequest.club">Club</span></dt>
+                <dd>
+                    <div *ngIf="joinClubRequest.club">
+                        <a [routerLink]="['/club', joinClubRequest.club?.id, 'view']">{{joinClubRequest.club?.id}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/join-club-request', joinClubRequest.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

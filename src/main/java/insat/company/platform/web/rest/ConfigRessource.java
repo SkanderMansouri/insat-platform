@@ -29,12 +29,12 @@ public class ConfigRessource {
 
     @GetMapping("/config")
     @Timed
-    public ResponseEntity<String> getSlackClientId() {
+    public ResponseEntity<JsonObject> getSlackClientId() {
        log.info("REST Request to get slack client id");
         JsonObject result = javax.json.Json.createObjectBuilder()
             .add("slackClientId", applicationProperties.getSlackClientId())
             .build();
-        return ResponseEntity.ok().body(result.toString());
+        return ResponseEntity.ok().body(result);
     }
 
 }

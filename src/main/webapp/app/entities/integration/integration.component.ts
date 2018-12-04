@@ -11,6 +11,7 @@ import { ITEMS_PER_PAGE } from 'app/shared';
 import { IntegrationService } from './integration.service';
 import { ConfigService } from '../../services/config.service';
 import { IConfig } from '../../shared/model/config.model';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'jhi-integration',
@@ -32,8 +33,9 @@ export class IntegrationComponent implements OnInit, OnDestroy {
     predicate: any;
     previousPage: any;
     reverse: any;
-    slackClientId: any;
+    slackClientId: string;
     code: any;
+    list: string[];
 
     constructor(
         private integrationService: IntegrationService,
@@ -43,7 +45,8 @@ export class IntegrationComponent implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private router: Router,
         private eventManager: JhiEventManager,
-        private configService: ConfigService
+        private configService: ConfigService,
+        private httpClient: HttpClient
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.activatedRoute.queryParams.subscribe(params => {
@@ -143,12 +146,25 @@ export class IntegrationComponent implements OnInit, OnDestroy {
             this.currentAccount = account;
         });
         this.registerChangeInIntegrations();
-        this.configService
-            .get()
-            .subscribe(
-                (res: HttpResponse<string>) => (this.slackClientId = res.body.slackClientId),
-                (res: HttpErrorResponse) => this.onError(res.message)
+        this.configService.get().subscribe(
+            (res: HttpResponse<string>) => {
+                this.slackClientId = res.body.slackClientId;
+                console.log(this.slackClientId + 'AAAABAAAAA' + this);
+            },
+            (res: HttpErrorResponse) => this.onError(res.message)
+        );
+        this.list = [this.code, 200];
+
+        if (this.code) {
+            this.configService.getcode(this.list).subscribe(
+                () => {
+                    console.log('Code envoyé !');
+                },
+                error => {
+                    console.log('Erreur ! : ' + error);
+                }
             );
+        }
     }
 
     ngOnDestroy() {

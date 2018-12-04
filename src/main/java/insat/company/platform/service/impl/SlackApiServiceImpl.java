@@ -46,7 +46,7 @@ public class SlackApiServiceImpl implements SlackApiService {
 
                 integration = getIntegration(oAuthAccessResponse);
             } else {
-                log.info("An occurred while receiving an integration from slack {}", oAuthAccessResponse.getError());
+                log.info("An error occurred while receiving an integration from slack {}", oAuthAccessResponse.getError());
             }
         } catch (IOException | SlackApiException e) {
             log.warn("An error occurred while obtaining oauth token", e);

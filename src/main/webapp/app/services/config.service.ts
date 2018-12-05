@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { SERVER_API_URL } from 'app/app.constants';
 import { IConfig } from '../shared/model/config.model';
 
-type EntityResponseType = HttpResponse<string>;
+type EntityResponseType = HttpResponse<any>;
 
 @Injectable({ providedIn: 'root' })
 export class ConfigService {
@@ -14,6 +14,6 @@ export class ConfigService {
     constructor(private http: HttpClient) {}
 
     get(): Observable<EntityResponseType> {
-        return this.http.get<string>(this.resourceUrl, { observe: 'response' });
+        return this.http.get<any>(this.resourceUrl, { observe: 'response' });
     }
 }

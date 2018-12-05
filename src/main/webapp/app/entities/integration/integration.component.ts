@@ -145,7 +145,7 @@ export class IntegrationComponent implements OnInit, OnDestroy {
         this.configService
             .get()
             .subscribe(
-                (res: HttpResponse<>) => (this.slackClientId = res.body.slackClientId),
+                (res: HttpResponse<any>) => (this.slackClientId = res.body.slackClientId),
                 (res: HttpErrorResponse) => this.onError(res.message)
             );
     }

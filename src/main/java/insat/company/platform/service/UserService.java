@@ -1,12 +1,9 @@
 package insat.company.platform.service;
 
 import insat.company.platform.config.Constants;
-import insat.company.platform.domain.Authority;
-import insat.company.platform.domain.Field;
-import insat.company.platform.domain.User;
-import insat.company.platform.repository.AuthorityRepository;
-import insat.company.platform.repository.FieldRepository;
-import insat.company.platform.repository.UserRepository;
+import insat.company.platform.domain.*;
+import insat.company.platform.domain.enumeration.StatusEnumeration;
+import insat.company.platform.repository.*;
 import insat.company.platform.repository.search.UserSearchRepository;
 import insat.company.platform.security.AuthoritiesConstants;
 import insat.company.platform.security.SecurityUtils;
@@ -21,6 +18,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +39,10 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final ClubRepository clubRepository;
+
+    private final JoinClubRequestRepository joinClubRequestRepository;
+
     private final FieldRepository fieldRepository;
 
     private final PasswordEncoder passwordEncoder;
@@ -51,8 +53,10 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
-    public UserService(UserRepository userRepository, FieldRepository fieldRepository, PasswordEncoder passwordEncoder, UserSearchRepository userSearchRepository, AuthorityRepository authorityRepository, CacheManager cacheManager) {
+    public UserService(UserRepository userRepository,ClubRepository clubRepository,JoinClubRequestRepository joinClubRequestRepository, FieldRepository fieldRepository, PasswordEncoder passwordEncoder, UserSearchRepository userSearchRepository, AuthorityRepository authorityRepository, CacheManager cacheManager) {
         this.userRepository = userRepository;
+        this.clubRepository = clubRepository;
+        this.joinClubRequestRepository = joinClubRequestRepository;
         this.fieldRepository = fieldRepository;
         this.passwordEncoder = passwordEncoder;
         this.userSearchRepository = userSearchRepository;
@@ -318,4 +322,59 @@ public class UserService {
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
     }
+
+    @PreAuthorize("hasRole('ROLE_PRESIDENT')")
+    public boolean verifyAccessToJoinClubRequest(JoinClubRequest joinClubRequest){
+        SecurityUtils.getCurrentUserLogin()
+            .flatMap(userRepository::findOneByLogin)
+            .map(user -> {
+                boolean result = false;
+                log.info("Accepting {}'s request to join {}",joinClubRequest.getUser().getFirstName(),joinClubRequest.getClub().getName());
+                if (!(clubRepository.findClubById(joinClubRequest.getClub().getId()).isPresent())){
+                    log.error("the club {} no longer exists", joinClubRequest.getClub().getName());
+                }
+                else if (!(user.equals(joinClubRequest.getClub().getPresident()))) {
+                    log.error("{} {} is not the president of {}", user.getFirstName(),user.getLastName(), joinClubRequest.getClub().getName());
+                }
+                else if (!(joinClubRequest.getStatus().equals(StatusEnumeration.PENDING))){
+                    switch (joinClubRequest.getStatus()){
+                        case ACCEPTED: log.error("the request is already accepted"); break;
+                        case REJECTED: log.error("the request is already rejected"); break;
+                        case DELETED: log.error("the request was deleted by the user"); break;
+                        default: log.error("Error while treating the request status");
+                    }
+                } else {
+                    result = true;
+                }
+                return result;
+        })
+            .orElse(false);
+        return  false;
+    }
+
+    @PreAuthorize("hasRole('ROLE_PRESIDENT')")
+    public void acceptJoinClubRequest(JoinClubRequest joinClubRequest){
+        if (verifyAccessToJoinClubRequest(joinClubRequest)){
+            Club club = joinClubRequest.getClub();
+            User user = joinClubRequest.getUser();
+            joinClubRequest.setStatus(StatusEnumeration.ACCEPTED);
+            club.addMember(user);
+            user.getClubs().add(club);
+            userRepository.save(user);
+            clubRepository.save(club);
+            joinClubRequestRepository.save(joinClubRequest);
+            this.clearUserCaches(user);
+            log.info("{} {} joined {} successfully !",user.getFirstName(),user.getLastName(),club.getName());
+        } else log.error("There was an error while accepting the request !");
+    }
+
+    @PreAuthorize("hasRole('ROLE_PRESIDENT')")
+    public void declineJoinClubRequest(JoinClubRequest joinClubRequest){
+        if (verifyAccessToJoinClubRequest(joinClubRequest)){
+            joinClubRequest.setStatus(StatusEnumeration.REJECTED);
+            joinClubRequestRepository.save(joinClubRequest);
+            log.info("The join request was declined !");
+        } else log.error("There was an error while rejecting the request !");
+    }
+
 }

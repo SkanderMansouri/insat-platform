@@ -2,24 +2,23 @@ package insat.company.platform.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import insat.company.platform.domain.JoinClubRequest;
+import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.JoinClubRequestService;
+import insat.company.platform.service.UserService;
 import insat.company.platform.web.rest.errors.BadRequestAlertException;
 import insat.company.platform.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing JoinClubRequest.
@@ -32,9 +31,11 @@ public class JoinClubRequestResource {
 
     private static final String ENTITY_NAME = "joinClubRequest";
 
+    private final UserService userService;
     private final JoinClubRequestService joinClubRequestService;
 
-    public JoinClubRequestResource(JoinClubRequestService joinClubRequestService) {
+    public JoinClubRequestResource(UserService userService, JoinClubRequestService joinClubRequestService) {
+        this.userService = userService;
         this.joinClubRequestService = joinClubRequestService;
     }
 
@@ -132,6 +133,54 @@ public class JoinClubRequestResource {
     public List<JoinClubRequest> searchJoinClubRequests(@RequestParam String query) {
         log.debug("REST request to search JoinClubRequests for query {}", query);
         return joinClubRequestService.search(query);
+    }
+
+    /**
+     * GET  /join-club-request/accept/:id : accepts the joinClubRequest by "id"
+     *
+     * @param id the id of the joinClubRequest to retrieve
+     * @return the ResponseEntity with status 200 (OK), or with status 404 (Not Found)
+     */
+    @GetMapping("/join-club-request/accept/{id}")
+    @Timed
+    public ResponseEntity<JoinClubRequest> acceptJoinClubRequestAPI(@RequestBody long id) {
+        log.debug("REST request to accept JoinClubRequest : {}", id);
+        Optional<JoinClubRequest> joinClubRequest = joinClubRequestService.findOne(id);
+        if (!SecurityUtils.isAuthenticated()) {
+            log.error("User should be logged in");
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        if (joinClubRequest.isPresent()) {
+            userService.acceptJoinClubRequest(joinClubRequest);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            log.error("The request doesn't exist !");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * GET  /join-club-request/decline/:id : declines the joinClubRequest by "id"
+     *
+     * @param id the id of the joinClubRequest to retrieve
+     * @return the ResponseEntity with status 200 (OK), or with status 404 (Not Found)
+     */
+    @GetMapping("/join-club-request/decline/{id}")
+    @Timed
+    public ResponseEntity<JoinClubRequest> declineJoinClubRequestAPI(@RequestBody long id) {
+        log.debug("REST request to decline JoinClubRequest : {}", id);
+        Optional<JoinClubRequest> joinClubRequest = joinClubRequestService.findOne(id);
+        if (!SecurityUtils.isAuthenticated()) {
+            log.error("User should be logged in");
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        if (joinClubRequest.isPresent()) {
+            userService.declineJoinClubRequest(joinClubRequest);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            log.error("The request doesn't exist !");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

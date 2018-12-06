@@ -324,57 +324,73 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ROLE_PRESIDENT')")
-    public boolean verifyAccessToJoinClubRequest(JoinClubRequest joinClubRequest){
-        SecurityUtils.getCurrentUserLogin()
-            .flatMap(userRepository::findOneByLogin)
-            .map(user -> {
-                boolean result = false;
-                log.info("Accepting {}'s request to join {}",joinClubRequest.getUser().getFirstName(),joinClubRequest.getClub().getName());
-                if (!(clubRepository.findClubById(joinClubRequest.getClub().getId()).isPresent())){
-                    log.error("the club {} no longer exists", joinClubRequest.getClub().getName());
-                }
-                else if (!(user.equals(joinClubRequest.getClub().getPresident()))) {
-                    log.error("{} {} is not the president of {}", user.getFirstName(),user.getLastName(), joinClubRequest.getClub().getName());
-                }
-                else if (!(joinClubRequest.getStatus().equals(StatusEnumeration.PENDING))){
-                    switch (joinClubRequest.getStatus()){
-                        case ACCEPTED: log.error("the request is already accepted"); break;
-                        case REJECTED: log.error("the request is already rejected"); break;
-                        case DELETED: log.error("the request was deleted by the user"); break;
-                        default: log.error("Error while treating the request status");
+    public boolean verifyAccessToJoinClubRequest(Optional<JoinClubRequest> joinClubRequest) {
+        joinClubRequest.map(joinClubRequestExists -> {
+            SecurityUtils.getCurrentUserLogin()
+                .flatMap(userRepository::findOneByLogin)
+                .map(user -> {
+                    boolean result = false;
+                    log.info("Accepting {}'s request to join {}", joinClubRequestExists.getUser().getFirstName(), joinClubRequestExists.getClub().getName());
+                    if (!(clubRepository.findClubById(joinClubRequestExists.getClub().getId()).isPresent())) {
+                        log.error("the club {} no longer exists", joinClubRequestExists.getClub().getName());
+                    } else if (!(user.equals(joinClubRequestExists.getClub().getPresident()))) {
+                        log.error("{} {} is not the president of {}", user.getFirstName(), user.getLastName(), joinClubRequestExists.getClub().getName());
+                    } else if (!(joinClubRequestExists.getStatus().equals(StatusEnumeration.PENDING))) {
+                        switch (joinClubRequestExists.getStatus()) {
+                            case ACCEPTED:
+                                log.error("the request is already accepted");
+                                break;
+                            case REJECTED:
+                                log.error("the request is already rejected");
+                                break;
+                            case DELETED:
+                                log.error("the request was deleted by the user");
+                                break;
+                            default:
+                                log.error("Error while treating the request status");
+                        }
+                    } else {
+                        result = true;
                     }
-                } else {
-                    result = true;
-                }
-                return result;
+                    return result;
+                })
+                .orElse(false);
+            return false;
         })
             .orElse(false);
-        return  false;
+        return false;
     }
 
     @PreAuthorize("hasRole('ROLE_PRESIDENT')")
-    public void acceptJoinClubRequest(JoinClubRequest joinClubRequest){
-        if (verifyAccessToJoinClubRequest(joinClubRequest)){
-            Club club = joinClubRequest.getClub();
-            User user = joinClubRequest.getUser();
-            joinClubRequest.setStatus(StatusEnumeration.ACCEPTED);
-            club.addMember(user);
-            user.getClubs().add(club);
-            userRepository.save(user);
-            clubRepository.save(club);
-            joinClubRequestRepository.save(joinClubRequest);
-            this.clearUserCaches(user);
-            log.info("{} {} joined {} successfully !",user.getFirstName(),user.getLastName(),club.getName());
-        } else log.error("There was an error while accepting the request !");
+    public void acceptJoinClubRequest(Optional<JoinClubRequest> joinClubRequest) {
+        joinClubRequest.map(joinClubRequestExists -> {
+            if (verifyAccessToJoinClubRequest(joinClubRequest)) {
+                Club club = joinClubRequestExists.getClub();
+                User user = joinClubRequestExists.getUser();
+                joinClubRequestExists.setStatus(StatusEnumeration.ACCEPTED);
+                club.addMember(user);
+                user.getClubs().add(club);
+                userRepository.save(user);
+                clubRepository.save(club);
+                joinClubRequestRepository.save(joinClubRequestExists);
+                this.clearUserCaches(user);
+                log.info("{} {} joined {} successfully !", user.getFirstName(), user.getLastName(), club.getName());
+            } else log.error("There was an error while accepting the request !");
+            return null;
+        })
+            .orElse(null);
     }
 
     @PreAuthorize("hasRole('ROLE_PRESIDENT')")
-    public void declineJoinClubRequest(JoinClubRequest joinClubRequest){
-        if (verifyAccessToJoinClubRequest(joinClubRequest)){
-            joinClubRequest.setStatus(StatusEnumeration.REJECTED);
-            joinClubRequestRepository.save(joinClubRequest);
-            log.info("The join request was declined !");
-        } else log.error("There was an error while rejecting the request !");
+    public void declineJoinClubRequest(Optional<JoinClubRequest> joinClubRequest) {
+        joinClubRequest.map(joinClubRequestExists -> {
+            if (verifyAccessToJoinClubRequest(joinClubRequest)) {
+                joinClubRequestExists.setStatus(StatusEnumeration.REJECTED);
+                joinClubRequestRepository.save(joinClubRequestExists);
+                log.info("The request was rejected successfully !");
+            } else log.error("There was an error while rejecting the request !");
+            return null;
+        })
+            .orElse(null);
     }
-
 }

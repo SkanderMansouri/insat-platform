@@ -1,6 +1,7 @@
 package insat.company.platform.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
@@ -38,6 +39,13 @@ public class Club implements Serializable {
         joinColumns = @JoinColumn(name = "clubs_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "members_id", referencedColumnName = "id"))
     private Set<User> members = new HashSet<>();
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "insat_event_club",
+        joinColumns = @JoinColumn(name = "clubs_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "insat_events_id", referencedColumnName = "id"))
+    private Set<InsatEvent> insatEvents = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -111,6 +119,13 @@ public class Club implements Serializable {
         user.getClubs().remove(this);
         return this;
     }
+    public Set<InsatEvent> getInsatEvents() {
+        return insatEvents;
+    }
+
+    public void setInsatEvents(Set<InsatEvent> insatEvents) {
+        this.insatEvents = insatEvents;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -141,4 +156,6 @@ public class Club implements Serializable {
             ", domain='" + getDomain() + "'" +
             "}";
     }
+
+
 }

@@ -105,6 +105,19 @@ public class User extends AbstractAuditingEntity implements Serializable {
         inverseJoinColumns = {@JoinColumn(name = "clubs_id", referencedColumnName = "id")})
     private Set<Club> clubs = new HashSet<>();
 
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "insat_event_member",
+        joinColumns = @JoinColumn(name = "members_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "insat_events_id", referencedColumnName = "id"))
+    private Set<InsatEvent> insatEvents = new HashSet<>();
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "insat_event_participant",
+        joinColumns = @JoinColumn(name = "participants_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "insat_events_id", referencedColumnName = "id"))
+
     public Long getId() {
         return id;
     }
@@ -226,6 +239,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.clubs = clubs;
     }
 
+    public Set<InsatEvent> getInsatEvents() {
+        return insatEvents;
+    }
+
+    public void setInsatEvents(Set<InsatEvent> insatEvents) {
+        this.insatEvents = insatEvents;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -258,4 +279,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
             ", activationKey='" + activationKey + '\'' +
             "}";
     }
+
+
 }

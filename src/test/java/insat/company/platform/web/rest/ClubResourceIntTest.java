@@ -102,7 +102,7 @@ public class ClubResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ClubResource clubResource = new ClubResource(clubService);
+        final ClubResource clubResource = new ClubResource(clubService, clubServiceImpl);
         this.restClubMockMvc = MockMvcBuilders.standaloneSetup(clubResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -176,7 +176,7 @@ public class ClubResourceIntTest {
 
     @SuppressWarnings({"unchecked"})
     public void getAllClubsWithEagerRelationshipsIsEnabled() throws Exception {
-        ClubResource clubResource = new ClubResource(clubServiceMock);
+        ClubResource clubResource = new ClubResource(clubServiceMock, clubServiceImpl);
         when(clubServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restClubMockMvc = MockMvcBuilders.standaloneSetup(clubResource)
@@ -193,7 +193,7 @@ public class ClubResourceIntTest {
 
     @SuppressWarnings({"unchecked"})
     public void getAllClubsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        ClubResource clubResource = new ClubResource(clubServiceMock);
+        ClubResource clubResource = new ClubResource(clubServiceMock, clubServiceImpl);
         when(clubServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
         MockMvc restClubMockMvc = MockMvcBuilders.standaloneSetup(clubResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)

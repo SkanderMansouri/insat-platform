@@ -28,4 +28,6 @@ public interface ClubRepository extends JpaRepository<Club, Long> {
     @Query("select club from Club club left join fetch club.members where club.id =:id")
     Optional<Club> findOneWithEagerRelationships(@Param("id") Long id);
 
+    @Override
+    Optional<Club> findById(Long aLong);
 }

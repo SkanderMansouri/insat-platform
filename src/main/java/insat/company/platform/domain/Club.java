@@ -111,6 +111,12 @@ public class Club implements Serializable {
         user.getClubs().remove(this);
         return this;
     }
+
+    public Boolean isMember(User user){
+       if(this.members.contains(user))
+           return true ;
+       return false ;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override

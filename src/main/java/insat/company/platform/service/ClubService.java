@@ -1,6 +1,7 @@
 package insat.company.platform.service;
 
 import insat.company.platform.domain.Club;
+import insat.company.platform.domain.JoinClubRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -56,4 +57,8 @@ public interface ClubService {
      * @return the list of entities
      */
     List<Club> search(String query);
+
+    Optional<JoinClubRequest> sendClubJoinRequest(Long id, String userLogin);
+
+    void deleteJoinRequest(Long id);
 }

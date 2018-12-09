@@ -132,7 +132,8 @@ public class ClubServiceImpl implements ClubService {
 
 
 
-    public Optional<JoinClubRequest> sendClubJoinRequest(Long clubId){
+    @Override
+    public Optional<JoinClubRequest> sendClubJoinRequest(Long clubId, String userLogin){
 
         Optional<String> OptUserLogin = SecurityUtils.getCurrentUserLogin();
         Optional<User> OptUser = userSearchRepository.findByLogin(OptUserLogin.get());
@@ -165,6 +166,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
 
+    @Override
     public void deleteJoinRequest (Long clubId){
 
         Optional<String> OptUserLogin = SecurityUtils.getCurrentUserLogin();

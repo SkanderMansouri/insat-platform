@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.Security;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,11 +31,9 @@ public class ClubResource {
     private static final String ENTITY_NAME = "club";
     private final Logger log = LoggerFactory.getLogger(ClubResource.class);
     private final ClubService clubService;
-    private final ClubServiceImpl clubServiceImpl ;
 
-    public ClubResource(ClubService clubService, ClubServiceImpl clubServiceImpl) {
+    public ClubResource(ClubService clubService) {
         this.clubService = clubService;
-        this.clubServiceImpl = clubServiceImpl;
     }
 
     /**
@@ -149,7 +148,8 @@ public class ClubResource {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        Optional<JoinClubRequest> OptNewRequest = clubServiceImpl.sendClubJoinRequest(id);
+        String userLogin = SecurityUtils.getCurrentUserLogin().get();
+        Optional<JoinClubRequest> OptNewRequest = clubService.sendClubJoinRequest(id,userLogin);
         if (OptNewRequest.isPresent()) {
 
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
@@ -169,7 +169,7 @@ public class ClubResource {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        clubServiceImpl.deleteJoinRequest(id);
+        clubService.deleteJoinRequest(id);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }

@@ -2,7 +2,6 @@ package insat.company.platform.service;
 
 import insat.company.platform.config.Constants;
 import insat.company.platform.domain.*;
-import insat.company.platform.domain.enumeration.StatusEnumeration;
 import insat.company.platform.repository.*;
 import insat.company.platform.repository.search.UserSearchRepository;
 import insat.company.platform.security.AuthoritiesConstants;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;

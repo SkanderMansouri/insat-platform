@@ -112,7 +112,7 @@ public class Club implements Serializable {
         return this;
     }
 
-    public Boolean isMember(User user){
+    public Boolean hasMember(User user){
        if(this.members.contains(user))
            return true ;
        return false ;

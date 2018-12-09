@@ -4,15 +4,13 @@ import insat.company.platform.InsatApp;
 import insat.company.platform.domain.Club;
 import insat.company.platform.domain.JoinClubRequest;
 import insat.company.platform.domain.User;
-import insat.company.platform.domain.enumeration.StatusEnumeration;
+import insat.company.platform.domain.enumeration.Status;
 import insat.company.platform.repository.ClubRepository;
 import insat.company.platform.repository.JoinClubRequestRepository;
 import insat.company.platform.repository.search.ClubSearchRepository;
 import insat.company.platform.repository.search.UserSearchRepository;
 import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.ClubService;
-import insat.company.platform.service.JoinClubRequestService;
-import insat.company.platform.service.impl.ClubServiceImpl;
 import insat.company.platform.web.rest.errors.ExceptionTranslator;
 import org.junit.Before;
 import org.junit.Test;
@@ -119,7 +117,7 @@ public class ClubResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ClubResource clubResource = new ClubResource(clubService);
+        final ClubResource clubResource = new ClubResource(clubService, userService);
         this.restClubMockMvc = MockMvcBuilders.standaloneSetup(clubResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -193,7 +191,7 @@ public class ClubResourceIntTest {
 
     @SuppressWarnings({"unchecked"})
     public void getAllClubsWithEagerRelationshipsIsEnabled() throws Exception {
-        ClubResource clubResource = new ClubResource(clubServiceMock);
+        ClubResource clubResource = new ClubResource(clubServiceMock, userService);
         when(clubServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restClubMockMvc = MockMvcBuilders.standaloneSetup(clubResource)
@@ -210,7 +208,7 @@ public class ClubResourceIntTest {
 
     @SuppressWarnings({"unchecked"})
     public void getAllClubsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        ClubResource clubResource = new ClubResource(clubServiceMock);
+        ClubResource clubResource = new ClubResource(clubServiceMock, userService);
         when(clubServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
         MockMvc restClubMockMvc = MockMvcBuilders.standaloneSetup(clubResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -367,7 +365,7 @@ public class ClubResourceIntTest {
         List<JoinClubRequest> joinClubRequestsList = joinClubRequestRepository.findAll();
         assertThat(joinClubRequestsList).hasSize(joinClubRequestBeforeCreateTheRequest + 1);
         JoinClubRequest addedJoinClubRequest = joinClubRequestsList.get(joinClubRequestBeforeCreateTheRequest);
-        assertThat(addedJoinClubRequest.getStatus()== StatusEnumeration.PENDING);
+        assertThat(addedJoinClubRequest.getStatus()== Status.PENDING);
 
     }
 

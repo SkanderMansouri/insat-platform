@@ -3,11 +3,12 @@ package insat.company.platform.repository;
 import insat.company.platform.domain.Club;
 import insat.company.platform.domain.JoinClubRequest;
 import insat.company.platform.domain.User;
-import org.springframework.data.jpa.repository.*;
+import insat.company.platform.domain.enumeration.Status;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Spring Data  repository for the JoinClubRequest entity.
@@ -20,5 +21,5 @@ public interface JoinClubRequestRepository extends JpaRepository<JoinClubRequest
     List<JoinClubRequest> findByUserIsCurrentUser();
 
 
-    Optional<JoinClubRequest> findOneByUserAndClub(User user, Club club);
+    JoinClubRequest findOneByUserAndClubAndStatusNot(User user, Club club, Status status);
 }

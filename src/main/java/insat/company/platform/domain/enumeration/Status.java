@@ -1,8 +1,8 @@
 package insat.company.platform.domain.enumeration;
 
 /**
- * The StatusEnumeration enumeration.
+ * The Status enumeration.
  */
-public enum StatusEnumeration {
+public enum Status {
     PENDING, ACCEPTED, REJECTED, DELETED
 }

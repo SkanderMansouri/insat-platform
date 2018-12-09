@@ -5,6 +5,7 @@ import insat.company.platform.InsatApp;
 import insat.company.platform.domain.JoinClubRequest;
 import insat.company.platform.domain.User;
 import insat.company.platform.domain.Club;
+import insat.company.platform.domain.enumeration.Status;
 import insat.company.platform.repository.JoinClubRequestRepository;
 import insat.company.platform.repository.search.JoinClubRequestSearchRepository;
 import insat.company.platform.service.JoinClubRequestService;
@@ -39,7 +40,6 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import insat.company.platform.domain.enumeration.StatusEnumeration;
 /**
  * Test class for the JoinClubRequestResource REST controller.
  *
@@ -52,8 +52,8 @@ public class JoinClubRequestResourceIntTest {
     private static final LocalDate DEFAULT_REQUEST_TIME = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_REQUEST_TIME = LocalDate.now(ZoneId.systemDefault());
 
-    private static final StatusEnumeration DEFAULT_STATUS = StatusEnumeration.PENDING;
-    private static final StatusEnumeration UPDATED_STATUS = StatusEnumeration.ACCEPTED;
+    private static final Status DEFAULT_STATUS = Status.PENDING;
+    private static final Status UPDATED_STATUS = Status.ACCEPTED;
 
     @Autowired
     private JoinClubRequestRepository joinClubRequestRepository;
@@ -218,7 +218,7 @@ public class JoinClubRequestResourceIntTest {
             .andExpect(jsonPath("$.[*].requestTime").value(hasItem(DEFAULT_REQUEST_TIME.toString())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
-    
+
     @Test
     @Transactional
     public void getJoinClubRequest() throws Exception {

@@ -3,6 +3,7 @@ package insat.company.platform.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import insat.company.platform.domain.Club;
 import insat.company.platform.domain.JoinClubRequest;
+import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.ClubService;
 import insat.company.platform.service.impl.ClubServiceImpl;
 import insat.company.platform.web.rest.errors.BadRequestAlertException;
@@ -133,25 +134,42 @@ public class ClubResource {
     }
 
     /**
-     *  create a joinClubRequest
+     * GET  /join/clubs/:id : send joinClubRequest by  club "id"
+     *
+     * @param id the id of the club  to join
+     * @return the ResponseEntity with status 200 (OK), or with status 404 (Not Found) or with status 401 (unauthorized)
      */
     @GetMapping("/join/clubs/{id}")
-
+    @Timed
     public ResponseEntity<JoinClubRequest> joinClub(@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request to create a joinClubRequest to join a club   : {}", id);
+
+        if (!SecurityUtils.isAuthenticated()) {
+            log.error("User should be logged in");
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         Optional<JoinClubRequest> OptNewRequest = clubServiceImpl.sendClubJoinRequest(id);
         if (OptNewRequest.isPresent()) {
-            JoinClubRequest newRequest = OptNewRequest.get();
-            return ResponseEntity.created(new URI("/api/join request/" + newRequest.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, newRequest.getId().toString()))
-                .body(OptNewRequest.get());
 
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
         }
         else{
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
+    @GetMapping("/deleteJoin/clubs/{id}")
+    @Timed
+    public ResponseEntity<JoinClubRequest> deleteRequestJoinClub(@PathVariable Long id) throws URISyntaxException {
+        log.debug("REST  to delete a joinClubRequest  : {}", id);
 
+        if (!SecurityUtils.isAuthenticated()) {
+            log.error("User should be logged in");
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
 
+        clubServiceImpl.deleteJoinRequest(id);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
 }

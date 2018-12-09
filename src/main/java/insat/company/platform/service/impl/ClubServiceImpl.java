@@ -141,7 +141,7 @@ public class ClubServiceImpl implements ClubService {
             if (OptClub.isPresent()) {
                 if(!(OptClub.get().isMember(OptUser.get()))) {
                     Optional<JoinClubRequest> requestPendingOfSameUser = joinClubRequestRepository.findOneByUserAndClub(OptUser.get(), OptClub.get());
-                    if (requestPendingOfSameUser.isEmpty()) {
+                    if ((!requestPendingOfSameUser.isPresent())) {
 
                         LocalDate requestTime = LocalDate.now();
                         StatusEnumeration status = StatusEnumeration.PENDING;

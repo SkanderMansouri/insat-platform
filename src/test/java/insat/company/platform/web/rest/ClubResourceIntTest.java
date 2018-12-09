@@ -2,8 +2,14 @@ package insat.company.platform.web.rest;
 
 import insat.company.platform.InsatApp;
 import insat.company.platform.domain.Club;
+import insat.company.platform.domain.JoinClubRequest;
+import insat.company.platform.domain.User;
+import insat.company.platform.domain.enumeration.Status;
 import insat.company.platform.repository.ClubRepository;
+import insat.company.platform.repository.JoinClubRequestRepository;
 import insat.company.platform.repository.search.ClubSearchRepository;
+import insat.company.platform.repository.search.UserSearchRepository;
+import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.ClubService;
 import insat.company.platform.web.rest.errors.ExceptionTranslator;
 import org.junit.Before;
@@ -17,6 +23,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -26,6 +33,7 @@ import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static insat.company.platform.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,6 +61,9 @@ public class ClubResourceIntTest {
     @Autowired
     private ClubRepository clubRepository;
 
+    @Autowired
+    private UserSearchRepository userSearchRepository;
+
     @Mock
     private ClubRepository clubRepositoryMock;
 
@@ -69,6 +80,10 @@ public class ClubResourceIntTest {
      */
     @Autowired
     private ClubSearchRepository mockClubSearchRepository;
+
+    @Autowired
+    private JoinClubRequestRepository joinClubRequestRepository;
+
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -102,7 +117,7 @@ public class ClubResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ClubResource clubResource = new ClubResource(clubService);
+        final ClubResource clubResource = new ClubResource(clubService, userService);
         this.restClubMockMvc = MockMvcBuilders.standaloneSetup(clubResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -176,7 +191,7 @@ public class ClubResourceIntTest {
 
     @SuppressWarnings({"unchecked"})
     public void getAllClubsWithEagerRelationshipsIsEnabled() throws Exception {
-        ClubResource clubResource = new ClubResource(clubServiceMock);
+        ClubResource clubResource = new ClubResource(clubServiceMock, userService);
         when(clubServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restClubMockMvc = MockMvcBuilders.standaloneSetup(clubResource)
@@ -193,7 +208,7 @@ public class ClubResourceIntTest {
 
     @SuppressWarnings({"unchecked"})
     public void getAllClubsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        ClubResource clubResource = new ClubResource(clubServiceMock);
+        ClubResource clubResource = new ClubResource(clubServiceMock, userService);
         when(clubServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
         MockMvc restClubMockMvc = MockMvcBuilders.standaloneSetup(clubResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -336,4 +351,45 @@ public class ClubResourceIntTest {
         club1.setId(null);
         assertThat(club1).isNotEqualTo(club2);
     }
+
+    @Test
+    @WithMockUser
+    public void shouldReturnOkAndCreateAJoinClubRequest() throws Exception {
+       int joinClubRequestBeforeCreateTheRequest = joinClubRequestRepository.findAll().size();
+        clubService.save(club);
+
+        restClubMockMvc.perform(get("/api/join/clubs/{id}" , club.getId())
+            .contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk());
+
+        List<JoinClubRequest> joinClubRequestsList = joinClubRequestRepository.findAll();
+        assertThat(joinClubRequestsList).hasSize(joinClubRequestBeforeCreateTheRequest + 1);
+        JoinClubRequest addedJoinClubRequest = joinClubRequestsList.get(joinClubRequestBeforeCreateTheRequest);
+        assertThat(addedJoinClubRequest.getStatus()== Status.PENDING);
+
+    }
+
+    @Test
+    public void shouldReturnBadRequestWhenUserIsNotAuthenticated() throws Exception {
+        clubService.save(club);
+        restClubMockMvc.perform(get("/api/join/clubs/{id}" , club.getId())
+            .contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isUnauthorized());
+    }
+    @Test
+    @WithMockUser(username="user@localhost",authorities={"ROLE_USR"}, password = "user")
+    public void shouldReturnBadRequestWhenRequestAlreadyExists() throws Exception {
+        clubService.save(club);
+        Optional<String> OptUserLogin = SecurityUtils.getCurrentUserLogin();
+        Optional<User> OptUser = userSearchRepository.findByLogin(OptUserLogin.get());
+        JoinClubRequest request1 =new JoinClubRequest();
+        request1.setUser(OptUser.get());
+        request1.setClub(club);
+        restClubMockMvc.perform(get("/api/join/clubs/{id}" , club.getId())
+            .contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isBadRequest());
+
+
+    }
+
 }

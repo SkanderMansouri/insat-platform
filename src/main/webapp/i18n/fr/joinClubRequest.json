@@ -1,0 +1,25 @@
+{
+    "insatApp": {
+        "joinClubRequest": {
+            "home": {
+                "title": "JoinClubRequests",
+                "createLabel": "Créer un nouveau Join Club Request",
+                "createOrEditLabel": "Créer ou éditer un Join Club Request",
+                "search": "Recherche pour Join Club Request"
+            },
+            "created": "Un nouveau Join Club Request a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Join Club Request avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Join Club Request avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Join Club Request {{ id }} ?"
+            },
+            "detail": {
+                "title": "Join Club Request"
+            },
+            "requestTime": "Request Time",
+            "status": "Status",
+            "user": "User",
+            "club": "Club"
+        }
+    }
+}

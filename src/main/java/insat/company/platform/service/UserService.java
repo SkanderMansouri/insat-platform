@@ -1,12 +1,8 @@
 package insat.company.platform.service;
 
 import insat.company.platform.config.Constants;
-import insat.company.platform.domain.Authority;
-import insat.company.platform.domain.Field;
-import insat.company.platform.domain.User;
-import insat.company.platform.repository.AuthorityRepository;
-import insat.company.platform.repository.FieldRepository;
-import insat.company.platform.repository.UserRepository;
+import insat.company.platform.domain.*;
+import insat.company.platform.repository.*;
 import insat.company.platform.repository.search.UserSearchRepository;
 import insat.company.platform.security.AuthoritiesConstants;
 import insat.company.platform.security.SecurityUtils;
@@ -51,6 +47,7 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+
     public UserService(UserRepository userRepository, FieldRepository fieldRepository, PasswordEncoder passwordEncoder, UserSearchRepository userSearchRepository, AuthorityRepository authorityRepository, CacheManager cacheManager) {
         this.userRepository = userRepository;
         this.fieldRepository = fieldRepository;
@@ -58,6 +55,7 @@ public class UserService {
         this.userSearchRepository = userSearchRepository;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -318,4 +316,5 @@ public class UserService {
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
     }
+
 }

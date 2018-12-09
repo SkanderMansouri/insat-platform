@@ -1,7 +1,6 @@
 package insat.company.platform.web.rest;
 
 import insat.company.platform.config.Constants;
-import insat.company.platform.domain.JoinClubRequest;
 import insat.company.platform.domain.User;
 import insat.company.platform.repository.UserRepository;
 import insat.company.platform.repository.search.UserSearchRepository;
@@ -9,7 +8,6 @@ import insat.company.platform.security.AuthoritiesConstants;
 import insat.company.platform.service.MailService;
 import insat.company.platform.service.UserService;
 import insat.company.platform.service.dto.UserDTO;
-import insat.company.platform.service.impl.ClubServiceImpl;
 import insat.company.platform.web.rest.errors.BadRequestAlertException;
 import insat.company.platform.web.rest.errors.EmailAlreadyUsedException;
 import insat.company.platform.web.rest.errors.LoginAlreadyUsedException;
@@ -212,8 +210,4 @@ public class UserResource {
             .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
     }
-
-
-    }
-
-
+}

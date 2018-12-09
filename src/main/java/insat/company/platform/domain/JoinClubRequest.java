@@ -5,12 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import insat.company.platform.domain.enumeration.Status;
 import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
-
-import insat.company.platform.domain.enumeration.StatusEnumeration;
 
 /**
  * A JoinClubRequest.
@@ -33,7 +32,7 @@ public class JoinClubRequest implements Serializable {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private StatusEnumeration status;
+    private Status status;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -67,16 +66,16 @@ public class JoinClubRequest implements Serializable {
         this.requestTime = requestTime;
     }
 
-    public StatusEnumeration getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public JoinClubRequest status(StatusEnumeration status) {
+    public JoinClubRequest status(Status status) {
         this.status = status;
         return this;
     }
 
-    public void setStatus(StatusEnumeration status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

@@ -3,9 +3,10 @@ package insat.company.platform.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import insat.company.platform.domain.Club;
 import insat.company.platform.domain.JoinClubRequest;
+import insat.company.platform.domain.User;
 import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.ClubService;
-import insat.company.platform.service.impl.ClubServiceImpl;
+import insat.company.platform.service.UserService;
 import insat.company.platform.web.rest.errors.BadRequestAlertException;
 import insat.company.platform.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.security.Security;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,9 +31,11 @@ public class ClubResource {
     private static final String ENTITY_NAME = "club";
     private final Logger log = LoggerFactory.getLogger(ClubResource.class);
     private final ClubService clubService;
+    private final UserService userService;
 
-    public ClubResource(ClubService clubService) {
+    public ClubResource(ClubService clubService, UserService userService) {
         this.clubService = clubService;
+        this.userService = userService;
     }
 
     /**
@@ -140,7 +142,7 @@ public class ClubResource {
      */
     @GetMapping("/join/clubs/{id}")
     @Timed
-    public ResponseEntity<JoinClubRequest> joinClub(@PathVariable Long id) throws URISyntaxException {
+    public ResponseEntity<?> joinClub(@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request to create a joinClubRequest to join a club   : {}", id);
 
         if (!SecurityUtils.isAuthenticated()) {
@@ -149,14 +151,12 @@ public class ClubResource {
         }
 
         String userLogin = SecurityUtils.getCurrentUserLogin().get();
-        Optional<JoinClubRequest> OptNewRequest = clubService.sendClubJoinRequest(id,userLogin);
-        if (OptNewRequest.isPresent()) {
 
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
-        }
-        else{
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return clubService.findOne(id).map(club -> {
+            User currentUser = userService.getUserWithAuthoritiesByLogin(userLogin).get();
+            clubService.sendClubJoinRequest(club,currentUser);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/deleteJoin/clubs/{id}")

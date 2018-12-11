@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -150,15 +152,12 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     public void deleteJoinRequest(Club club, User user) {
-
-
         joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club, Status.PENDING).map(
             RequestToDelete -> {
                 RequestToDelete.setStatus(Status.DELETED);
                 log.info("Accepting to delete join Request ");
-                return null ;
+                return new ResponseEntity(HttpStatus.OK);
             }
             ).orElseThrow(IllegalArgumentException::new);
-
     }
 }

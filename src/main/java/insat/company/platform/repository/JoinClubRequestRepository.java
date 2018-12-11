@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.DoubleStream;
 
 /**
  * Spring Data  repository for the JoinClubRequest entity.
@@ -22,4 +24,6 @@ public interface JoinClubRequestRepository extends JpaRepository<JoinClubRequest
 
 
     JoinClubRequest findOneByUserAndClubAndStatusNot(User user, Club club, Status status);
+
+    Optional<JoinClubRequest> findOneByUserAndClubAndStatus(User user, Club club, Status pending);
 }

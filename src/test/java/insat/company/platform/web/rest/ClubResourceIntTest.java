@@ -7,10 +7,13 @@ import insat.company.platform.domain.User;
 import insat.company.platform.domain.enumeration.Status;
 import insat.company.platform.repository.ClubRepository;
 import insat.company.platform.repository.JoinClubRequestRepository;
+import insat.company.platform.repository.UserRepository;
 import insat.company.platform.repository.search.ClubSearchRepository;
 import insat.company.platform.repository.search.UserSearchRepository;
 import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.ClubService;
+import insat.company.platform.service.JoinClubRequestService;
+import insat.company.platform.service.UserService;
 import insat.company.platform.web.rest.errors.ExceptionTranslator;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,13 +26,18 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.management.remote.JMXAuthenticator;
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -73,6 +81,10 @@ public class ClubResourceIntTest {
     @Autowired
     private ClubService clubService;
 
+    @Autowired
+    private UserRepository userRepository;
+
+
     /**
      * This repository is mocked in the insat.company.platform.repository.search test package.
      *
@@ -95,6 +107,13 @@ public class ClubResourceIntTest {
     private ExceptionTranslator exceptionTranslator;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
+    private JoinClubRequestService joinClubRequestService;
+
+
+    @Autowired
     private EntityManager em;
 
     private MockMvc restClubMockMvc;
@@ -113,6 +132,7 @@ public class ClubResourceIntTest {
             .domain(DEFAULT_DOMAIN);
         return club;
     }
+
 
     @Before
     public void setup() {
@@ -351,7 +371,7 @@ public class ClubResourceIntTest {
         club1.setId(null);
         assertThat(club1).isNotEqualTo(club2);
     }
-
+    //works fine
     @Test
     @WithMockUser
     public void shouldReturnOkAndCreateAJoinClubRequest() throws Exception {
@@ -368,7 +388,21 @@ public class ClubResourceIntTest {
         assertThat(addedJoinClubRequest.getStatus()== Status.PENDING);
 
     }
+    //works fine
+    @Test
+    @WithMockUser
+    public void shouldReturnBadRequestWhenClubIdIsNotValid() throws Exception {
+        int joinClubRequestBeforeCreateTheRequest = joinClubRequestRepository.findAll().size();
+        Long NotAClubId =3000L;
 
+        restClubMockMvc.perform(get("/api/join/clubs/{id}" ,NotAClubId)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isNotFound());
+        List<JoinClubRequest> joinClubRequestsList = joinClubRequestRepository.findAll();
+        assertThat(joinClubRequestsList).hasSize(joinClubRequestBeforeCreateTheRequest );
+
+    }
+        //works fine
     @Test
     public void shouldReturnBadRequestWhenUserIsNotAuthenticated() throws Exception {
         clubService.save(club);
@@ -377,7 +411,7 @@ public class ClubResourceIntTest {
             .andExpect(status().isUnauthorized());
     }
     @Test
-    @WithMockUser(username="user@localhost",authorities={"ROLE_USR"}, password = "user")
+    @WithMockUser
     public void shouldReturnBadRequestWhenRequestAlreadyExists() throws Exception {
         clubService.save(club);
         Optional<String> OptUserLogin = SecurityUtils.getCurrentUserLogin();
@@ -385,11 +419,41 @@ public class ClubResourceIntTest {
         JoinClubRequest request1 =new JoinClubRequest();
         request1.setUser(OptUser.get());
         request1.setClub(club);
+        request1.setStatus(Status.PENDING);
+        joinClubRequestService.save(request1);
         restClubMockMvc.perform(get("/api/join/clubs/{id}" , club.getId())
             .contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isBadRequest());
 
 
     }
+    @Test
+    @WithMockUser(username = "user", password = "user", roles = "USER")
+    public void shouldReturnOkAndSetStatusRequestDeleted() throws Exception {
+       clubService.save(club);
+        JoinClubRequest joinClubRequest = new JoinClubRequest()
+            .requestTime(LocalDate.now())
+            .status(Status.PENDING);
+
+        // Add required entity
+        User user = new User();
+        user.setLogin("user");
+        user.setPassword("user");
+
+        userSearchRepository.save(user);
+        joinClubRequest.setUser(user);
+        joinClubRequest.setClub(club);
+        joinClubRequestRepository.save(joinClubRequest);
+        restClubMockMvc.perform(get("/api/deleteJoin/clubs/{id}" , club.getId())
+            .contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk());
+        assertThat(joinClubRequest.getStatus().equals(Status.DELETED));
+
+
+
+
+
+    }
 
 }
+

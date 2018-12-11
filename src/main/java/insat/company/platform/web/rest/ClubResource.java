@@ -161,7 +161,7 @@ public class ClubResource {
 
     @GetMapping("/deleteJoin/clubs/{id}")
     @Timed
-    public ResponseEntity<JoinClubRequest> deleteRequestJoinClub(@PathVariable Long id) throws URISyntaxException {
+    public ResponseEntity<?> deleteRequestJoinClub(@PathVariable Long id) throws URISyntaxException {
         log.debug("REST  to delete a joinClubRequest  : {}", id);
 
         if (!SecurityUtils.isAuthenticated()) {
@@ -169,7 +169,11 @@ public class ClubResource {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        clubService.deleteJoinRequest(id);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        String userLogin = SecurityUtils.getCurrentUserLogin().get();
+        return clubService.findOne(id).map(club -> {
+            User currentUser = userService.getUserWithAuthoritiesByLogin(userLogin).get();
+            clubService.deleteJoinRequest(club,currentUser);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }

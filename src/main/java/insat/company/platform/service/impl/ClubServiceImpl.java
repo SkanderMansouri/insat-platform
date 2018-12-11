@@ -147,24 +147,18 @@ public class ClubServiceImpl implements ClubService {
         }
     }
 
+
     @Override
-    public void deleteJoinRequest(Long clubId) {
-        Optional<String> OptUserLogin = SecurityUtils.getCurrentUserLogin();
-        Optional<User> OptUser = userSearchRepository.findByLogin(OptUserLogin.get());
-        if (OptUser.isPresent()) {
-            Optional<Club> OptClub = clubRepository.findById(clubId);
-            if (OptClub.isPresent()) {
-                Club club = OptClub.get();
-                User user = OptUser.get();
-                Optional<JoinClubRequest> OptJoinClubRequest = joinClubRequestRepository.findOneByUserAndClubAndStatusNot(user, club,Status.PENDING);
-                if (OptJoinClubRequest.isPresent()) {
-                    JoinClubRequest joinRequestToDelete = OptJoinClubRequest.get();
-                    joinClubRequestService.delete(joinRequestToDelete.getId());
-                    log.info("Request Deleted ");
-                } else log.info("{} {} Request Not found !");
+    public void deleteJoinRequest(Club club, User user) {
+
+
+        joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club, Status.PENDING).map(
+            RequestToDelete -> {
+                RequestToDelete.setStatus(Status.DELETED);
+                log.info("Accepting to delete join Request ");
+                return null ;
             }
-            log.info("{} {} Request Not found !");
-        }
+            ).orElseThrow(IllegalArgumentException::new);
+
     }
 }
-

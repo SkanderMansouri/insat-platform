@@ -61,5 +61,5 @@ public interface ClubService {
 
     JoinClubRequest sendClubJoinRequest(Club club, User user);
 
-    void deleteJoinRequest(Long id);
+    void deleteJoinRequest(Club club, User user);
 }

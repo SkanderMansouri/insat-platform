@@ -371,89 +371,108 @@ public class ClubResourceIntTest {
         club1.setId(null);
         assertThat(club1).isNotEqualTo(club2);
     }
+
     //works fine
     @Test
     @WithMockUser
     public void shouldReturnOkAndCreateAJoinClubRequest() throws Exception {
-       int joinClubRequestBeforeCreateTheRequest = joinClubRequestRepository.findAll().size();
+        int joinClubRequestBeforeCreateTheRequest = joinClubRequestRepository.findAll().size();
         clubService.save(club);
 
-        restClubMockMvc.perform(get("/api/join/clubs/{id}" , club.getId())
+        restClubMockMvc.perform(get("/api/join/clubs/{id}", club.getId())
             .contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
         List<JoinClubRequest> joinClubRequestsList = joinClubRequestRepository.findAll();
         assertThat(joinClubRequestsList).hasSize(joinClubRequestBeforeCreateTheRequest + 1);
         JoinClubRequest addedJoinClubRequest = joinClubRequestsList.get(joinClubRequestBeforeCreateTheRequest);
-        assertThat(addedJoinClubRequest.getStatus()== Status.PENDING);
+        assertThat(addedJoinClubRequest.getStatus() == Status.PENDING);
 
     }
+
     //works fine
     @Test
     @WithMockUser
     public void shouldReturnBadRequestWhenClubIdIsNotValid() throws Exception {
         int joinClubRequestBeforeCreateTheRequest = joinClubRequestRepository.findAll().size();
-        Long NotAClubId =3000L;
+        Long NotAClubId = 3000L;
 
-        restClubMockMvc.perform(get("/api/join/clubs/{id}" ,NotAClubId)
+        restClubMockMvc.perform(get("/api/join/clubs/{id}", NotAClubId)
             .contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isNotFound());
         List<JoinClubRequest> joinClubRequestsList = joinClubRequestRepository.findAll();
-        assertThat(joinClubRequestsList).hasSize(joinClubRequestBeforeCreateTheRequest );
+        assertThat(joinClubRequestsList).hasSize(joinClubRequestBeforeCreateTheRequest);
 
     }
-        //works fine
+
+    //works fine
     @Test
     public void shouldReturnBadRequestWhenUserIsNotAuthenticated() throws Exception {
         clubService.save(club);
-        restClubMockMvc.perform(get("/api/join/clubs/{id}" , club.getId())
+        restClubMockMvc.perform(get("/api/join/clubs/{id}", club.getId())
             .contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isUnauthorized());
     }
+
     @Test
     @WithMockUser
     public void shouldReturnBadRequestWhenRequestAlreadyExists() throws Exception {
         clubService.save(club);
         Optional<String> OptUserLogin = SecurityUtils.getCurrentUserLogin();
         Optional<User> OptUser = userSearchRepository.findByLogin(OptUserLogin.get());
-        JoinClubRequest request1 =new JoinClubRequest();
+        JoinClubRequest request1 = new JoinClubRequest();
         request1.setUser(OptUser.get());
         request1.setClub(club);
         request1.setStatus(Status.PENDING);
         joinClubRequestService.save(request1);
-        restClubMockMvc.perform(get("/api/join/clubs/{id}" , club.getId())
+        restClubMockMvc.perform(get("/api/join/clubs/{id}", club.getId())
             .contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isBadRequest());
 
 
     }
+
     @Test
     @WithMockUser(username = "user", password = "user", roles = "USER")
     public void shouldReturnOkAndSetStatusRequestDeleted() throws Exception {
-       clubService.save(club);
+        int clubsCount = clubRepository.findAll().size();
+        clubService.save(club);
+        assertThat(clubRepository.findAll().size()).isEqualTo(clubsCount + 1);
+
+        club = clubRepository.findAll().get(clubsCount);
         JoinClubRequest joinClubRequest = new JoinClubRequest()
             .requestTime(LocalDate.now())
             .status(Status.PENDING);
 
         // Add required entity
-        User user = new User();
-        user.setLogin("user");
-        user.setPassword("user");
+        User user;
+        if (userRepository.findOneByLogin("user").isPresent()) {
+            user = userRepository.findOneByLogin("user").get();
+        } else {
+            user = new User();
+            user.setLogin("user");
+            user.setPassword("user");
+            user.setEmail("mail@mail.com");
+            user.setFirstName("user");
+            user.setLastName("user");
+            user.setImageUrl("");
+            userRepository.save(user);
+            userSearchRepository.save(user);
+            System.out.println("created new  user");
+        }
 
-        userSearchRepository.save(user);
+        //userSearchRepository.save(user);
         joinClubRequest.setUser(user);
         joinClubRequest.setClub(club);
+        joinClubRequest.setStatus(Status.PENDING);
+        int size = joinClubRequestRepository.findAll().size();
         joinClubRequestRepository.save(joinClubRequest);
-        restClubMockMvc.perform(get("/api/deleteJoin/clubs/{id}" , club.getId())
+        joinClubRequestService.save(joinClubRequest);
+        assertThat(joinClubRequestRepository.findAll().size()).isEqualTo(size + 1);
+        restClubMockMvc.perform(get("/api/deleteJoin/clubs/{id}", club.getId())
             .contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
         assertThat(joinClubRequest.getStatus().equals(Status.DELETED));
-
-
-
-
-
     }
-
 }
 

@@ -11,6 +11,7 @@ import insat.company.platform.repository.search.UserSearchRepository;
 import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.ClubService;
 import insat.company.platform.service.JoinClubRequestService;
+import org.hibernate.mapping.Join;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -133,9 +134,15 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public JoinClubRequest sendClubJoinRequest(Club club, User user) {
         if (!(club.hasMember(user))) {
-            return (JoinClubRequest) Optional.ofNullable(joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club,Status.PENDING))
-                .map( obj -> null)
-
+            return Optional.ofNullable(joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club,Status.PENDING))
+                .map(obj ->{
+                    JoinClubRequest joinClubRequest = new JoinClubRequest();
+                    joinClubRequest.setId(0L);
+                    joinClubRequest.setStatus(Status.PENDING);
+                    joinClubRequest.setClub(club);
+                    joinClubRequest.setUser(user);
+                    return joinClubRequest;
+                })
                 .orElseGet(() -> {
                 JoinClubRequest joinClubRequest = new JoinClubRequest();
                 joinClubRequest.setClub(club);
@@ -143,9 +150,7 @@ public class ClubServiceImpl implements ClubService {
                 joinClubRequest.setRequestTime(LocalDate.now());
                 joinClubRequest.setStatus(Status.PENDING);
                 log.info("{} {} Request Created  {} successfully !", joinClubRequest.getUser().getId(), joinClubRequest.getClub().getId());
-                //return joinClubRequestRepository.save(joinClubRequest);
-
-                return joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club,Status.PENDING);
+                return joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club,Status.PENDING).get();
             });
         } else {
             log.info("{} {} Request to the same club from the same user already sent");

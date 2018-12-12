@@ -427,7 +427,6 @@ public class ClubResourceIntTest {
         request1.setRequestTime(LocalDate.now());
         request1.setStatus(Status.PENDING);
         joinClubRequestService.save(request1);
-        System.out.println( joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club,Status.PENDING).get());
         assertThat(joinClubRequestRepository.findAll().size()).isEqualTo(joinClubRequestBeforeCreateTheRequestSize+1);
         restClubMockMvc.perform(get("/api/join/clubs/{id}", club.getId())
             .contentType(TestUtil.APPLICATION_JSON_UTF8))

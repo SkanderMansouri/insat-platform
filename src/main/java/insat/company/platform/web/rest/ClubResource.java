@@ -155,10 +155,10 @@ public class ClubResource {
         return clubService.findOne(id).map(club -> {
             User currentUser = userService.getUserWithAuthoritiesByLogin(userLogin).get();
             JoinClubRequest joinClubRequest= clubService.sendClubJoinRequest(club, currentUser);
-            System.out.println(joinClubRequest);
-            if(joinClubRequest!= null){
+
+            if(joinClubRequest.getId() != 0L)
                 return new ResponseEntity<>(HttpStatus.OK);
-            }else
+            else
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 

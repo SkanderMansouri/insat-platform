@@ -166,6 +166,14 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     public void deleteJoinRequest(Club club, User user) {
+        joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club, Status.PENDING).map(
+            requestToDelete -> {
+                requestToDelete.status(Status.DELETED);
+                log.info("Accepting to delete join Request");
+                return new ResponseEntity(HttpStatus.OK);
+            }).orElseThrow(IllegalArgumentException::new);
+
+/*
         Optional.ofNullable(joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club, Status.PENDING))
             .map((obj) -> {
                 if (obj.isPresent()) {
@@ -173,9 +181,19 @@ public class ClubServiceImpl implements ClubService {
                     obj.get().setStatus(Status.DELETED);
                     log.info("Accepting to delete join Request ");
                     return new ResponseEntity(HttpStatus.OK);
-                }else {
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                } else {
+                    return new ResponseEntity(HttpStatus.BAD_REQUEST);
+                /*
+                try {
+                        throw new Exception("a user cannot delete another's request.");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }finally {
+
+                    }
                 }
-            });
+
+                }
+            }).orElseThrow(IllegalArgumentException::new);*/
     }
 }

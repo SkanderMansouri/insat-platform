@@ -154,8 +154,14 @@ public class ClubResource {
 
         return clubService.findOne(id).map(club -> {
             User currentUser = userService.getUserWithAuthoritiesByLogin(userLogin).get();
-            clubService.sendClubJoinRequest(club,currentUser);
-            return new ResponseEntity<>(HttpStatus.OK);
+            JoinClubRequest joinClubRequest= clubService.sendClubJoinRequest(club, currentUser);
+            System.out.println(joinClubRequest);
+            if(joinClubRequest!= null){
+                return new ResponseEntity<>(HttpStatus.OK);
+            }else
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 

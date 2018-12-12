@@ -415,23 +415,27 @@ public class ClubResourceIntTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(username = "user", password = "user", roles = "USER")
     public void shouldReturnBadRequestWhenRequestAlreadyExists() throws Exception {
         clubService.save(club);
-        Optional<String> OptUserLogin = SecurityUtils.getCurrentUserLogin();
-        Optional<User> OptUser = userSearchRepository.findByLogin(OptUserLogin.get());
+        int joinClubRequestBeforeCreateTheRequestSize = joinClubRequestRepository.findAll().size();
+
+        User user = userRepository.findOneByLogin("user").get();
         JoinClubRequest request1 = new JoinClubRequest();
-        request1.setUser(OptUser.get());
+        request1.setUser(user);
         request1.setClub(club);
+        request1.setRequestTime(LocalDate.now());
         request1.setStatus(Status.PENDING);
         joinClubRequestService.save(request1);
+        System.out.println( joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club,Status.PENDING).get());
+        assertThat(joinClubRequestRepository.findAll().size()).isEqualTo(joinClubRequestBeforeCreateTheRequestSize+1);
         restClubMockMvc.perform(get("/api/join/clubs/{id}", club.getId())
             .contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isBadRequest());
-
+        assertThat(joinClubRequestRepository.findAll().size()).isEqualTo(joinClubRequestBeforeCreateTheRequestSize+1);
 
     }
-
+    //works fine
     @Test
     @WithMockUser(username = "user", password = "user", roles = "USER")
     public void shouldReturnOkAndSetStatusRequestDeleted() throws Exception {
@@ -441,27 +445,10 @@ public class ClubResourceIntTest {
 
         club = clubRepository.findAll().get(clubsCount);
         JoinClubRequest joinClubRequest = new JoinClubRequest()
-            .requestTime(LocalDate.now())
-            .status(Status.PENDING);
+            .requestTime(LocalDate.now());
 
-        // Add required entity
         User user;
-        if (userRepository.findOneByLogin("user").isPresent()) {
-            user = userRepository.findOneByLogin("user").get();
-        } else {
-            user = new User();
-            user.setLogin("user");
-            user.setPassword("user");
-            user.setEmail("mail@mail.com");
-            user.setFirstName("user");
-            user.setLastName("user");
-            user.setImageUrl("");
-            userRepository.save(user);
-            userSearchRepository.save(user);
-            System.out.println("created new  user");
-        }
-
-        //userSearchRepository.save(user);
+        user = userRepository.findOneByLogin("user").get();
         joinClubRequest.setUser(user);
         joinClubRequest.setClub(club);
         joinClubRequest.setStatus(Status.PENDING);

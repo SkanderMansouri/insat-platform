@@ -133,7 +133,9 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public JoinClubRequest sendClubJoinRequest(Club club, User user) {
         if (!(club.hasMember(user))) {
-            return Optional.ofNullable(joinClubRequestRepository.findOneByUserAndClubAndStatusNot(user, club,Status.PENDING))
+            return (JoinClubRequest) Optional.ofNullable(joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club,Status.PENDING))
+                .map( obj -> null)
+
                 .orElseGet(() -> {
                 JoinClubRequest joinClubRequest = new JoinClubRequest();
                 joinClubRequest.setClub(club);
@@ -141,11 +143,14 @@ public class ClubServiceImpl implements ClubService {
                 joinClubRequest.setRequestTime(LocalDate.now());
                 joinClubRequest.setStatus(Status.PENDING);
                 log.info("{} {} Request Created  {} successfully !", joinClubRequest.getUser().getId(), joinClubRequest.getClub().getId());
-                return joinClubRequestRepository.save(joinClubRequest);
+                //return joinClubRequestRepository.save(joinClubRequest);
+
+                return joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club,Status.PENDING);
             });
         } else {
             log.info("{} {} Request to the same club from the same user already sent");
             throw new IllegalArgumentException("You cannot send two requests");
+
         }
     }
 

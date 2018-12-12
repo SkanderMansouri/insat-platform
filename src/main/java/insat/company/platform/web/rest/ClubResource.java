@@ -180,8 +180,16 @@ public class ClubResource {
         String userLogin = SecurityUtils.getCurrentUserLogin().get();
         return clubService.findOne(id).map(club -> {
             User currentUser = userService.getUserWithAuthoritiesByLogin(userLogin).get();
-            clubService.deleteJoinRequest(club,currentUser);
-            return new ResponseEntity<>(HttpStatus.OK);
+            ResponseEntity resp = new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            try{
+                clubService.deleteJoinRequest(club,currentUser);
+                resp =  new ResponseEntity<>(HttpStatus.OK);
+            }catch (Exception e){
+                resp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }finally {
+                return resp;
+            }
+
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }

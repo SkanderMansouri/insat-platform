@@ -132,6 +132,8 @@ public class JoinClubRequest implements Serializable {
             "id=" + getId() +
             ", requestTime='" + getRequestTime() + "'" +
             ", status='" + getStatus() + "'" +
+            ", USER='" + getUser().getId() + "'" +
+            ", club='" + getClub().getId() + "'" +
             "}";
     }
 }

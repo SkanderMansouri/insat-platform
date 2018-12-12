@@ -134,24 +134,28 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public JoinClubRequest sendClubJoinRequest(Club club, User user) {
         if (!(club.hasMember(user))) {
-            return Optional.ofNullable(joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club,Status.PENDING))
-                .map(obj ->{
+            return Optional.ofNullable(joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club, Status.PENDING))
+                .map((obj) -> {
+                    if (obj.isPresent()) {
+                        return null;
+                    }
                     JoinClubRequest joinClubRequest = new JoinClubRequest();
-                    joinClubRequest.setId(0L);
+                    joinClubRequest.setClub(club);
+                    joinClubRequest.setUser(user);
+                    joinClubRequest.setRequestTime(LocalDate.now());
+                    joinClubRequest.setStatus(Status.PENDING);
+                    joinClubRequest = joinClubRequestRepository.save(joinClubRequest);
+                    log.info("{} {} Request Created  {} successfully !", joinClubRequest.getUser().getId(), joinClubRequest.getClub().getId());
+                    return joinClubRequest;
+                })
+                .orElseGet(() -> {
+                    JoinClubRequest joinClubRequest = new JoinClubRequest();
+                    joinClubRequest.setId(-1L);
                     joinClubRequest.setStatus(Status.PENDING);
                     joinClubRequest.setClub(club);
                     joinClubRequest.setUser(user);
                     return joinClubRequest;
-                })
-                .orElseGet(() -> {
-                JoinClubRequest joinClubRequest = new JoinClubRequest();
-                joinClubRequest.setClub(club);
-                joinClubRequest.setUser(user);
-                joinClubRequest.setRequestTime(LocalDate.now());
-                joinClubRequest.setStatus(Status.PENDING);
-                log.info("{} {} Request Created  {} successfully !", joinClubRequest.getUser().getId(), joinClubRequest.getClub().getId());
-                return joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club,Status.PENDING).get();
-            });
+                });
         } else {
             log.info("{} {} Request to the same club from the same user already sent");
             throw new IllegalArgumentException("You cannot send two requests");
@@ -162,12 +166,16 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     public void deleteJoinRequest(Club club, User user) {
-        joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club, Status.PENDING).map(
-            RequestToDelete -> {
-                RequestToDelete.setStatus(Status.DELETED);
-                log.info("Accepting to delete join Request ");
-                return new ResponseEntity(HttpStatus.OK);
-            }
-            ).orElseThrow(IllegalArgumentException::new);
+        Optional.ofNullable(joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club, Status.PENDING))
+            .map((obj) -> {
+                if (obj.isPresent()) {
+                    System.out.println(obj.get());
+                    obj.get().setStatus(Status.DELETED);
+                    log.info("Accepting to delete join Request ");
+                    return new ResponseEntity(HttpStatus.OK);
+                }else {
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+            });
     }
 }

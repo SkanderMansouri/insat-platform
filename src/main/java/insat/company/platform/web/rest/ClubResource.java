@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import insat.company.platform.domain.Club;
 import insat.company.platform.domain.JoinClubRequest;
 import insat.company.platform.domain.User;
+import insat.company.platform.repository.ClubRepository;
 import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.ClubService;
 import insat.company.platform.service.UserService;
@@ -32,10 +33,12 @@ public class ClubResource {
     private final Logger log = LoggerFactory.getLogger(ClubResource.class);
     private final ClubService clubService;
     private final UserService userService;
+   //private final ClubRepository clubRepository;
 
-    public ClubResource(ClubService clubService, UserService userService) {
+    public ClubResource(ClubService clubService, UserService userService/*, ClubRepository clubRepository*/) {
         this.clubService = clubService;
         this.userService = userService;
+//        this.clubRepository = clubRepository;
     }
 
     /**
@@ -143,7 +146,7 @@ public class ClubResource {
     @GetMapping("/join/clubs/{id}")
     @Timed
     public ResponseEntity<?> joinClub(@PathVariable Long id) throws URISyntaxException {
-        log.debug("REST request to create a joinClubRequest to join a club   : {}", id);
+        log.debug("REST request to create a joinClubRequest to join a shouldReturnOkAndCreateAJoinClubRequest\nclub   : {}", id);
 
         if (!SecurityUtils.isAuthenticated()) {
             log.error("User should be logged in");
@@ -154,14 +157,13 @@ public class ClubResource {
 
         return clubService.findOne(id).map(club -> {
             User currentUser = userService.getUserWithAuthoritiesByLogin(userLogin).get();
+            if(club.hasMember(currentUser))
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             JoinClubRequest joinClubRequest= clubService.sendClubJoinRequest(club, currentUser);
-
-            if(joinClubRequest.getId() != 0L)
+            if(joinClubRequest.getId() >= 0L)
                 return new ResponseEntity<>(HttpStatus.OK);
             else
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 

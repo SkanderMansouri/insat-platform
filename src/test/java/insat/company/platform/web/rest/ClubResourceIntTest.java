@@ -15,6 +15,7 @@ import insat.company.platform.service.ClubService;
 import insat.company.platform.service.JoinClubRequestService;
 import insat.company.platform.service.UserService;
 import insat.company.platform.web.rest.errors.ExceptionTranslator;
+import org.hibernate.mapping.Join;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,10 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.management.remote.JMXAuthenticator;
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static insat.company.platform.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -414,6 +412,7 @@ public class ClubResourceIntTest {
             .andExpect(status().isUnauthorized());
     }
 
+    // works fine
     @Test
     @WithMockUser(username = "user", password = "user", roles = "USER")
     public void shouldReturnBadRequestWhenRequestAlreadyExists() throws Exception {
@@ -427,13 +426,14 @@ public class ClubResourceIntTest {
         request1.setRequestTime(LocalDate.now());
         request1.setStatus(Status.PENDING);
         joinClubRequestService.save(request1);
-        assertThat(joinClubRequestRepository.findAll().size()).isEqualTo(joinClubRequestBeforeCreateTheRequestSize+1);
+        assertThat(joinClubRequestRepository.findAll().size()).isEqualTo(joinClubRequestBeforeCreateTheRequestSize + 1);
         restClubMockMvc.perform(get("/api/join/clubs/{id}", club.getId())
             .contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isBadRequest());
-        assertThat(joinClubRequestRepository.findAll().size()).isEqualTo(joinClubRequestBeforeCreateTheRequestSize+1);
+        assertThat(joinClubRequestRepository.findAll().size()).isEqualTo(joinClubRequestBeforeCreateTheRequestSize + 1);
 
     }
+
     //works fine
     @Test
     @WithMockUser(username = "user", password = "user", roles = "USER")
@@ -460,5 +460,50 @@ public class ClubResourceIntTest {
             .andExpect(status().isOk());
         assertThat(joinClubRequest.getStatus().equals(Status.DELETED));
     }
-}
 
+    // works fine
+    @Test
+    @WithMockUser(username = "user", password = "user", roles = "USER")
+    public void shouldReturnBadRequestWhenUserAlreadyMember() throws Exception {
+        int clubsCount = clubRepository.findAll().size();
+        int joinRequestsCount = joinClubRequestRepository.findAll().size();
+        User user = userRepository.findOneByLogin("user").get();
+        club.members(new HashSet());
+        user.setClubs(new HashSet<>());
+        club.addMember(user);
+
+        club = clubService.save(club);
+        assertThat(clubRepository.findAll().size()).isEqualTo(clubsCount + 1);
+
+        restClubMockMvc.perform(get("/api/join/clubs/{id}", club.getId())
+            .contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isBadRequest());
+
+        assertThat(joinClubRequestRepository.findAll().size()).isEqualTo(joinRequestsCount);
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "user", roles = "USER")
+    public void shouldReturnBadRequestWhenRequestIsNotSentByAuthenticatedUserAndAsksToBeDeleted() throws Exception {
+        int joinRequestCount = joinClubRequestRepository.findAll().size();
+        User user = userRepository.findOneByLogin("user").get();
+        User admin = userRepository.findOneByLogin("admin").get();
+
+        club = clubService.save(club);
+        JoinClubRequest joinClubRequestADMIN = new JoinClubRequest();
+        joinClubRequestADMIN.setUser(admin);
+        joinClubRequestADMIN.setClub(club);
+        joinClubRequestADMIN.setRequestTime(LocalDate.now());
+        joinClubRequestADMIN.status(Status.PENDING);
+        joinClubRequestRepository.save(joinClubRequestADMIN);
+        assertThat(joinClubRequestRepository.findAll().size()).isEqualTo(joinRequestCount + 1);
+
+        restClubMockMvc.perform(get("/api/deleteJoin/clubs/{id}", club.getId())
+            .contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isBadRequest());
+
+        joinClubRequestADMIN = joinClubRequestRepository.findAll().get(joinRequestCount);
+        assertThat(joinClubRequestADMIN.getStatus()).isEqualTo(Status.PENDING);
+
+    }
+}

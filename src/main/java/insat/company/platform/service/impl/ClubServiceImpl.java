@@ -172,28 +172,5 @@ public class ClubServiceImpl implements ClubService {
                 log.info("Accepting to delete join Request");
                 return new ResponseEntity(HttpStatus.OK);
             }).orElseThrow(IllegalArgumentException::new);
-
-/*
-        Optional.ofNullable(joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club, Status.PENDING))
-            .map((obj) -> {
-                if (obj.isPresent()) {
-                    System.out.println(obj.get());
-                    obj.get().setStatus(Status.DELETED);
-                    log.info("Accepting to delete join Request ");
-                    return new ResponseEntity(HttpStatus.OK);
-                } else {
-                    return new ResponseEntity(HttpStatus.BAD_REQUEST);
-                /*
-                try {
-                        throw new Exception("a user cannot delete another's request.");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }finally {
-
-                    }
-                }
-
-                }
-            }).orElseThrow(IllegalArgumentException::new);*/
     }
 }

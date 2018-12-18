@@ -111,4 +111,12 @@ public class ClubServiceImpl implements ClubService {
             .stream(clubSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
     }
+    /**
+     * @return a list of all the clubs
+     */
+    public List<Club> getClubsList() {
+
+        return clubRepository.findAll();
+    }
+
 }

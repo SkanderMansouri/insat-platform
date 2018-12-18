@@ -110,9 +110,15 @@
                     </select>
                 </div>
             </div>
+            <div *ngIf="user.authorities=='ROLE_PRESIDENT'" class="form-group">
+                <label>ClubsList</label>
+                <select class="form-control" multiple name="club"   (ngModel)="club">
+                    <option *ngFor="let clubb of clubsList"  [ngValue]="clubb" (click)="onSelect(clubb)" >{{clubb.name}}</option>
+                </select>
+            </div>
             <div>
                 <button type="button" class="btn btn-secondary" (click)="previousState()">
-                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>
                     jhiTranslate="entity.action.cancel">Cancel</span>
                 </button>
                 <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">

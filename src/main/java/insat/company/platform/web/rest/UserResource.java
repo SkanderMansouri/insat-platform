@@ -1,7 +1,9 @@
 package insat.company.platform.web.rest;
 
 import insat.company.platform.config.Constants;
+import insat.company.platform.domain.Club;
 import insat.company.platform.domain.User;
+import insat.company.platform.repository.ClubRepository;
 import insat.company.platform.repository.UserRepository;
 import insat.company.platform.repository.search.UserSearchRepository;
 import insat.company.platform.security.AuthoritiesConstants;
@@ -73,12 +75,18 @@ public class UserResource {
 
     private final UserSearchRepository userSearchRepository;
 
-    public UserResource(UserService userService, UserRepository userRepository, MailService mailService, UserSearchRepository userSearchRepository) {
+    private final ClubRepository clubRepository;
+
+    private final ClubResource clubResource;
+
+    public UserResource(UserService userService, UserRepository userRepository, MailService mailService, UserSearchRepository userSearchRepository, ClubRepository clubRepository, ClubResource clubResource) {
 
         this.userService = userService;
         this.userRepository = userRepository;
         this.mailService = mailService;
         this.userSearchRepository = userSearchRepository;
+        this.clubRepository = clubRepository;
+        this.clubResource = clubResource;
     }
 
     /**
@@ -113,6 +121,60 @@ public class UserResource {
                 .headers(HeaderUtil.createAlert( "userManagement.created", newUser.getLogin()))
                 .body(newUser);
         }
+    }
+    /**
+     * POST  /president  : Creates a new user as president.
+     * <p>
+     * Creates a new user if the login and email are not already used, and sends an
+     * mail with an activation link.
+     * The user needs to be activated on creation.
+     *
+     * @param userDTO the user to create
+     * @param clubId the club to modify
+     * @return the ResponseEntity with status 201 (Created) and with body the new user, or with status 400 (Bad Request) if the login or email is already in use
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @throws BadRequestAlertException 400 (Bad Request) if the login or email is already in use
+     */
+    @PostMapping("/president")
+    @Timed
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<User> createPresident(@Valid @RequestBody UserDTO userDTO, @RequestParam( value = "id") String clubId) throws URISyntaxException {
+        log.debug("REST request to save User : {}", userDTO);
+
+        ResponseEntity<User> response= createUser(userDTO);
+        Optional<Club>  club=clubRepository.findOneById(Long.parseLong(clubId));
+        Club modifiedClub=club.get();
+        modifiedClub.setPresident(response.getBody());
+        clubResource.updateClub(modifiedClub);
+        return response;
+    }
+
+    /**
+     * PUT /updatePresident  : Creates a new user as president.
+     * <p>
+     * Creates a new user if the login and email are not already used, and sends an
+     * mail with an activation link.
+     * The user needs to be activated on creation.
+     *
+     * @param userDTO the user to create
+     * @param clubId the club to modify
+     * @return the ResponseEntity with status 201 (Created) and with body the new user, or with status 400 (Bad Request) if the login or email is already in use
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @throws BadRequestAlertException 400 (Bad Request) if the login or email is already in use
+     */
+    @PutMapping("/updatePresident")
+    @Timed
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<UserDTO> updatePresident(@Valid @RequestBody UserDTO userDTO, @RequestParam( value = "id") String clubId) throws URISyntaxException {
+        log.debug("REST request to save User : {}", userDTO);
+
+        ResponseEntity<UserDTO> response= updateUser(userDTO);
+        Optional<Club>  club=clubRepository.findOneById(Long.parseLong(clubId));
+        Club modifiedClub=club.get();
+        User president=userRepository.findOneByLogin(response.getBody().getLogin()).get();
+        modifiedClub.setPresident( president);
+        clubResource.updateClub(modifiedClub);
+        return response;
     }
 
     /**

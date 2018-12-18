@@ -56,4 +56,6 @@ public interface ClubService {
      * @return the list of entities
      */
     List<Club> search(String query);
+
+    List<Club> getClubsList();
 }

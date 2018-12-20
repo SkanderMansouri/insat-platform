@@ -6,6 +6,7 @@ import { InsatSlackUserModule } from './slack-user/slack-user.module';
 import { InsatSlackChannelModule } from './slack-channel/slack-channel.module';
 import { InsatClubModule } from './club/club.module';
 
+import { InsatJoinClubRequestModule } from './join-club-request/join-club-request.module';
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
 @NgModule({
@@ -16,6 +17,7 @@ import { InsatClubModule } from './club/club.module';
         InsatSlackUserModule,
         InsatSlackChannelModule,
         InsatClubModule,
+        InsatJoinClubRequestModule,
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
     declarations: [],

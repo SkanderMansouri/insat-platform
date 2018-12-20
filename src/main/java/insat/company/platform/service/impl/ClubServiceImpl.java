@@ -1,16 +1,27 @@
 package insat.company.platform.service.impl;
 
 import insat.company.platform.domain.Club;
+import insat.company.platform.domain.JoinClubRequest;
+import insat.company.platform.domain.User;
+import insat.company.platform.domain.enumeration.Status;
 import insat.company.platform.repository.ClubRepository;
+import insat.company.platform.repository.JoinClubRequestRepository;
 import insat.company.platform.repository.search.ClubSearchRepository;
+import insat.company.platform.repository.search.UserSearchRepository;
+import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.ClubService;
+import insat.company.platform.service.JoinClubRequestService;
+import org.hibernate.mapping.Join;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,9 +42,18 @@ public class ClubServiceImpl implements ClubService {
 
     private final ClubSearchRepository clubSearchRepository;
 
-    public ClubServiceImpl(ClubRepository clubRepository, ClubSearchRepository clubSearchRepository) {
+    private final UserSearchRepository userSearchRepository;
+
+    private final JoinClubRequestRepository joinClubRequestRepository;
+
+    private final JoinClubRequestService joinClubRequestService;
+
+    public ClubServiceImpl(ClubRepository clubRepository, ClubSearchRepository clubSearchRepository, UserSearchRepository userSearchRepository, JoinClubRequestRepository joinClubRequestRepository, JoinClubRequestService joinClubRequestService) {
         this.clubRepository = clubRepository;
         this.clubSearchRepository = clubSearchRepository;
+        this.userSearchRepository = userSearchRepository;
+        this.joinClubRequestRepository = joinClubRequestRepository;
+        this.joinClubRequestService = joinClubRequestService;
     }
 
     /**
@@ -70,7 +90,6 @@ public class ClubServiceImpl implements ClubService {
     public Page<Club> findAllWithEagerRelationships(Pageable pageable) {
         return clubRepository.findAllWithEagerRelationships(pageable);
     }
-
 
     /**
      * Get one club by id.
@@ -111,12 +130,56 @@ public class ClubServiceImpl implements ClubService {
             .stream(clubSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
     }
+
     /**
      * @return a list of all the clubs
      */
     public List<Club> getClubsList() {
 
         return clubRepository.findAll();
+    }
+
+    @Override
+    public JoinClubRequest sendClubJoinRequest(Club club, User user) {
+        if (!(club.hasMember(user))) {
+            return Optional.ofNullable(joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club, Status.PENDING))
+                .map((obj) -> {
+                    if (obj.isPresent()) {
+                        return null;
+                    }
+                    JoinClubRequest joinClubRequest = new JoinClubRequest();
+                    joinClubRequest.setClub(club);
+                    joinClubRequest.setUser(user);
+                    joinClubRequest.setRequestTime(LocalDate.now());
+                    joinClubRequest.setStatus(Status.PENDING);
+                    joinClubRequest = joinClubRequestRepository.save(joinClubRequest);
+                    log.info("{} {} Request Created  {} successfully !", joinClubRequest.getUser().getId(), joinClubRequest.getClub().getId());
+                    return joinClubRequest;
+                })
+                .orElseGet(() -> {
+                    JoinClubRequest joinClubRequest = new JoinClubRequest();
+                    joinClubRequest.setId(-1L);
+                    joinClubRequest.setStatus(Status.PENDING);
+                    joinClubRequest.setClub(club);
+                    joinClubRequest.setUser(user);
+                    return joinClubRequest;
+                });
+        } else {
+            log.info("{} {} Request to the same club from the same user already sent");
+            throw new IllegalArgumentException("You cannot send two requests");
+
+        }
+    }
+
+
+    @Override
+    public void deleteJoinRequest(Club club, User user) {
+        joinClubRequestRepository.findOneByUserAndClubAndStatus(user, club, Status.PENDING).map(
+            requestToDelete -> {
+                requestToDelete.status(Status.DELETED);
+                log.info("Accepting to delete join Request");
+                return new ResponseEntity(HttpStatus.OK);
+            }).orElseThrow(IllegalArgumentException::new);
     }
 
 }

@@ -30,4 +30,6 @@ public interface ClubRepository extends JpaRepository<Club, Long> {
 
     Optional<Club> findOneById(Long id);
 
+    Optional<Club> findById(Long aLong);
+
 }

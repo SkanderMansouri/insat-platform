@@ -2,14 +2,19 @@ package insat.company.platform.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import insat.company.platform.domain.Club;
-import insat.company.platform.domain.User;
 import insat.company.platform.security.AuthoritiesConstants;
+import insat.company.platform.domain.JoinClubRequest;
+import insat.company.platform.domain.User;
+import insat.company.platform.repository.ClubRepository;
+import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.ClubService;
+import insat.company.platform.service.UserService;
 import insat.company.platform.web.rest.errors.BadRequestAlertException;
 import insat.company.platform.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,9 +35,13 @@ public class ClubResource {
     private static final String ENTITY_NAME = "club";
     private final Logger log = LoggerFactory.getLogger(ClubResource.class);
     private final ClubService clubService;
+    private final UserService userService;
+   //private final ClubRepository clubRepository;
 
-    public ClubResource(ClubService clubService) {
+    public ClubResource(ClubService clubService, UserService userService/*, ClubRepository clubRepository*/) {
         this.clubService = clubService;
+        this.userService = userService;
+//        this.clubRepository = clubRepository;
     }
 
     /**
@@ -143,4 +152,60 @@ public class ClubResource {
     }
 
 
+     /**
+     * GET  /join/clubs/:id : send joinClubRequest by  club "id"
+     *
+     * @param id the id of the club  to join
+     * @return the ResponseEntity with status 200 (OK), or with status 404 (Not Found) or with status 401 (unauthorized)
+     */
+    @GetMapping("/join/clubs/{id}")
+    @Timed
+    public ResponseEntity<?> joinClub(@PathVariable Long id) throws URISyntaxException {
+        log.debug("REST request to create a joinClubRequest to join a shouldReturnOkAndCreateAJoinClubRequest\nclub   : {}", id);
+
+        if (!SecurityUtils.isAuthenticated()) {
+            log.error("User should be logged in");
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        String userLogin = SecurityUtils.getCurrentUserLogin().get();
+
+        return clubService.findOne(id).map(club -> {
+            User currentUser = userService.getUserWithAuthoritiesByLogin(userLogin).get();
+            if(club.hasMember(currentUser))
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            JoinClubRequest joinClubRequest= clubService.sendClubJoinRequest(club, currentUser);
+            if(joinClubRequest.getId() >= 0L)
+                return new ResponseEntity<>(HttpStatus.OK);
+            else
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/deleteJoin/clubs/{id}")
+    @Timed
+    public ResponseEntity<?> deleteRequestJoinClub(@PathVariable Long id) throws URISyntaxException {
+        log.debug("REST  to delete a joinClubRequest  : {}", id);
+
+        if (!SecurityUtils.isAuthenticated()) {
+            log.error("User should be logged in");
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        String userLogin = SecurityUtils.getCurrentUserLogin().get();
+        return clubService.findOne(id).map(club -> {
+            User currentUser = userService.getUserWithAuthoritiesByLogin(userLogin).get();
+            ResponseEntity resp = new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            try{
+                clubService.deleteJoinRequest(club,currentUser);
+                resp =  new ResponseEntity<>(HttpStatus.OK);
+            }catch (Exception e){
+                resp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }finally {
+                return resp;
+            }
+
+        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+  
 }

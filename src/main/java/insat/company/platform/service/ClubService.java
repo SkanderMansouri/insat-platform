@@ -59,7 +59,10 @@ public interface ClubService {
      */
     List<Club> search(String query);
 
+    List<Club> getClubsList();
+
     JoinClubRequest sendClubJoinRequest(Club club, User user);
 
     void deleteJoinRequest(Club club, User user);
+
 }

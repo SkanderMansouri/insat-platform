@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
@@ -15,9 +15,18 @@ export class UserService {
     create(user: IUser): Observable<HttpResponse<IUser>> {
         return this.http.post<IUser>(this.resourceUrl, user, { observe: 'response' });
     }
+    createPresident(user: IUser, clubId: number): Observable<HttpResponse<IUser>> {
+        const param = new HttpParams().set('id', clubId.toString());
+        return this.http.post<IUser>(SERVER_API_URL + 'api/president', user, { params: param, observe: 'response' });
+    }
 
     update(user: IUser): Observable<HttpResponse<IUser>> {
         return this.http.put<IUser>(this.resourceUrl, user, { observe: 'response' });
+    }
+
+    updatePresident(user: IUser, clubId: number): Observable<HttpResponse<IUser>> {
+        const param = new HttpParams().set('id', clubId.toString());
+        return this.http.put<IUser>(SERVER_API_URL + 'api/updatePresident', user, { params: param, observe: 'response' });
     }
 
     find(login: string): Observable<HttpResponse<IUser>> {

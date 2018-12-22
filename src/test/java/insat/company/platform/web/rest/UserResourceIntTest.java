@@ -2,13 +2,16 @@ package insat.company.platform.web.rest;
 
 import insat.company.platform.InsatApp;
 import insat.company.platform.domain.Authority;
+import insat.company.platform.domain.Club;
 import insat.company.platform.domain.User;
+import insat.company.platform.repository.ClubRepository;
 import insat.company.platform.repository.UserRepository;
 import insat.company.platform.repository.search.UserSearchRepository;
 import insat.company.platform.security.AuthoritiesConstants;
 import insat.company.platform.service.MailService;
 import insat.company.platform.service.UserService;
 import insat.company.platform.service.dto.UserDTO;
+import insat.company.platform.service.impl.ClubServiceImpl;
 import insat.company.platform.service.mapper.UserMapper;
 import insat.company.platform.web.rest.errors.ExceptionTranslator;
 import insat.company.platform.web.rest.vm.ManagedUserVM;
@@ -16,11 +19,14 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,6 +40,8 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -89,6 +97,21 @@ public class UserResourceIntTest {
     @Autowired
     private UserMapper userMapper;
 
+    @Mock
+    private UserResource userResource;
+
+
+    @Autowired
+    private ClubRepository clubRepository;
+
+    @Mock
+    private ClubResource clubResource;
+
+
+    @Autowired
+    private ClubServiceImpl clubServiceImpl;
+
+
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
@@ -112,7 +135,7 @@ public class UserResourceIntTest {
     public void setup() {
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
         cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).clear();
-        UserResource userResource = new UserResource(userService, userRepository, mailService, mockUserSearchRepository);
+        UserResource userResource = new UserResource(userService, userRepository, mailService, mockUserSearchRepository,clubRepository,clubResource);
 
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -631,4 +654,76 @@ public class UserResourceIntTest {
         assertThat(authorityA).isEqualTo(authorityB);
         assertThat(authorityA.hashCode()).isEqualTo(authorityB.hashCode());
     }
+    @Test
+    @Transactional
+    public void shouldReturnIsCreatedWhenCreatePresident() throws Exception {
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setLogin(DEFAULT_LOGIN);
+        managedUserVM.setPassword(DEFAULT_PASSWORD);
+        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
+        managedUserVM.setLastName(DEFAULT_LASTNAME);
+        managedUserVM.setEmail(DEFAULT_EMAIL);
+        managedUserVM.setActivated(true);
+        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
+        managedUserVM.setLangKey(DEFAULT_LANGKEY);
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        Club club= new Club()
+            .name("club_test")
+            .domain("domain_test");
+        clubServiceImpl.save(club);
+        ResponseEntity<User> response =new ResponseEntity<>(HttpStatus.OK);
+        when(userResource.createUser(managedUserVM)).thenReturn(response);
+
+        restUserMockMvc.perform(post("/api/president?id="+Long.toString(club.getId()))
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+            .andExpect(status().isCreated());
+        club.setPresident(response.getBody());
+        verify(clubResource,times(1)).updateClub(eq(club));
+        Optional<Club> modifiedClub = clubRepository.findOneById(club.getId());
+        assertThat(modifiedClub.get().getPresident()).isEqualTo(response.getBody());
+
+    }
+
+    @Test
+    @Transactional
+    public void shouldReturnIsOkWhenUpdatePresident() throws Exception {
+        userRepository.saveAndFlush(user);
+        mockUserSearchRepository.save(user);
+        User updatedUser = userRepository.findById(user.getId()).get();
+
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setId(updatedUser.getId());
+        managedUserVM.setLogin(updatedUser.getLogin());
+        managedUserVM.setPassword(UPDATED_PASSWORD);
+        managedUserVM.setFirstName(UPDATED_FIRSTNAME);
+        managedUserVM.setLastName(UPDATED_LASTNAME);
+        managedUserVM.setEmail(UPDATED_EMAIL);
+        managedUserVM.setActivated(updatedUser.getActivated());
+        managedUserVM.setImageUrl(UPDATED_IMAGEURL);
+        managedUserVM.setLangKey(UPDATED_LANGKEY);
+        managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
+        managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
+        managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        Club club= new Club()
+            .name("club_test")
+            .domain("domain_test");
+        clubServiceImpl.save(club);
+        ResponseEntity<UserDTO> response =new ResponseEntity<>(HttpStatus.OK);
+        when(userResource.updateUser(managedUserVM)).thenReturn(response);
+
+        restUserMockMvc.perform(put("/api/updatePresident?id="+Long.toString(club.getId()))
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+                .andExpect(status().isOk());
+
+        club.setPresident(updatedUser);
+        verify(clubResource,times(1)).updateClub(eq(club));
+        Optional<Club> modifiedClub = clubRepository.findOneById(club.getId());
+        assertThat(modifiedClub.get().getPresident()).isEqualTo(updatedUser);
+
+    }
+
 }

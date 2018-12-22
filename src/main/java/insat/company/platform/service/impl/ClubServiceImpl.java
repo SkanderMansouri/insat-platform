@@ -131,6 +131,14 @@ public class ClubServiceImpl implements ClubService {
             .collect(Collectors.toList());
     }
 
+    /**
+     * @return a list of all the clubs
+     */
+    public List<Club> getClubsList() {
+
+        return clubRepository.findAll();
+    }
+
     @Override
     public JoinClubRequest sendClubJoinRequest(Club club, User user) {
         if (!(club.hasMember(user))) {
@@ -173,4 +181,5 @@ public class ClubServiceImpl implements ClubService {
                 return new ResponseEntity(HttpStatus.OK);
             }).orElseThrow(IllegalArgumentException::new);
     }
+
 }

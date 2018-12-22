@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
-import { IClub } from 'app/shared/model/club.model';
+import { Club, IClub } from 'app/shared/model/club.model';
 
 type EntityResponseType = HttpResponse<IClub>;
 type EntityArrayResponseType = HttpResponse<IClub[]>;
@@ -21,6 +21,7 @@ export class ClubService {
     }
 
     update(club: IClub): Observable<EntityResponseType> {
+        console.log('i was hereeeee {}', club.id);
         return this.http.put<IClub>(this.resourceUrl, club, { observe: 'response' });
     }
 
@@ -40,5 +41,9 @@ export class ClubService {
     search(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http.get<IClub[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
+    }
+
+    clubsList(): Observable<Club[]> {
+        return this.http.get<Club[]>(SERVER_API_URL + 'api/clubs/list');
     }
 }

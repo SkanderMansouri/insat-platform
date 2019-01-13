@@ -105,6 +105,20 @@ public class User extends AbstractAuditingEntity implements Serializable {
         inverseJoinColumns = {@JoinColumn(name = "clubs_id", referencedColumnName = "id")})
     private Set<Club> clubs = new HashSet<>();
 
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "insat_event_member",
+        joinColumns = @JoinColumn(name = "members_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "insat_events_id", referencedColumnName = "id"))
+    private Set<InsatEvent> memberEvents = new HashSet<>();
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "insat_event_participant",
+        joinColumns = @JoinColumn(name = "participants_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "insat_events_id", referencedColumnName = "id"))
+    private Set<InsatEvent> participantEvents = new HashSet<>();
+
     public Long getId() {
         return id;
     }
@@ -226,6 +240,22 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.clubs = clubs;
     }
 
+    public Set<InsatEvent> getMemberEvents() {
+        return memberEvents;
+    }
+
+    public void setMemberEvents(Set<InsatEvent> memberEvents) {
+        this.memberEvents = memberEvents;
+    }
+
+    public Set<InsatEvent> getParticipantEvents() {
+        return participantEvents;
+    }
+
+    public void setParticipantEvents(Set<InsatEvent> participantEvents) {
+        this.participantEvents = participantEvents;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -258,4 +288,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
             ", activationKey='" + activationKey + '\'' +
             "}";
     }
+
+
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity InsatEvent.
+    -->
+    <changeSet id="20190113174341-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="insat_events_id"
+                                 baseTableName="insat_event_member"
+                                 constraintName="fk_insat_event_member_insat_events_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="insat_event"/>
+        <addForeignKeyConstraint baseColumnNames="members_id"
+                                 baseTableName="insat_event_member"
+                                 constraintName="fk_insat_event_member_members_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+        
+        <addForeignKeyConstraint baseColumnNames="insat_events_id"
+                                 baseTableName="insat_event_participant"
+                                 constraintName="fk_insat_event_participant_insat_events_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="insat_event"/>
+        <addForeignKeyConstraint baseColumnNames="participants_id"
+                                 baseTableName="insat_event_participant"
+                                 constraintName="fk_insat_event_participant_participants_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="insat_events_id"
+                                 baseTableName="insat_event_club"
+                                 constraintName="fk_insat_event_club_insat_events_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="insat_event"/>
+        <addForeignKeyConstraint baseColumnNames="clubs_id"
+                                 baseTableName="insat_event_club"
+                                 constraintName="fk_insat_event_club_clubs_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="club"/>
+        
+    </changeSet>
+</databaseChangeLog>

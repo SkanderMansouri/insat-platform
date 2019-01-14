@@ -65,4 +65,9 @@ public interface ClubService {
 
     void deleteJoinRequest(Club club, User user);
 
+    boolean verifyAccessToJoinClubRequest(Optional<JoinClubRequest> joinClubRequest);
+
+    void acceptJoinClubRequest(Optional<JoinClubRequest> joinClubRequest);
+
+    void declineJoinClubRequest(Optional<JoinClubRequest> joinClubRequest);
 }

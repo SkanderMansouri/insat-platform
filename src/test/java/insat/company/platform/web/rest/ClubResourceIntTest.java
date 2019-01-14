@@ -10,12 +10,10 @@ import insat.company.platform.repository.JoinClubRequestRepository;
 import insat.company.platform.repository.UserRepository;
 import insat.company.platform.repository.search.ClubSearchRepository;
 import insat.company.platform.repository.search.UserSearchRepository;
-import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.ClubService;
 import insat.company.platform.service.JoinClubRequestService;
 import insat.company.platform.service.UserService;
 import insat.company.platform.web.rest.errors.ExceptionTranslator;
-import org.hibernate.mapping.Join;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,19 +25,18 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.management.remote.JMXAuthenticator;
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 
 import static insat.company.platform.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,6 +53,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = InsatApp.class)
+@Transactional
 public class ClubResourceIntTest {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -135,7 +133,7 @@ public class ClubResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ClubResource clubResource = new ClubResource(clubService, userService);
+        final ClubResource clubResource = new ClubResource(clubService, userService, joinClubRequestRepository);
         this.restClubMockMvc = MockMvcBuilders.standaloneSetup(clubResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -209,7 +207,7 @@ public class ClubResourceIntTest {
 
     @SuppressWarnings({"unchecked"})
     public void getAllClubsWithEagerRelationshipsIsEnabled() throws Exception {
-        ClubResource clubResource = new ClubResource(clubServiceMock, userService);
+        ClubResource clubResource = new ClubResource(clubServiceMock, userService, joinClubRequestRepository);
         when(clubServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restClubMockMvc = MockMvcBuilders.standaloneSetup(clubResource)
@@ -226,7 +224,7 @@ public class ClubResourceIntTest {
 
     @SuppressWarnings({"unchecked"})
     public void getAllClubsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        ClubResource clubResource = new ClubResource(clubServiceMock, userService);
+        ClubResource clubResource = new ClubResource(clubServiceMock, userService, joinClubRequestRepository);
         when(clubServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
         MockMvc restClubMockMvc = MockMvcBuilders.standaloneSetup(clubResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -505,5 +503,144 @@ public class ClubResourceIntTest {
         joinClubRequestADMIN = joinClubRequestRepository.findAll().get(joinRequestCount);
         assertThat(joinClubRequestADMIN.getStatus()).isEqualTo(Status.PENDING);
 
+    }
+
+    @Test
+    @WithMockUser(username = "president", roles = "PRESIDENT")
+    public void shouldReturnOKAndAcceptRequest() throws Exception {
+        User user = new User();
+        user.setFirstName("Member");
+        user.setLastName("Member");
+        user.setLogin("Member");
+        user.setPassword("$2y$12$ZYPDAI1tNHe07AS.w5m28.BsSHCrTj4AOp34n/euJx0MfoVjG/Zla");
+        userRepository.save(user);
+        User president = new User();
+        president.setFirstName("president");
+        president.setLastName("president");
+        president.setLogin("president");
+        president.setPassword("$2y$12$ZYPDAI1tNHe07AS.w5m28.BsSHCrTj4AOp34n/euJx0MfoVjG/Zla");
+        userRepository.save(president);
+        Club club = new Club();
+        club.setId((long) 1);
+        club.setName("Existing club");
+        club.setDomain("Anything");
+        club.setPresident(president);
+        clubRepository.save(club);
+        JoinClubRequest joinClubRequest = new JoinClubRequest();
+        joinClubRequest.setId(new Long(1));
+        joinClubRequest.setUser(user);
+        joinClubRequest.setClub(club);
+        joinClubRequest.setRequestTime(LocalDate.now());
+        joinClubRequest.setStatus(Status.PENDING);
+        joinClubRequestRepository.save(joinClubRequest);
+        restClubMockMvc.perform(get("/api/acceptJoin/joinClubRequests/{id}", joinClubRequest.getId())
+            .contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk());
+        joinClubRequest = joinClubRequestRepository.getOne(joinClubRequest.getId());
+        assertThat(joinClubRequest.getStatus()).isEqualTo(Status.ACCEPTED);
+    }
+
+    @Test
+    @WithMockUser(username = "president", roles = "PRESIDENT")
+    public void shouldReturnOKAndRejectRequest() throws Exception {
+        User user = new User();
+        user.setFirstName("Member");
+        user.setLastName("Member");
+        user.setLogin("Member");
+        user.setPassword("$2y$12$ZYPDAI1tNHe07AS.w5m28.BsSHCrTj4AOp34n/euJx0MfoVjG/Zla");
+        userRepository.save(user);
+        User president = new User();
+        president.setFirstName("president");
+        president.setLastName("president");
+        president.setLogin("president");
+        president.setPassword("$2y$12$ZYPDAI1tNHe07AS.w5m28.BsSHCrTj4AOp34n/euJx0MfoVjG/Zla");
+        userRepository.save(president);
+        Club club = new Club();
+        club.setId((long) 1);
+        club.setName("Existing club");
+        club.setDomain("Anything");
+        club.setPresident(president);
+        clubRepository.save(club);
+        JoinClubRequest joinClubRequest = new JoinClubRequest();
+        joinClubRequest.setId(new Long(1));
+        joinClubRequest.setUser(user);
+        joinClubRequest.setClub(club);
+        joinClubRequest.setRequestTime(LocalDate.now());
+        joinClubRequest.setStatus(Status.PENDING);
+        joinClubRequestRepository.save(joinClubRequest);
+        restClubMockMvc.perform(get("/api/declineJoin/joinClubRequests/{id}", joinClubRequest.getId())
+            .contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk());
+        joinClubRequest = joinClubRequestRepository.getOne(joinClubRequest.getId());
+        assertThat(joinClubRequest.getStatus()).isEqualTo(Status.REJECTED);
+    }
+
+    @Test
+    public void shouldReturnUnauthorized() throws Exception {
+        User user = new User();
+        user.setFirstName("Member");
+        user.setLastName("Member");
+        user.setLogin("Member");
+        user.setPassword("$2y$12$ZYPDAI1tNHe07AS.w5m28.BsSHCrTj4AOp34n/euJx0MfoVjG/Zla");
+        userRepository.save(user);
+        User president = new User();
+        president.setFirstName("president");
+        president.setLastName("president");
+        president.setLogin("president");
+        president.setPassword("$2y$12$ZYPDAI1tNHe07AS.w5m28.BsSHCrTj4AOp34n/euJx0MfoVjG/Zla");
+        userRepository.save(president);
+        Club club = new Club();
+        club.setId((long) 1);
+        club.setName("Existing club");
+        club.setDomain("Anything");
+        club.setPresident(president);
+        clubRepository.save(club);
+        JoinClubRequest joinClubRequest = new JoinClubRequest();
+        joinClubRequest.setId(new Long(1));
+        joinClubRequest.setUser(user);
+        joinClubRequest.setClub(club);
+        joinClubRequest.setRequestTime(LocalDate.now());
+        joinClubRequest.setStatus(Status.PENDING);
+        joinClubRequestRepository.save(joinClubRequest);
+        restClubMockMvc.perform(get("/api/declineJoin/joinClubRequests/{id}", joinClubRequest.getId())
+            .contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isUnauthorized());
+        joinClubRequest = joinClubRequestRepository.getOne(joinClubRequest.getId());
+        assertThat(joinClubRequest.getStatus()).isEqualTo(Status.PENDING);
+    }
+
+    @Test
+    @WithMockUser(username = "member", roles = "PRESIDENT")
+    public void shouldReturnBadRequest() throws Exception {
+        User user = new User();
+        user.setFirstName("member");
+        user.setLastName("member");
+        user.setLogin("member");
+        user.setPassword("$2y$12$ZYPDAI1tNHe07AS.w5m28.BsSHCrTj4AOp34n/euJx0MfoVjG/Zla");
+        userRepository.save(user);
+        User president = new User();
+        president.setFirstName("president");
+        president.setLastName("president");
+        president.setLogin("president");
+        president.setPassword("$2y$12$ZYPDAI1tNHe07AS.w5m28.BsSHCrTj4AOp34n/euJx0MfoVjG/Zla");
+        userRepository.save(president);
+        Club club = new Club();
+        club.setId((long) 1);
+        club.setName("Existing club");
+        club.setDomain("Anything");
+        club.setPresident(president);
+        clubRepository.save(club);
+        JoinClubRequest joinClubRequest = new JoinClubRequest();
+        joinClubRequest.setId(new Long(1));
+        joinClubRequest.setUser(user);
+        joinClubRequest.setClub(club);
+        joinClubRequest.setRequestTime(LocalDate.now());
+        joinClubRequest.setStatus(Status.PENDING);
+        joinClubRequestRepository.save(joinClubRequest);
+        restClubMockMvc.perform(get("/api/declineJoin/joinClubRequests/{id}", joinClubRequest.getId())
+            .contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isBadRequest());
+        joinClubRequest = joinClubRequestRepository.getOne(joinClubRequest.getId());
+        assertThat(joinClubRequest.getStatus()).isEqualTo(Status.PENDING);
     }
 }

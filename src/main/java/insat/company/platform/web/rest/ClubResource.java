@@ -2,10 +2,10 @@ package insat.company.platform.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import insat.company.platform.domain.Club;
-import insat.company.platform.security.AuthoritiesConstants;
 import insat.company.platform.domain.JoinClubRequest;
 import insat.company.platform.domain.User;
-import insat.company.platform.repository.ClubRepository;
+import insat.company.platform.repository.JoinClubRequestRepository;
+import insat.company.platform.security.AuthoritiesConstants;
 import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.ClubService;
 import insat.company.platform.service.UserService;
@@ -36,12 +36,12 @@ public class ClubResource {
     private final Logger log = LoggerFactory.getLogger(ClubResource.class);
     private final ClubService clubService;
     private final UserService userService;
-   //private final ClubRepository clubRepository;
+    private final JoinClubRequestRepository joinClubRequestRepository;
 
-    public ClubResource(ClubService clubService, UserService userService/*, ClubRepository clubRepository*/) {
+    public ClubResource(ClubService clubService, UserService userService, JoinClubRequestRepository joinClubRequestRepository) {
         this.clubService = clubService;
         this.userService = userService;
-//        this.clubRepository = clubRepository;
+        this.joinClubRequestRepository = joinClubRequestRepository;
     }
 
     /**
@@ -207,5 +207,55 @@ public class ClubResource {
 
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-  
+
+    @GetMapping("/acceptJoin/joinClubRequests/{id}")
+    @Timed
+    public ResponseEntity<?> acceptJoinClub(@PathVariable Long id) throws URISyntaxException {
+        log.debug("REST request to accept the joinClubRequest {}", id);
+
+        if (!SecurityUtils.isAuthenticated()) {
+            log.error("User should be logged in");
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        Optional<JoinClubRequest> joinClubRequest = joinClubRequestRepository.findOneById(id);
+
+        return joinClubRequest.map(joinClubRequestExists -> {
+            if (clubService.verifyAccessToJoinClubRequest(joinClubRequest)) {
+                clubService.acceptJoinClubRequest(joinClubRequest);
+                log.info("joinClubRequest {} successfully accepted !", id);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                log.error("conditions to accept joinClubRequest {} not fulfilled !", id);
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        })
+            .orElseGet(() -> {
+                log.error("joinClubRequest {} not found !", id);
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            });
+    }
+
+    @GetMapping("/declineJoin/joinClubRequests/{id}")
+    @Timed
+    public ResponseEntity<?> declineJoinClub(@PathVariable Long id) throws URISyntaxException {
+        log.debug("REST request to decline the joinClubRequest {}", id);
+
+        if (!SecurityUtils.isAuthenticated()) {
+            log.error("User should be logged in");
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        Optional<JoinClubRequest> joinClubRequest = joinClubRequestRepository.findOneById(id);
+
+        return joinClubRequest.map(joinClubRequestExists -> {
+            if (clubService.verifyAccessToJoinClubRequest(joinClubRequest)) {
+                clubService.declineJoinClubRequest(joinClubRequest);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        })
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 }

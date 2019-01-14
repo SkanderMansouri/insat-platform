@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
@@ -23,7 +23,7 @@ export class InsatEventUpdateComponent implements OnInit {
     clubs: IClub[];
 
     users: IUser[];
-    date: string;
+    date: any;
 
     constructor(
         private jhiAlertService: JhiAlertService,
@@ -37,7 +37,7 @@ export class InsatEventUpdateComponent implements OnInit {
         this.isSaving = false;
         this.activatedRoute.data.subscribe(({ insatEvent }) => {
             this.insatEvent = insatEvent;
-            this.date = this.insatEvent.date != null ? this.insatEvent.date.format(DATE_TIME_FORMAT) : null;
+            this.date = null;
         });
         this.clubService.query().subscribe(
             (res: HttpResponse<IClub[]>) => {
@@ -59,10 +59,11 @@ export class InsatEventUpdateComponent implements OnInit {
 
     save() {
         this.isSaving = true;
-        this.insatEvent.date = this.date != null ? moment(this.date, DATE_TIME_FORMAT) : null;
+        this.insatEvent.date = moment(this.date, DATE_TIME_FORMAT);
         if (this.insatEvent.id !== undefined) {
             this.subscribeToSaveResponse(this.insatEventService.update(this.insatEvent));
         } else {
+            console.log(' date is  {} ', this.insatEvent.date);
             this.subscribeToSaveResponse(this.insatEventService.create(this.insatEvent));
         }
     }

@@ -1,7 +1,6 @@
 package insat.company.platform.service;
 
 import insat.company.platform.domain.InsatEvent;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -34,7 +33,7 @@ public interface InsatEventService {
      * @return the list of entities
      */
     Page<InsatEvent> findAllWithEagerRelationships(Pageable pageable);
-    
+
     /**
      * Get the "id" insatEvent.
      *
@@ -54,7 +53,7 @@ public interface InsatEventService {
      * Search for the insatEvent corresponding to the query.
      *
      * @param query the query of the search
-     * 
+     *
      * @return the list of entities
      */
     List<InsatEvent> search(String query);

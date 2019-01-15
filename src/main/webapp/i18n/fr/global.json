@@ -13,6 +13,7 @@
                 "slackChannel": "Slack Channel",
                 "club": "Club",
                 "joinClubRequest": "Join Club Request",
+                "insatEvent": "Insat Event",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

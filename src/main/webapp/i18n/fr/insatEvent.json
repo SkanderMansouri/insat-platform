@@ -1,0 +1,28 @@
+{
+    "insatApp": {
+        "insatEvent": {
+            "home": {
+                "title": "InsatEvents",
+                "createLabel": "Créer un nouveau Insat Event",
+                "createOrEditLabel": "Créer ou éditer un Insat Event",
+                "search": "Recherche pour Insat Event"
+            },
+            "created": "Un nouveau Insat Event a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Insat Event avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Insat Event avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Insat Event {{ id }} ?"
+            },
+            "detail": {
+                "title": "Insat Event"
+            },
+            "name": "Name",
+            "date": "Date",
+            "place": "Place",
+            "description": "Description",
+            "club": "Club",
+            "member": "Member",
+            "participant": "Participant"
+        }
+    }
+}

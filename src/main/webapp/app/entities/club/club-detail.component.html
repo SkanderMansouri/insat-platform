@@ -1,4 +1,12 @@
-<div class="row justify-content-center">
+<style>
+    .col-centered{
+
+        float: none;
+        margin: 0 auto;
+    }
+
+</style>
+<div class="row justify-content-center col-lg-5 col-lg-offset-1 col-centered">
     <div class="col-8">
         <div *ngIf="club">
             <h2><span jhiTranslate="insatApp.club.detail.title">Club</span> {{club.id}}</h2>

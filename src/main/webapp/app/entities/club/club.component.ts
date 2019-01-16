@@ -10,7 +10,8 @@ import { ClubService } from './club.service';
 
 @Component({
     selector: 'jhi-club',
-    templateUrl: './club.component.html'
+    templateUrl: './club.component.html',
+    styleUrls: ['club.css']
 })
 export class ClubComponent implements OnInit, OnDestroy {
     clubs: IClub[];

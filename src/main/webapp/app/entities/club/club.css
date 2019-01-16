@@ -1,0 +1,8 @@
+button {
+    background-color: #0c3171;
+}
+
+.col-centered {
+    float: none;
+    margin: 0 auto;
+}

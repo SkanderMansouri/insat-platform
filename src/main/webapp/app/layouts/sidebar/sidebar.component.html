@@ -1,126 +1,217 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
-
-
-<nav class="sidebar sidebarblock sidebar-menu">
-    <div class="float-left">
-        <a class="navbar-brand float-left">
-            <span jhiTranslate="global.title" id="sidebar"></span> <span class="navbar-version">{{version}}</span>
+<nav class="sidebar sidebar-dark sidebar-expand-md jh-sidebar">
+    <div class="jh-logo-container float-left">
+        <a class="jh-sidebar-toggler d-lg-none float-right" href="javascript:void(0);" data-toggle="collapse" data-target="#sidebarResponsive" aria-controls="sidebarResponsive" aria-expanded="false" aria-label="Toggle navigation" (click)="togglesidebar()">
+            <fa-icon icon="bars"></fa-icon>
+        </a>
+        <a class="sidebar-brand logo float-left" routerLink="/" (click)="collapsesidebar()">
+            <span class="logo-img"></span>
+            <span jhiTranslate="global.title" class="sidebar-title">Insat</span> <span class="sidebar-version">{{version}}</span>
         </a>
     </div>
-    <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
-
-        <div class="w3-sidebar w3-bar-block w3-animate-left page-wrapper chiller-theme toggled" >
-            <nav class="sidebar-wrapper">
-                <div class="sidebar-content">
-                    <div class="sidebar-header-logo">
-
-                    </div>
-                    <div class="sidebar-header">
-                        <div class="user-pic">
-                            <img class="img-responsive img-rounded"
-                                 src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
-                                 alt="User picture">
-                        </div>
-                        <div class="user-info" (click)="myFunction()">
-                    <span class="user-name">Jhon
-                        <strong>Smith</strong>
+    <div class="sidebar-collapse collapse" id="sidebarResponsive" [ngbCollapse]="issidebarCollapsed" [ngSwitch]="isAuthenticated()">
+        <ul class="sidebar-nav ml-auto">
+            <li *ngSwitchCase="true" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link" routerLink="list/slack/users">
+                    <span>
+                        <fa-icon icon="list" fixedWidth="true"></fa-icon>
+                        <span>List-slack-users</span>
                     </span>
-                            <span class="user-role">Administrator</span>
-                            <span class="user-status">
-                        <i class="fa fa-circle"></i>
-                        <span>Online</span>
+                </a>
+            </li>
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link" routerLink="/" (click)="collapsesidebar()">
+                    <span>
+                        <fa-icon icon="home"></fa-icon>
+                        <span jhiTranslate="global.menu.home">Home</span>
                     </span>
-                        </div>
-                    </div>
-                    <!-- sidebar-search  -->
-                    <div class="sidebar-menu">
-                        <ul>
-                            <li class="header-menu">
-                                <span>Menu</span>
-                            </li>
-                            <li class="sidebar">
-                                <a href="#">
-                                    <i class="fa fa-home"></i>
-                                    <span>Home</span>
-                                </a>
-                            </li>
-                            <li class="sidebar">
-                                <a href="#">
-                                    <i class="fa fa-user"></i>
-                                    <span>Users</span>
-                                </a>
-                            </li>
-                            <li class="sidebar">
-                                <a href="#">
-                                    <i class="fa fa-users"></i>
-                                    <span>Clubs</span>
-                                </a>
-                            </li>
-                            <li class="sidebar">
-                                <a href="#">
-                                    <i class="fa fa-question"></i>
-                                    <span>Requests</span>
-                                    <span class="badge badge-pill badge-danger">3</span>
-                                </a>
-                            </li>
-                            <li class="sidebar">
-                                <a href="#">
-                                    <i class="fa fa-bullhorn"></i>
-                                    <span>Events</span>
-                                    <span class="badge badge-pill badge-danger">3</span>
-                                </a>
-                            </li>
-                            <li class="header-menu">
-                                <span>Personnal</span>
-                            </li>
-                            <li class="sidebar-dropdown active">
-                                <a href="#">
-                                    <i class="fa fa-tachometer-alt"></i>
-                                    <span>User account</span>
-                                </a>
-                                <div class="sidebar-submenu" style="display:block;">
-                                    <ul>
-                                        <li>
-                                            <a href="#">Setting
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Invite user</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Password</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-
-
-                        </ul>
-                    </div>
-                    <!-- sidebar-menu  -->
-                </div>
-                <!-- sidebar-content  -->
-
-            </nav>
-
-        </div>
-</div>
+                </a>
+            </li>
+            <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
+            <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+                    <span>
+                        <fa-icon icon="th-list"></fa-icon>
+                        <span jhiTranslate="global.menu.entities.main">
+                            Entities
+                        </span>
+                    </span>
+                </a>
+                <ul class="dropdown-menu" ngbDropdownMenu>
+                    <li>
+                        <a class="dropdown-item" routerLink="integration" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapsesidebar()">
+                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.entities.integration">Integration</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="field" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapsesidebar()">
+                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.entities.field">Field</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="slack-user" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapsesidebar()">
+                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.entities.slackUser">Slack User</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="slack-channel" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapsesidebar()">
+                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.entities.slackChannel">Slack Channel</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="club" routerLinkActive="active"
+                           [routerLinkActiveOptions]="{ exact: true }" (click)="collapsesidebar()">
+                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.entities.club">Club</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="join-club-request" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapsesidebar()">
+                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.entities.joinClubRequest">Join Club Request</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="insat-event" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapsesidebar()">
+                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.entities.insatEvent">Insat Event</span>
+                        </a>
+                    </li>
+                    <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
+                </ul>
+            </li>
+            <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
+                    <span>
+                        <fa-icon icon="user-plus"></fa-icon>
+                        <span jhiTranslate="global.menu.admin.main">Administration</span>
+                    </span>
+                </a>
+                <ul class="dropdown-menu" ngbDropdownMenu>
+                    <li>
+                        <a class="dropdown-item" routerLink="admin/user-management" routerLinkActive="active" (click)="collapsesidebar()">
+                            <fa-icon icon="user" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.admin.userManagement">User management</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="admin/jhi-tracker" routerLinkActive="active" (click)="collapsesidebar()">
+                            <fa-icon icon="eye" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.admin.tracker">User tracker</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="admin/jhi-metrics" routerLinkActive="active" (click)="collapsesidebar()">
+                            <fa-icon icon="tachometer-alt" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.admin.metrics">Metrics</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="admin/jhi-health" routerLinkActive="active" (click)="collapsesidebar()">
+                            <fa-icon icon="heart" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.admin.health">Health</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="admin/jhi-configuration" routerLinkActive="active" (click)="collapsesidebar()">
+                            <fa-icon icon="list" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.admin.configuration">Configuration</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="admin/audits" routerLinkActive="active" (click)="collapsesidebar()">
+                            <fa-icon icon="bell" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.admin.audits">Audits</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="admin/logs" routerLinkActive="active" (click)="collapsesidebar()">
+                            <fa-icon icon="tasks" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.admin.logs">Logs</span>
+                        </a>
+                    </li>
+                    <li *ngIf="swaggerEnabled">
+                        <a class="dropdown-item" routerLink="admin/docs" routerLinkActive="active" (click)="collapsesidebar()">
+                            <fa-icon icon="book" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.admin.apidocs">API</span>
+                        </a>
+                    </li>
+                    <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
+                    <li *ngIf="!inProduction">
+                        <a class="dropdown-item" href='./h2-console' target="_tab" (click)="collapsesidebar()">
+                            <fa-icon icon="hdd" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.admin.database">Database</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li ngbDropdown class="nav-item dropdown pointer" *ngIf="languages && languages.length > 1">
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="languagessidebarDropdown">
+                    <span>
+                        <fa-icon icon="flag"></fa-icon>
+                        <span jhiTranslate="global.menu.language">Language</span>
+                    </span>
+                </a>
+                <ul class="dropdown-menu" ngbDropdownMenu>
+                    <li *ngFor="let language of languages">
+                        <a class="dropdown-item" [jhiActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapsesidebar();">{{language | findLanguageFromKey}}</a>
+                    </li>
+                </ul>
+            </li>
+            <li ngbDropdown class="nav-item dropdown pointer" placement="bottom-right" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
+                  <span *ngIf="!getImageUrl()">
+                    <fa-icon icon="user"></fa-icon>
+                    <span jhiTranslate="global.menu.account.main">
+                      Account
+                    </span>
+                  </span>
+                  <span *ngIf="getImageUrl()">
+                      <img [src]="getImageUrl()" class="profile-image img-circle" alt="Avatar">
+                  </span>
+                </a>
+                <ul class="dropdown-menu" ngbDropdownMenu>
+                    <li *ngSwitchCase="true">
+                        <a class="dropdown-item" routerLink="settings" routerLinkActive="active" (click)="collapsesidebar()">
+                            <fa-icon icon="wrench" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.account.settings">Settings</span>
+                        </a>
+                    </li>
+                    <li *ngSwitchCase="true">
+                        <a class="dropdown-item" routerLink="invite" routerLinkActive="active" (click)="collapsesidebar()">
+                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.account.invite">invite user</span>
+                        </a>
+                    </li>
+                    <li *ngSwitchCase="true">
+                        <a class="dropdown-item" routerLink="password" routerLinkActive="active" (click)="collapsesidebar()">
+                            <fa-icon icon="clock" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.account.password">Password</span>
+                        </a>
+                    </li>
+                    <li *ngSwitchCase="true">
+                        <a class="dropdown-item" (click)="logout()" id="logout">
+                            <fa-icon icon="sign-out-alt" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.account.logout">Sign out</span>
+                        </a>
+                    </li>
+                    <li *ngSwitchCase="false">
+                        <a class="dropdown-item" (click)="login()" id="login">
+                            <fa-icon icon="sign-in-alt" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.account.login">Sign in</span>
+                        </a>
+                    </li>
+                    <li *ngSwitchCase="false">
+                        <a class="dropdown-item" routerLink="register" routerLinkActive="active" (click)="collapsesidebar()">
+                            <fa-icon icon="user-plus" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.account.register">Register</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
 </nav>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
-
-
-
-
-
-

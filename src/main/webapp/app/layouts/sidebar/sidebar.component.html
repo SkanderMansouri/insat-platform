@@ -1,26 +1,22 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<nav class="sidebar sidebarblock sidebar-menu">
+    <div class="float-left">
+        <a class="navbar-brand float-left">
+            <span jhiTranslate="global.title" id="sidebar"></span> <span class="navbar-version">{{version}}</span>
+        </a>
+    </div>
+    <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"
+      xmlns:margin-left="http://www.w3.org/1999/xhtml" xmlns:margin-left="http://www.w3.org/1999/xhtml">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!------ Include the above in your HEAD tag ---------->
-
-
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Responsive sidebar template with sliding effect and dropdown menu based on bootstrap 3">
-    <title>Sidebar template</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
-
-
-
-<nav class="sidebar sidebar-dark sidebar-expand-md">
-    <div class="float-left">
-<div class="page-wrapper chiller-theme toggled  ">
-
-    <nav id="sidebar" class="sidebar-wrapper">
+<div   class="w3-sidebar w3-bar-block w3-animate-left page-wrapper chiller-theme toggled" >
+    <nav  class="sidebar-wrapper">
         <div class="sidebar-content">
             <div class="sidebar-header">
                 <div class="user-pic">
@@ -38,32 +34,19 @@
           </span>
                 </div>
             </div>
-            <!-- sidebar-header  -->
-            <div class="sidebar-search">
-                <div>
-                    <div class="input-group">
-                        <input type="text" class="form-control search-menu" placeholder="Search...">
-                        <div class="input-group-append">
-              <span class="input-group-text">
-                <i class="fa fa-search" aria-hidden="true"></i>
-              </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <!-- sidebar-search  -->
             <div class="sidebar-menu">
                 <ul>
                     <li class="header-menu">
-                        <span>General</span>
+                        <span>Menu</span>
                     </li>
                     <li class="sidebar-dropdown active">
                         <a href="#">
                             <i class="fa fa-tachometer-alt"></i>
-                            <span>Dashboard</span>
+                            <span>Users List</span>
                             <span class="badge badge-pill badge-warning">New</span>
                         </a>
-                        <div class="sidebar-submenu" style="display:block;">
+                       <!-- <div class="sidebar-submenu" style="display:block;">
                             <ul>
                                 <li>
                                     <a href="#">Dashboard 1
@@ -78,11 +61,11 @@
                                 </li>
                             </ul>
                         </div>
-                    </li>
+                    </li> !-->
                     <li class="sidebar-dropdown">
                         <a href="#">
                             <i class="fa fa-shopping-cart"></i>
-                            <span>E-commerce</span>
+                            <span>Clubs List</span>
                             <span class="badge badge-pill badge-danger">3</span>
                         </a>
                         <div class="sidebar-submenu">
@@ -104,7 +87,7 @@
                     <li class="sidebar-dropdown">
                         <a href="#">
                             <i class="far fa-gem"></i>
-                            <span>Components</span>
+                            <span>Events List</span>
                         </a>
                         <div class="sidebar-submenu">
                             <ul>
@@ -194,10 +177,8 @@
     </nav>
 
 </div>
-    </div>
+</div>
 </nav>
-s
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>

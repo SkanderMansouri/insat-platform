@@ -123,8 +123,7 @@ body {
     max-height: 100%;
     position: fixed;
     top: 0;
-    padding-top: 50px;
-    z-index: 998;
+    z-index: 999;
 }
 
 .sidebar-wrapper ul {
@@ -169,7 +168,14 @@ body {
     font-size: 20px;
 }
 /*--------------------sidebar-header----------------------*/
-
+.sidebar-wrapper .sidebar-header-logo {
+    padding: 30px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    overflow: hidden;
+    background: url('../../../content/images/logo.png') no-repeat center center;
+    background-size: contain;
+}
 .sidebar-wrapper .sidebar-header {
     padding: 20px;
     overflow: hidden;
@@ -491,4 +497,10 @@ body {
 
 .chiller-theme .sidebar-footer > a:last-child {
     border-right: none;
+}
+
+@media screen and (max-width: 768px) {
+    .sidebar-menu {
+        display: none;
+    }
 }

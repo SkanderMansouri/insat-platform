@@ -1,3 +1,14 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"
+>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+
+
 <nav class="sidebar sidebarblock sidebar-menu">
     <div class="float-left">
         <a class="navbar-brand float-left">
@@ -5,178 +16,102 @@
         </a>
     </div>
     <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"
-      xmlns:margin-left="http://www.w3.org/1999/xhtml" xmlns:margin-left="http://www.w3.org/1999/xhtml">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
-<div   class="w3-sidebar w3-bar-block w3-animate-left page-wrapper chiller-theme toggled" >
-    <nav  class="sidebar-wrapper">
-        <div class="sidebar-content">
-            <div class="sidebar-header">
-                <div class="user-pic">
-                    <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
-                         alt="User picture">
-                </div>
-                <div class="user-info">
-          <span class="user-name">Jhon
-            <strong>Smith</strong>
-          </span>
-                    <span class="user-role">Administrator</span>
-                    <span class="user-status">
-            <i class="fa fa-circle"></i>
-            <span>Online</span>
-          </span>
-                </div>
-            </div>
-            <!-- sidebar-search  -->
-            <div class="sidebar-menu">
-                <ul>
-                    <li class="header-menu">
-                        <span>Menu</span>
-                    </li>
-                    <li class="sidebar-dropdown active">
-                        <a href="#">
-                            <i class="fa fa-tachometer-alt"></i>
-                            <span>Users List</span>
-                            <span class="badge badge-pill badge-warning">New</span>
-                        </a>
-                       <!-- <div class="sidebar-submenu" style="display:block;">
-                            <ul>
-                                <li>
-                                    <a href="#">Dashboard 1
-                                        <span class="badge badge-pill badge-success">Pro</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">Dashboard 2</a>
-                                </li>
-                                <li>
-                                    <a href="#">Dashboard 3</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li> !-->
-                    <li class="sidebar-dropdown">
-                        <a href="#">
-                            <i class="fa fa-shopping-cart"></i>
-                            <span>Clubs List</span>
-                            <span class="badge badge-pill badge-danger">3</span>
-                        </a>
-                        <div class="sidebar-submenu">
-                            <ul>
-                                <li>
-                                    <a href="#">Products
 
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">Orders</a>
-                                </li>
-                                <li>
-                                    <a href="#">Credit cart</a>
-                                </li>
-                            </ul>
+        <div class="w3-sidebar w3-bar-block w3-animate-left page-wrapper chiller-theme toggled" >
+            <nav class="sidebar-wrapper">
+                <div class="sidebar-content">
+                    <div class="sidebar-header-logo">
+
+                    </div>
+                    <div class="sidebar-header">
+                        <div class="user-pic">
+                            <img class="img-responsive img-rounded"
+                                 src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
+                                 alt="User picture">
                         </div>
-                    </li>
-                    <li class="sidebar-dropdown">
-                        <a href="#">
-                            <i class="far fa-gem"></i>
-                            <span>Events List</span>
-                        </a>
-                        <div class="sidebar-submenu">
-                            <ul>
-                                <li>
-                                    <a href="#">General</a>
-                                </li>
-                                <li>
-                                    <a href="#">Panels</a>
-                                </li>
-                                <li>
-                                    <a href="#">Tables</a>
-                                </li>
-                                <li>
-                                    <a href="#">Icons</a>
-                                </li>
-                                <li>
-                                    <a href="#">Forms</a>
-                                </li>
-                            </ul>
+                        <div class="user-info" (click)="myFunction()">
+                    <span class="user-name">Jhon
+                        <strong>Smith</strong>
+                    </span>
+                            <span class="user-role">Administrator</span>
+                            <span class="user-status">
+                        <i class="fa fa-circle"></i>
+                        <span>Online</span>
+                    </span>
                         </div>
-                    </li>
-                    <li class="sidebar-dropdown">
-                        <a href="#">
-                            <i class="fa fa-chart-line"></i>
-                            <span>Charts</span>
-                        </a>
-                        <div class="sidebar-submenu">
-                            <ul>
-                                <li>
-                                    <a href="#">Pie chart</a>
-                                </li>
-                                <li>
-                                    <a href="#">Line chart</a>
-                                </li>
-                                <li>
-                                    <a href="#">Bar chart</a>
-                                </li>
-                                <li>
-                                    <a href="#">Histogram</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="sidebar-dropdown">
-                        <a href="#">
-                            <i class="fa fa-globe"></i>
-                            <span>Maps</span>
-                        </a>
-                        <div class="sidebar-submenu">
-                            <ul>
-                                <li>
-                                    <a href="#">Google maps</a>
-                                </li>
-                                <li>
-                                    <a href="#">Open street map</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="header-menu">
-                        <span>Extra</span>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-book"></i>
-                            <span>Documentation</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-calendar"></i>
-                            <span>Calendar</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-folder"></i>
-                            <span>Examples</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <!-- sidebar-menu  -->
+                    </div>
+                    <!-- sidebar-search  -->
+                    <div class="sidebar-menu">
+                        <ul>
+                            <li class="header-menu">
+                                <span>Menu</span>
+                            </li>
+                            <li class="sidebar">
+                                <a href="#">
+                                    <i class="fa fa-home"></i>
+                                    <span>Home</span>
+                                </a>
+                            </li>
+                            <li class="sidebar">
+                                <a href="#">
+                                    <i class="fa fa-user"></i>
+                                    <span>Users</span>
+                                </a>
+                            </li>
+                            <li class="sidebar">
+                                <a href="#">
+                                    <i class="fa fa-users"></i>
+                                    <span>Clubs</span>
+                                </a>
+                            </li>
+                            <li class="sidebar">
+                                <a href="#">
+                                    <i class="fa fa-question"></i>
+                                    <span>Requests</span>
+                                    <span class="badge badge-pill badge-danger">3</span>
+                                </a>
+                            </li>
+                            <li class="sidebar">
+                                <a href="#">
+                                    <i class="fa fa-bullhorn"></i>
+                                    <span>Events</span>
+                                    <span class="badge badge-pill badge-danger">3</span>
+                                </a>
+                            </li>
+                            <li class="header-menu">
+                                <span>Personnal</span>
+                            </li>
+                            <li class="sidebar-dropdown active">
+                                <a href="#">
+                                    <i class="fa fa-tachometer-alt"></i>
+                                    <span>User account</span>
+                                </a>
+                                <div class="sidebar-submenu" style="display:block;">
+                                    <ul>
+                                        <li>
+                                            <a href="#">Setting
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Invite user</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Password</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                    <!-- sidebar-menu  -->
+                </div>
+                <!-- sidebar-content  -->
+
+            </nav>
+
         </div>
-        <!-- sidebar-content  -->
-
-    </nav>
-
-</div>
 </div>
 </nav>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -184,6 +119,8 @@
         crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+
+
 
 
 

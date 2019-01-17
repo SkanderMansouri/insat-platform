@@ -75,4 +75,8 @@ export class SidebarComponent implements OnInit {
     getImageUrl() {
         return this.isAuthenticated() ? this.principal.getImageUrl() : null;
     }
+
+    // myFunction(){
+    //     alert("hello");
+    // }
 }

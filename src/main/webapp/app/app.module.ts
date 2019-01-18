@@ -22,6 +22,7 @@ import * as moment from 'moment';
 import { ActiveMenuDirective, ErrorComponent, FooterComponent, JhiMainComponent, NavbarComponent, PageRibbonComponent } from './layouts';
 import { SlackUsersListComponent } from './entities/slack-user/slack-users-list.component';
 import { SidebarComponent } from './layouts/sidebar/sidebar.component';
+import { HistoryModule } from 'app/history/history.module';
 
 @NgModule({
     imports: [
@@ -40,7 +41,8 @@ import { SidebarComponent } from './layouts/sidebar/sidebar.component';
         InsatHomeModule,
         InsatAccountModule,
         // jhipster-needle-angular-add-module JHipster will add new module here
-        InsatEntityModule
+        InsatEntityModule,
+        HistoryModule
     ],
     declarations: [
         JhiMainComponent,

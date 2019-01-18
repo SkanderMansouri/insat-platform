@@ -2,14 +2,12 @@
 <div class="row justify-content-center col-lg-5 ">
     <div class="wrap col-8">
         <div class="table" *ngIf="club">
-
-
             <jhi-alert-error></jhi-alert-error>
             <ul>
                 <li>
                     <div class="top purple white">
-                         <h1>{{club.name}}</h1>
-                        <div class="circle">$19</div>
+                         <h1 class="align-middle">{{club.name}}</h1>
+                        <div class="circle align-middle"><fa-icon [icon]="'users'"></fa-icon></div>
                     </div>
                     <br>
                     <div class="bottom">
@@ -19,32 +17,23 @@
 
                 <p><span jhiTranslate="insatApp.club.president">President</span></p>
 
-                    {{club.president?.login}}
+                        <span>{{club.president?.login}}</span>
 
                 <p><span jhiTranslate="insatApp.club.member">Member</span></p>
 
                     <div *ngFor="let member of club.members; let last = last">
                         {{member.login}}{{last ? '' : ', '}}
                     </div>
-
+                        <p>
+                            <button type="submit" (click)="previousState()" class="btn btn-info button">
+                                <fa-icon [icon]="'arrow-left'"></fa-icon>
+                            </button>
+                            <button type="button" [routerLink]="['/club', club.id, 'edit']" class="btn btn-primary button">
+                                <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            </button>
+                        </p>
                     </div>
-                    <p>
-                <div class="float-lg-right">
 
-            <button type="submit"
-                    (click)="previousState()"
-                    class="btn btn-info button">
-                <fa-icon [icon]="'arrow-left'"></fa-icon>
-            </button>
-
-            <button type="button"
-                    [routerLink]="['/club', club.id, 'edit']"
-                    class="btn btn-primary button">
-                <fa-icon [icon]="'pencil-alt'"></fa-icon>
-            </button>
-
-                </div>
-                    </p>
                 </li>
             </ul>
         </div>

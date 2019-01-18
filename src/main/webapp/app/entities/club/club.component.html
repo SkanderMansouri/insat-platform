@@ -1,6 +1,5 @@
 
 <div>
-
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-club"
                 [routerLink]="['/club/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
@@ -8,12 +7,11 @@
             Create new Club
             </span>
         </button>
-    </h2>
     <jhi-alert></jhi-alert>
-   <br></br>
+   </br>
     <div >
 
-        <div class="float-right col-lg-2   ">
+        <div class="float-right col-lg-3">
             <form name="searchForm" class="float-right">
                 <div class="input-group float-right ">
                     <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch"
@@ -29,18 +27,18 @@
         </div>
     </div>
     <br/>
-
+    <br/>
     <div class="table-responsive " class="table-clubs" *ngIf="clubs">
         <h2 id="page-heading">
             <div class="header">
                 <span jhiTranslate="insatApp.club.home.title">Clubs</span> </div>
-        <table class="table table-striped " style="">
+        <table class="table table-striped " style="" *jhiHasAnyAuthority="'ROLE_ADMIN'">
             <thead>
 
             </thead>
             <tbody>
             <tr *ngFor="let club of clubs ;trackBy: trackId">
-                <td></td>
+                <td><fa-icon [icon]="'users'"></fa-icon></td>
                 <td><a  style="" [routerLink]="['/club', club.id, 'view' ]">{{club.name}}</a></td>
 
                 <td class="text-right">
@@ -70,5 +68,6 @@
             </tr>
             </tbody>
         </table>
+        </h2>
     </div>
 </div>

@@ -1,7 +1,6 @@
 
 <div>
-    <h2 id="page-heading">
-        <span jhiTranslate="insatApp.club.home.title">Clubs</span>
+
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-club"
                 [routerLink]="['/club/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
@@ -11,10 +10,12 @@
         </button>
     </h2>
     <jhi-alert></jhi-alert>
-    <div class="row">
-        <div class="col-sm-12">
-            <form name="searchForm" class="form-inline">
-                <div class="input-group w-100 mt-3">
+   <br></br>
+    <div >
+
+        <div class="float-right col-lg-2   ">
+            <form name="searchForm" class="float-right">
+                <div class="input-group float-right ">
                     <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch"
                            name="currentSearch" placeholder="{{ 'insatApp.club.home.search' | translate }}">
                     <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
@@ -28,35 +29,39 @@
         </div>
     </div>
     <br/>
-    <div class="table-responsive col-lg-5 col-lg-offset-1 col-centered" *ngIf="clubs">
+
+    <div class="table-responsive " class="table-clubs" *ngIf="clubs">
+        <h2 id="page-heading">
+            <div class="header">
+                <span jhiTranslate="insatApp.club.home.title">Clubs</span> </div>
         <table class="table table-striped " style="">
             <thead>
 
             </thead>
             <tbody>
             <tr *ngFor="let club of clubs ;trackBy: trackId">
-
-                <td><a [routerLink]="['/club', club.id, 'view' ]">{{club.name}}</a></td>
+                <td></td>
+                <td><a  style="" [routerLink]="['/club', club.id, 'view' ]">{{club.name}}</a></td>
 
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
                                 [routerLink]="['/club', club.id, 'view' ]"
-                                class="btn btn-info btn-sm">
+                                class="btn btn-info btn-sm btn-"
+                                >
                             <fa-icon [icon]="'eye'"></fa-icon>
 
                         </button>
                         <button type="submit"
                                 [routerLink]="['/club', club.id, 'edit']"
-                                class="btn btn-primary btn-sm">
+                                class="btn btn-primary btn-sm btn-">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
-
                         </button>
                         <button type="submit"
                                 [routerLink]="['/', { outlets: { popup: 'club/'+ club.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm">
+                                class="btn btn-danger btn-sm btn-">
                             <fa-icon [icon]="'times'"></fa-icon>
 
                         </button>

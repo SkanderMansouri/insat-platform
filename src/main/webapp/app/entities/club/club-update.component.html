@@ -4,31 +4,37 @@
             <h2 id="jhi-club-heading" jhiTranslate="insatApp.club.home.createOrEditLabel">Create or edit a Club</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!club.id">
-                    <label for="id" jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id"
-                           [(ngModel)]="club.id" readonly/>
-                </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="insatApp.club.name" for="field_name">Name</label>
-                    <input type="text" class="form-control" name="name" id="field_name"
-                           [(ngModel)]="club.name"/>
+                    <div class="input-container">
+                        <fa-icon class="fa icon" [icon]="'users'"></fa-icon>
+                        <input type="text" class="form-control" name="name" id="field_name"
+                               [(ngModel)]="club.name"/>
+                    </div>
+
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="insatApp.club.domain"
                            for="field_domain">Domain</label>
-                    <input type="text" class="form-control" name="domain" id="field_domain"
-                           [(ngModel)]="club.domain"/>
+                    <div class="input-container">
+                        <fa-icon class="fa icon" [icon]="'briefcase'"></fa-icon>
+                        <input type="text" class="form-control" name="domain" id="field_domain"
+                               [(ngModel)]="club.domain"/>
+                    </div>
+
                 </div>
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="insatApp.club.president" for="field_president">President</label>
+                    <div class="input-container">
+                    <i class="fa fa-user icon"></i>
                     <select class="form-control" id="field_president" name="president" [(ngModel)]="club.president">
                         <option [ngValue]="null"></option>
                         <option [ngValue]="userOption.id === club.president?.id ? club.president : userOption"
                                 *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}
                         </option>
                     </select>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label jhiTranslate="insatApp.club.member" for="field_member">Member</label>

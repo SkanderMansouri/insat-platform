@@ -7,6 +7,7 @@ import insat.company.platform.repository.ClubRepository;
 import insat.company.platform.repository.UserRepository;
 import insat.company.platform.repository.search.UserSearchRepository;
 import insat.company.platform.security.AuthoritiesConstants;
+import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.MailService;
 import insat.company.platform.service.UserService;
 import insat.company.platform.service.dto.UserDTO;
@@ -272,4 +273,13 @@ public class UserResource {
             .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
     }
+    @GetMapping("/users/clubs")
+    @Timed
+    public Set<Club> getClubs() {
+        String userLogin = SecurityUtils.getCurrentUserLogin().get();
+        User currentUser = userService.getUserWithAuthoritiesByLogin(userLogin).get();
+        Set <Club> clubs = currentUser.getClubs();
+        return clubs;
+    }
+
 }

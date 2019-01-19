@@ -18,6 +18,7 @@ export class ClubComponent implements OnInit, OnDestroy {
     currentAccount: any;
     eventSubscriber: Subscription;
     currentSearch: string;
+    UsersClubs: IClub[];
 
     constructor(
         private clubService: ClubService,
@@ -69,6 +70,10 @@ export class ClubComponent implements OnInit, OnDestroy {
             this.currentAccount = account;
         });
         this.registerChangeInClubs();
+        this.UsersClubs = [];
+        this.clubService.clubsUserList().subscribe(clubsList => {
+            this.UsersClubs = clubsList;
+        });
     }
 
     ngOnDestroy() {

@@ -46,4 +46,7 @@ export class ClubService {
     clubsList(): Observable<Club[]> {
         return this.http.get<Club[]>(SERVER_API_URL + 'api/clubs/list');
     }
+    clubsUserList(): Observable<Club[]> {
+        return this.http.get<Club[]>(SERVER_API_URL + 'api/users/clubs');
+    }
 }

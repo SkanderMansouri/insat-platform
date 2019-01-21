@@ -2,6 +2,7 @@ package insat.company.platform.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import insat.company.platform.domain.InsatEvent;
+import insat.company.platform.security.AuthoritiesConstants;
 import insat.company.platform.service.InsatEventService;
 import insat.company.platform.web.rest.errors.BadRequestAlertException;
 import insat.company.platform.web.rest.util.HeaderUtil;
@@ -9,6 +10,7 @@ import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -78,7 +80,6 @@ public class InsatEventResource {
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, insatEvent.getId().toString()))
             .body(result);
     }
-
     /**
      * GET  /insat-events : get all the insatEvents.
      *
@@ -91,7 +92,15 @@ public class InsatEventResource {
         log.debug("REST request to get all InsatEvents");
         return insatEventService.findAll();
     }
-
+    /**
+     * @return a string list of the all of the clubs name
+     */
+    @GetMapping("/insat-events/list")
+    @Timed
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public List<InsatEvent> getEventsList() {
+        return insatEventService.findAll();
+    }
     /**
      * GET  /insat-events/:id : get the "id" insatEvent.
      *

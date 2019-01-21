@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
 import { IInsatEvent } from 'app/shared/model/insat-event.model';
+import { InsatEvent } from 'app/shared/model/insat-event.model';
 
 type EntityResponseType = HttpResponse<IInsatEvent>;
 type EntityArrayResponseType = HttpResponse<IInsatEvent[]>;
@@ -32,7 +33,6 @@ export class InsatEventService {
             .put<IInsatEvent>(this.resourceUrl, copy, { observe: 'response' })
             .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
-
     find(id: number): Observable<EntityResponseType> {
         return this.http
             .get<IInsatEvent>(`${this.resourceUrl}/${id}`, { observe: 'response' })
@@ -46,6 +46,12 @@ export class InsatEventService {
             .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
     }
 
+    loadAll(req?: any): Observable<EntityArrayResponseType> {
+        const options = createRequestOption(req);
+        return this.http
+            .get<IInsatEvent[]>(this.resourceUrl, { params: options, observe: 'response' })
+            .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+    }
     delete(id: number): Observable<HttpResponse<any>> {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
@@ -78,5 +84,8 @@ export class InsatEventService {
             });
         }
         return res;
+    }
+    eventsList(): Observable<InsatEvent[]> {
+        return this.http.get<InsatEvent[]>(SERVER_API_URL + 'api/insat-events/list');
     }
 }

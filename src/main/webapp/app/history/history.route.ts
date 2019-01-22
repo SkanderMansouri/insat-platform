@@ -7,7 +7,7 @@ export const historyRoute: Route = {
     path: 'history',
     component: HistoryComponent,
     data: {
-        authorities: ['ROLE_USER'],
+        authorities: ['ROLE_ADMIN'],
         pageTitle: 'global.menu.account.history'
     },
     canActivate: [UserRouteAccessService]

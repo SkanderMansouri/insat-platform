@@ -3,7 +3,9 @@
     <router-outlet name="navbar"></router-outlet>
 </div>
 <div>
+    <p *jhiHasAnyAuthority="'ROLE_USER'">
     <router-outlet name="sidebar"></router-outlet>
+    </p>
 </div>
 <div class="container-fluid">
     <div class="card jh-card">

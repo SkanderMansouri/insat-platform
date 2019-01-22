@@ -187,7 +187,11 @@
                         </a>
                     </li>
                     <li *ngSwitchCase="true">
-                        <a class="dropdown-item" routerLink="history" routerLinkActive="active" (click)="collapseNavbar()">
+                        <a *jhiHasAnyAuthority="'ROLE_USER'" class="dropdown-item" routerLink="history" routerLinkActive="active" (click)="collapseNavbar()">
+                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
+                            <span >Usercalender</span>
+                        </a>
+                        <a *jhiHasAnyAuthority="'ROLE_ADMIN'" class="dropdown-item" routerLink="Userhistory" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
                             <span >calender</span>
                         </a>

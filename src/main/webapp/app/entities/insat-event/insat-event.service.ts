@@ -9,6 +9,7 @@ import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
 import { IInsatEvent } from 'app/shared/model/insat-event.model';
 import { InsatEvent } from 'app/shared/model/insat-event.model';
+import { Subject } from 'rxjs/internal/Subject';
 
 type EntityResponseType = HttpResponse<IInsatEvent>;
 type EntityArrayResponseType = HttpResponse<IInsatEvent[]>;
@@ -87,5 +88,11 @@ export class InsatEventService {
     }
     eventsList(): Observable<InsatEvent[]> {
         return this.http.get<InsatEvent[]>(SERVER_API_URL + 'api/insat-events/list');
+    }
+    public _subject = new Subject<object>();
+    public event = this._subject.asObservable();
+
+    public publish(data: any) {
+        this._subject.next(data);
     }
 }

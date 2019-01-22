@@ -3,7 +3,7 @@ import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMo
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { IInsatEvent, InsatEvent } from 'app/shared/model/insat-event.model';
 import { JhiAlertService } from 'ng-jhipster';
@@ -40,6 +40,7 @@ const colors: any = {
 export class HistoryComponent implements OnInit {
     @ViewChild('modalContent')
     modalContent: TemplateRef<any>;
+    num: number;
 
     view: CalendarView = CalendarView.Month;
 
@@ -52,18 +53,18 @@ export class HistoryComponent implements OnInit {
         event: CalendarEvent;
     };
     date: Date = new Date();
+
     actions: CalendarEventAction[] = [
         {
-            label: '<i class="fa fa-fw fa-pencil"></i>',
+            label: '✏️',
             onClick: ({ event }: { event: CalendarEvent }): void => {
-                this.handleEvent('Edited', event);
+                this.handleEvent('edit', event);
             }
         },
         {
-            label: '<i class="fa fa-fw fa-times"></i>',
+            label: '❌ ',
             onClick: ({ event }: { event: CalendarEvent }): void => {
-                this.events = this.events.filter(iEvent => iEvent !== event);
-                this.handleEvent('Deleted', event);
+                this.handleEvent('delete', event);
             }
         }
     ];
@@ -80,6 +81,7 @@ export class HistoryComponent implements OnInit {
         private modal: NgbModal,
         private activatedRoute: ActivatedRoute,
         private insatEventService: InsatEventService,
+        private router: Router,
         private jhiAlertService: JhiAlertService
     ) {}
     ngOnInit() {
@@ -99,7 +101,10 @@ export class HistoryComponent implements OnInit {
                 start: this.date,
                 end: this.date,
                 title: this.insatEvents[i].name,
-                color: colors.yellow,
+                color: {
+                    primary: '#' + (0x1000000 + Math.random() * 0xffffff).toString(16).substr(1, 6),
+                    secondary: '#' + (0x1000000 + Math.random() * 0xffffff).toString(16).substr(1, 6)
+                },
                 actions: this.actions,
                 allDay: true,
                 resizable: {
@@ -132,11 +137,24 @@ export class HistoryComponent implements OnInit {
     }
 
     handleEvent(action: string, event: CalendarEvent): void {
+        action = action === 'Clicked' ? 'edit' : action;
         this.modalData = { event, action };
-        this.modal.open(this.modalContent, { size: 'lg' });
-        console.log('333333333333333');
-    }
+        let url = this.router.createUrlTree(['/', { outlets: { popup: 'insat-event/' + event.id + '/delete' } }]);
 
+        if (action === 'edit') {
+            url = this.router.createUrlTree(['/insat-event', event.id, 'edit']);
+        }
+        this.router.navigateByUrl(url.toString());
+        if (action === 'delete') {
+            this.insatEventService.event.subscribe(data => {
+                if (data) {
+                    this.events.indexOf(event, this.num);
+                    this.events.splice(this.num, 1);
+                    this.refresh.next();
+                }
+            });
+        }
+    }
     addEvent(): void {
         this.events.push({
             title: 'New event',
@@ -160,5 +178,15 @@ export class HistoryComponent implements OnInit {
         this.events.push(event);
         this.refresh.next();
         console.log('55555555555');
+    }
+    clickdel(index: number) {
+        console.log('hoy');
+        this.insatEventService.event.subscribe(data => {
+            console.log('index', index); // {data: 'some data'}
+            if (data) {
+                this.events.splice(index, 1);
+                this.refresh.next();
+            }
+        });
     }
 }

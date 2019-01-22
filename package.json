@@ -24,6 +24,7 @@
     "angular-calendar-scheduler": "^1.0.6",
     "bootstrap": "4.1.3",
     "core-js": "2.5.7",
+    "http-response-class": "^1.2.4",
     "jquery": "^3.3.1",
     "moment": "2.22.2",
     "ng-jhipster": "0.5.6",

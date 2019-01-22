@@ -8,6 +8,7 @@ import insat.company.platform.repository.UserRepository;
 import insat.company.platform.repository.search.UserSearchRepository;
 import insat.company.platform.security.AuthoritiesConstants;
 import insat.company.platform.security.SecurityUtils;
+import insat.company.platform.service.ClubService;
 import insat.company.platform.service.MailService;
 import insat.company.platform.service.UserService;
 import insat.company.platform.service.dto.UserDTO;
@@ -80,7 +81,9 @@ public class UserResource {
 
     private final ClubResource clubResource;
 
-    public UserResource(UserService userService, UserRepository userRepository, MailService mailService, UserSearchRepository userSearchRepository, ClubRepository clubRepository, ClubResource clubResource) {
+    private final ClubService clubService;
+
+    public UserResource(UserService userService, UserRepository userRepository, MailService mailService, UserSearchRepository userSearchRepository, ClubRepository clubRepository, ClubResource clubResource, ClubService clubService) {
 
         this.userService = userService;
         this.userRepository = userRepository;
@@ -88,6 +91,7 @@ public class UserResource {
         this.userSearchRepository = userSearchRepository;
         this.clubRepository = clubRepository;
         this.clubResource = clubResource;
+        this.clubService = clubService;
     }
 
     /**
@@ -275,11 +279,22 @@ public class UserResource {
     }
     @GetMapping("/users/clubs")
     @Timed
-    public Set<Club> getClubs() {
+    public List<Club> getClubs() {
+
         String userLogin = SecurityUtils.getCurrentUserLogin().get();
         User currentUser = userService.getUserWithAuthoritiesByLogin(userLogin).get();
-        Set <Club> clubs = currentUser.getClubs();
-        return clubs;
+        List<Club> clubs= clubService.findAll();
+        List<Club> result = new ArrayList<>();
+
+        for (Club club : clubs ){
+
+            List<User> users = new ArrayList<>(club.getMembers());
+            if (users.contains(currentUser))
+                result.add(club);
+        }
+
+
+        return result;
     }
 
 }

@@ -10,7 +10,7 @@
     <jhi-alert></jhi-alert>
     <div >
 
-        <div class="col-lg-7">
+        <div class="col-lg-7" *jhiHasAnyAuthority="'ROLE_ADMIN'" >
             <form name="searchForm" class="float-right">
                 <div class="input-group float-right ">
                     <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch"

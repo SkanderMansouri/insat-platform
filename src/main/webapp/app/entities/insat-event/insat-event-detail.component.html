@@ -1,51 +1,58 @@
 <div class="row justify-content-center">
-    <div class="col-8">
-        <div *ngIf="insatEvent">
-            <h2><span jhiTranslate="insatApp.insatEvent.detail.title">Insat Event</span> {{insatEvent.id}}</h2>
-            <hr>
+    <div class=" wrap col-8">
+        <div  class ="tale" *ngIf="insatEvent">
+
             <jhi-alert-error></jhi-alert-error>
-            <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="insatApp.insatEvent.name">Name</span></dt>
-                <dd>
-                    <span>{{insatEvent.name}}</span>
-                </dd>
-                <dt><span jhiTranslate="insatApp.insatEvent.date">Date</span></dt>
-                <dd>
+            <ul>
+                <li>
+                    <div class="top purple white">
+                        <h1 class="align-middle">{{insatEvent.name}}</h1>
+                        <div class="circle align-middle"><fa-icon [icon]="'calendar-alt'"></fa-icon></div>
+                    </div>
+                    <br>
+                    <div class="bottom">
+                <p><span jhiTranslate="insatApp.insatEvent.date">Date</span></p>
+                
                     <span>{{insatEvent.date}}</span>
-                </dd>
-                <dt><span jhiTranslate="insatApp.insatEvent.place">Place</span></dt>
-                <dd>
+                
+                <p><span jhiTranslate="insatApp.insatEvent.place">Place</span></p>
+                
                     <span>{{insatEvent.place}}</span>
-                </dd>
-                <dt><span jhiTranslate="insatApp.insatEvent.description">Description</span></dt>
-                <dd>
+                
+                <p><span jhiTranslate="insatApp.insatEvent.description">Description</span></p>
+                
                     <span>{{insatEvent.description}}</span>
-                </dd>
-                <dt><span jhiTranslate="insatApp.insatEvent.member">Member</span></dt>
-                <dd>
+                
+                <p><span jhiTranslate="insatApp.insatEvent.member">Member</span></p>
+                
                     <span *ngFor="let member of insatEvent.members; let last = last">
                         {{member.login}}{{last ? '' : ', '}}
                     </span>
-                </dd>
-                <dt><span jhiTranslate="insatApp.insatEvent.participant">Participant</span></dt>
-                <dd>
+                
+                <p><span jhiTranslate="insatApp.insatEvent.participant">Participant</span></p>
+                
                     <span *ngFor="let participant of insatEvent.participants; let last = last">
                         {{participant.login}}{{last ? '' : ', '}}
                     </span>
-                </dd>
-            </dl>
+                
 
+                    </div>
+                    <br>
+                    <p>
             <button type="submit"
                     (click)="previousState()"
                     class="btn btn-info">
-                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+                <fa-icon [icon]="'arrow-left'"></fa-icon>
             </button>
 
             <button type="button"
                     [routerLink]="['/insat-event', insatEvent.id, 'edit']"
                     class="btn btn-primary">
-                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>
             </button>
+                    </p>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

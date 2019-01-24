@@ -10,7 +10,8 @@ import { InsatEventService } from './insat-event.service';
 
 @Component({
     selector: 'jhi-insat-event',
-    templateUrl: './insat-event.component.html'
+    templateUrl: './insat-event.component.html',
+    styleUrls: ['EventList.css']
 })
 export class InsatEventComponent implements OnInit, OnDestroy {
     insatEvents: IInsatEvent[];

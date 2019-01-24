@@ -13,6 +13,7 @@ import {
     faSync,
     faEye,
     faBan,
+    faBookmark,
     faTimes,
     faArrowLeft,
     faSave,
@@ -41,6 +42,7 @@ import {
     faTasks,
     faHome
 } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarPlus } from '@fortawesome/free-solid-svg-icons/faCalendarPlus';
 
 // Adds the SVG icon to the library so you can use it in your page
 library.add(faUser);
@@ -55,6 +57,7 @@ library.add(faArrowLeft);
 library.add(faSave);
 library.add(faPlus);
 library.add(faPencilAlt);
+library.add(faBars);
 library.add(faBars);
 library.add(faHome);
 library.add(faThList);
@@ -73,6 +76,7 @@ library.add(faClock);
 library.add(faCloud);
 library.add(faSignOutAlt);
 library.add(faSignInAlt);
+library.add(faCalendarPlus);
 library.add(faCalendarAlt);
 library.add(faSearch);
 library.add(faTrashAlt);

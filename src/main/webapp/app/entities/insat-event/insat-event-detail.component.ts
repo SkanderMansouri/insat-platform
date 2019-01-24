@@ -5,7 +5,8 @@ import { IInsatEvent } from 'app/shared/model/insat-event.model';
 
 @Component({
     selector: 'jhi-insat-event-detail',
-    templateUrl: './insat-event-detail.component.html'
+    templateUrl: './insat-event-detail.component.html',
+    styleUrls: ['EventDetail.css']
 })
 export class InsatEventDetailComponent implements OnInit {
     insatEvent: IInsatEvent;

@@ -87,6 +87,9 @@ export class ClubComponent implements OnInit, OnDestroy {
     registerChangeInClubs() {
         this.eventSubscriber = this.eventManager.subscribe('clubListModification', response => this.loadAll());
     }
+    createJoinRequest(idClub: number) {
+        this.clubService.createRequest(idClub);
+    }
 
     private onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);

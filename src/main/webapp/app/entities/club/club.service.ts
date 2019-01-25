@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
 import { Club, IClub } from 'app/shared/model/club.model';
+import { IJoinClubRequest } from 'app/shared/model/join-club-request.model';
 
 type EntityResponseType = HttpResponse<IClub>;
 type EntityArrayResponseType = HttpResponse<IClub[]>;
@@ -48,5 +49,8 @@ export class ClubService {
     }
     clubsUserList(): Observable<Club[]> {
         return this.http.get<Club[]>(SERVER_API_URL + 'api/users/clubs');
+    }
+    createRequest(id: number): Observable<EntityResponseType> {
+        return this.http.get<IJoinClubRequest>(SERVER_API_URL + 'api/join/clubs/{id}', { observe: 'response' });
     }
 }

@@ -143,6 +143,8 @@ body {
     height: calc(100% - 30px);
     overflow-y: auto;
     position: relative;
+    top: 65px;
+    padding-bottom: 30px;
 }
 
 .sidebar-content.desktop {
@@ -173,6 +175,7 @@ body {
     margin-top: 5px;
     margin-bottom: 5px;
     overflow: hidden;
+    /*background: url('../../../content/images/logo.png') no-repeat center center;*/
     background-size: contain;
 }
 .sidebar-wrapper .sidebar-header {
@@ -323,49 +326,17 @@ body {
     right: 17px;
 }
 
-/*--------------------------side-footer------------------------------*/
+/*--------------------------side-logo------------------------------*/
 
-.sidebar-footer {
+.sidebar-logo {
     position: absolute;
     width: 100%;
-    bottom: 0;
+    height: 60px;
+    top: 0;
     display: flex;
-}
-
-.sidebar-footer > a {
-    flex-grow: 1;
-    text-align: center;
-    height: 30px;
-    line-height: 30px;
-    position: relative;
-}
-
-.sidebar-footer > a .notification {
-    position: absolute;
-    top: 0;
-}
-
-.badge-sonar {
-    display: inline-block;
-    background: #980303;
-    border-radius: 50%;
-    height: 8px;
-    width: 8px;
-    position: absolute;
-    top: 0;
-}
-
-.badge-sonar:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    border: 2px solid #980303;
-    opacity: 0;
-    border-radius: 50%;
-    width: 100%;
-    height: 100%;
-    animation: sonar 1.5s infinite;
+    background: url('../../../content/images/logo.png') no-repeat;
+    background-size: contain;
+    background-position: center;
 }
 
 /*--------------------------page-content-----------------------------*/
@@ -501,88 +472,5 @@ body {
 @media screen and (max-width: 768px) {
     .sidebar-menu {
         display: none;
-    }
-
-    .sidebar-version {
-        font-size: 10px;
-        color: #ccc;
-    }
-
-    .jh-sidebar {
-        background-color: #353d47;
-        padding: 0.2em 1em;
-    }
-
-    .jh-sidebar .profile-image {
-        margin: -10px 0px;
-        height: 40px;
-        width: 40px;
-        border-radius: 50%;
-    }
-
-    .jh-sidebar .dropdown-item.active,
-    .jh-sidebar .dropdown-item.active:focus,
-    .jh-sidebar .dropdown-item.active:hover {
-        background-color: #353d47;
-    }
-
-    .jh-sidebar .dropdown-toggle::after {
-        margin-left: 0.15em;
-    }
-
-    .jh-sidebar ul.sidebar-nav {
-        padding: 0.5em;
-    }
-
-    .jh-sidebar .sidebar-nav .nav-item {
-        margin-left: 1.5rem;
-    }
-
-    .jh-sidebar a.nav-link {
-        font-weight: 400;
-    }
-
-    .jh-sidebar .jh-sidebar-toggler {
-        color: #ccc;
-        font-size: 1.5em;
-        padding: 10px;
-    }
-
-    .jh-sidebar .jh-sidebar-toggler:hover {
-        color: #fff;
-    }
-
-    @media screen and (min-width: 768px) {
-        .jh-sidebar-toggler {
-            display: none;
-        }
-    }
-
-    @media screen and (max-width: 992px) {
-        .jh-logo-container {
-            width: 100%;
-        }
-    }
-
-    .sidebar-title {
-        display: inline-block;
-        vertical-align: middle;
-    }
-    .sidebar-brand.logo {
-        padding: 5px 15px;
-    }
-
-    .logo-img {
-        height: 100%;
-
-        background-size: contain;
-        width: 100%;
-    }
-
-    .logo .logo-img {
-        height: 45px;
-        display: inline-block;
-        vertical-align: middle;
-        width: 70px;
     }
 }

@@ -1,9 +1,14 @@
 package insat.company.platform.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import insat.company.platform.domain.Club;
 import insat.company.platform.domain.InsatEvent;
+import insat.company.platform.domain.User;
+import insat.company.platform.repository.UserRepository;
 import insat.company.platform.security.AuthoritiesConstants;
+import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.InsatEventService;
+import insat.company.platform.service.UserService;
 import insat.company.platform.web.rest.errors.BadRequestAlertException;
 import insat.company.platform.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -16,8 +21,10 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.StreamSupport;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
@@ -35,8 +42,11 @@ public class InsatEventResource {
 
     private final InsatEventService insatEventService;
 
-    public InsatEventResource(InsatEventService insatEventService) {
+    private final UserRepository userRepository;
+
+    public InsatEventResource(InsatEventService insatEventService,UserRepository userRepository ) {
         this.insatEventService = insatEventService;
+        this.userRepository=userRepository;
     }
 
     /**
@@ -80,6 +90,61 @@ public class InsatEventResource {
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, insatEvent.getId().toString()))
             .body(result);
     }
+
+    /**
+     * PUT  /insat-events : Updates an existing insatEvent.
+     *
+     * @param insatEvent the insatEvent to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated insatEvent,
+     * or with status 400 (Bad Request) if the insatEvent is not valid,
+     * or with status 500 (Internal Server Error) if the insatEvent couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping("/insat-events/updatemembers")
+    @Timed
+    public ResponseEntity<InsatEvent>  updateMembersList(@RequestBody InsatEvent insatEvent) throws URISyntaxException {
+        log.debug("REST request to update InsatEvent : {}", insatEvent);
+        if (insatEvent.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        String userLogin = SecurityUtils.getCurrentUserLogin().get();
+        InsatEvent event=insatEventService.findOne(insatEvent.getId()).get();
+        User current=userRepository.findOneWithEagerRelationshipsEvents(userLogin).get();
+        Set<User> members=event.getMembers();
+        members.remove(current);
+        event.setMembers(members);
+        InsatEvent result = insatEventService.save(event);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, event.getId().toString()))
+            .body(result);
+    }
+    /**
+     * PUT  /insat-events/addtolist : add a member in an existing insatEvent.
+     *
+     * @param insatEvent the insatEvent to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated insatEvent,
+     * or with status 400 (Bad Request) if the insatEvent is not valid,
+     * or with status 500 (Internal Server Error) if the insatEvent couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping("/insat-events/addtolist")
+    @Timed
+    public ResponseEntity<InsatEvent>  AddToMembersList(@RequestBody InsatEvent insatEvent) throws URISyntaxException {
+        log.debug("REST request to update InsatEvent : {}", insatEvent);
+        if (insatEvent.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        String userLogin = SecurityUtils.getCurrentUserLogin().get();
+        InsatEvent event=insatEventService.findOne(insatEvent.getId()).get();
+        User current=userRepository.findOneWithEagerRelationshipsEvents(userLogin).get();
+        Set<User> members=event.getMembers();
+        members.add(current);
+        event.setMembers(members);
+        InsatEvent result = insatEventService.save(event);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, event.getId().toString()))
+            .body(result);
+    }
     /**
      * GET  /insat-events : get all the insatEvents.
      *
@@ -97,9 +162,41 @@ public class InsatEventResource {
      */
     @GetMapping("/insat-events/list")
     @Timed
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<InsatEvent> getEventsList() {
         return insatEventService.findAll();
+    }
+
+    @GetMapping("/insat-events/notmemberlist")
+    @Timed
+    public List<InsatEvent> getNotMemberEventsList() {
+        String userLogin = SecurityUtils.getCurrentUserLogin().get();
+        System.out.println("login is"+userLogin);
+        User current=userRepository.findOneWithEagerRelationshipsEvents(userLogin).get();
+        List<InsatEvent> Events =insatEventService.findAll();
+        List<InsatEvent> result = new ArrayList<>();
+        for(InsatEvent event : Events)
+        {   if(!event.getMembers().contains(current))
+        {
+            result.add(event);
+        }
+        }
+        return result;
+    }
+    @GetMapping("/insat-events/userlist")
+    @Timed
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER+ "\")")
+    public ResponseEntity<List<InsatEvent>> getUserEventsList() {
+        String userLogin = SecurityUtils.getCurrentUserLogin().get();
+        System.out.println("login is"+userLogin);
+        User current=userRepository.findOneWithEagerRelationshipsEvents(userLogin).get();
+        Set<InsatEvent> Events= current.getMemberEvents();
+        List<InsatEvent> result = new ArrayList<>();
+        for(InsatEvent event : Events)
+        {
+           result.add(event);
+        }
+        return ResponseEntity.ok()
+            .body(result);
     }
     /**
      * GET  /insat-events/:id : get the "id" insatEvent.

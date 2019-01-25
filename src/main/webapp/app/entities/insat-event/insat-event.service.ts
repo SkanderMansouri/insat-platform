@@ -10,6 +10,7 @@ import { createRequestOption } from 'app/shared';
 import { IInsatEvent } from 'app/shared/model/insat-event.model';
 import { InsatEvent } from 'app/shared/model/insat-event.model';
 import { Subject } from 'rxjs/internal/Subject';
+import { User } from 'app/core';
 
 type EntityResponseType = HttpResponse<IInsatEvent>;
 type EntityArrayResponseType = HttpResponse<IInsatEvent[]>;
@@ -18,7 +19,8 @@ type EntityArrayResponseType = HttpResponse<IInsatEvent[]>;
 export class InsatEventService {
     public resourceUrl = SERVER_API_URL + 'api/insat-events';
     public resourceSearchUrl = SERVER_API_URL + 'api/_search/insat-events';
-
+    public _subject = new Subject<object>();
+    public event = this._subject.asObservable();
     constructor(private http: HttpClient) {}
 
     create(insatEvent: IInsatEvent): Observable<EntityResponseType> {
@@ -32,6 +34,18 @@ export class InsatEventService {
         const copy = this.convertDateFromClient(insatEvent);
         return this.http
             .put<IInsatEvent>(this.resourceUrl, copy, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+    }
+    updateMembersList(insatEvent: IInsatEvent): Observable<EntityResponseType> {
+        const copy = this.convertFromClient(insatEvent);
+        return this.http
+            .put<IInsatEvent>(SERVER_API_URL + 'api/insat-events/updatemembers', copy, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+    }
+    AddToMembersList(insatEvent: IInsatEvent): Observable<EntityResponseType> {
+        const copy = this.convertFromClient(insatEvent);
+        return this.http
+            .put<IInsatEvent>(SERVER_API_URL + 'api/insat-events/addtolist', copy, { observe: 'response' })
             .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
     find(id: number): Observable<EntityResponseType> {
@@ -70,7 +84,10 @@ export class InsatEventService {
         });
         return copy;
     }
-
+    protected convertFromClient(insatEvent: IInsatEvent): IInsatEvent {
+        const copy: IInsatEvent = Object.assign({}, insatEvent, {});
+        return copy;
+    }
     protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
         if (res.body) {
             res.body.date = res.body.date != null ? moment(res.body.date) : null;
@@ -89,8 +106,13 @@ export class InsatEventService {
     eventsList(): Observable<InsatEvent[]> {
         return this.http.get<InsatEvent[]>(SERVER_API_URL + 'api/insat-events/list');
     }
-    public _subject = new Subject<object>();
-    public event = this._subject.asObservable();
+    notMemberEventsList(): Observable<InsatEvent[]> {
+        return this.http.get<InsatEvent[]>(SERVER_API_URL + 'api/insat-events/notmemberlist');
+    }
+    usereventsList(): Observable<HttpResponse<InsatEvent[]>> {
+        console.log('user events list');
+        return this.http.get<InsatEvent[]>(SERVER_API_URL + 'api/insat-events/userlist', { observe: 'response' });
+    }
 
     public publish(data: any) {
         this._subject.next(data);

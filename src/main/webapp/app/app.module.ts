@@ -24,6 +24,7 @@ import { SlackUsersListComponent } from './entities/slack-user/slack-users-list.
 import { SidebarComponent } from './layouts/sidebar/sidebar.component';
 import { HistoryModule } from 'app/history/history.module';
 import { InsatInsatEventModule } from 'app/entities/insat-event/insat-event.module';
+import { UserHistoryModule } from 'app/user-history/user-history.module';
 
 @NgModule({
     imports: [
@@ -44,6 +45,7 @@ import { InsatInsatEventModule } from 'app/entities/insat-event/insat-event.modu
         // jhipster-needle-angular-add-module JHipster will add new module here
         InsatEntityModule,
         HistoryModule,
+        UserHistoryModule,
         InsatInsatEventModule
     ],
     declarations: [

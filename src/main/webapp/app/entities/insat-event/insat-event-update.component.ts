@@ -14,14 +14,13 @@ import { IUser, UserService } from 'app/core';
 
 @Component({
     selector: 'jhi-insat-event-update',
-    templateUrl: './insat-event-update.component.html'
+    templateUrl: './insat-event-update.component.html',
+    styleUrls: ['InsatEventUpdate.css']
 })
 export class InsatEventUpdateComponent implements OnInit {
     insatEvent: IInsatEvent;
     isSaving: boolean;
-
     clubs: IClub[];
-
     users: IUser[];
     date: any;
 

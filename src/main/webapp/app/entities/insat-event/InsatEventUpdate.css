@@ -15,6 +15,7 @@
     background: #327a81;
     color: white;
     min-width: 50px;
+    height: 100%;
     text-align: center;
     border-radius: 5px;
 }

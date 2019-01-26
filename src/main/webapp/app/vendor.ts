@@ -6,6 +6,9 @@ import '../content/css/vendor.css';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
+    faUsers,
+    faAlignLeft,
+    faCalendarMinus,
     faUser,
     faSort,
     faSortUp,
@@ -39,11 +42,17 @@ import {
     faTrashAlt,
     faAsterisk,
     faTasks,
-    faHome
+    faHome,
+    faMapMarkerAlt
 } from '@fortawesome/free-solid-svg-icons';
 
 // Adds the SVG icon to the library so you can use it in your page
 library.add(faUser);
+library.add(faMapMarkerAlt);
+library.add(faUser);
+library.add(faUsers);
+library.add(faAlignLeft);
+library.add(faCalendarMinus);
 library.add(faSort);
 library.add(faSortUp);
 library.add(faSortDown);

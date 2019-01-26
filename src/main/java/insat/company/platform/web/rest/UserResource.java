@@ -7,6 +7,7 @@ import insat.company.platform.repository.ClubRepository;
 import insat.company.platform.repository.UserRepository;
 import insat.company.platform.repository.search.UserSearchRepository;
 import insat.company.platform.security.AuthoritiesConstants;
+import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.MailService;
 import insat.company.platform.service.UserService;
 import insat.company.platform.service.dto.UserDTO;
@@ -18,6 +19,7 @@ import insat.company.platform.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;

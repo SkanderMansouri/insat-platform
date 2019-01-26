@@ -1,0 +1,40 @@
+* {
+    box-sizing: border-box;
+}
+
+/* Style the input container */
+.input-container {
+    display: flex;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+/* Style the form icons */
+.icon {
+    padding: 10px;
+    background: #327a81;
+    color: white;
+    min-width: 50px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+/* Style the input fields */
+.input-field {
+    width: 100%;
+    padding: 10px;
+    outline: none;
+}
+
+.input-field:focus {
+    border: 2px solid #327a81;
+}
+
+/* Set a style for the submit button */
+.btn {
+    background-color: #0c3171;
+}
+
+.btn:hover {
+    opacity: 1;
+}

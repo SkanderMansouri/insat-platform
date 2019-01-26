@@ -10,7 +10,7 @@
     <jhi-alert></jhi-alert>
     <div >
 
-        <div class="col-lg-7" *jhiHasAnyAuthority="'ROLE_ADMIN'" >
+        <div class="col-lg-7">
             <form name="searchForm" class="float-right">
                 <div class="input-group float-right ">
                     <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch"
@@ -28,83 +28,45 @@
     <br/>
     <br/>
     <div class="table-responsive " class="table-clubs" *ngIf="clubs">
-        <h2 id="page-heading">
-            <div class="header">
-                <span jhiTranslate="insatApp.club.home.title">Clubs</span> </div>
-        <table class="table table-striped " style="" *jhiHasAnyAuthority="'ROLE_USER'">
-            <thead>
+         <h2 id="page-heading">
+             <div class="header">
+                 <span jhiTranslate="insatApp.club.home.title">Clubs</span> </div>
+         <table class="table table-striped " style="" *jhiHasAnyAuthority="'ROLE_ADMIN'">
+             <thead>
 
-            </thead>
-            <tbody>
-            <tr *ngFor="let club of clubs ;trackBy: trackId">
-                <td><fa-icon [icon]="'users'"></fa-icon></td>
-                <td><a  style="" [routerLink]="['/club', club.id, 'view' ]">{{club.name}}</a></td>
-                <td><button  (click)="createJoinRequest(club.id)">
-                    <fa-icon [icon]="'search'"></fa-icon>
-                </button></td>
-                <td class="text-right">
-                    <div class="btn-group flex-btn-group-container">
-                        <button type="submit"
-                                [routerLink]="['/club', club.id, 'view' ]"
-                                class="btn btn-info btn-sm btn-"
-                                >
-                            <fa-icon [icon]="'eye'"></fa-icon>
+             </thead>
+             <tbody>
+             <tr *ngFor="let club of clubs ;trackBy: trackId">
+                 <td><fa-icon [icon]="'users'"></fa-icon></td>
+                 <td><a  style="" [routerLink]="['/club', club.id, 'view' ]">{{club.name}}</a></td>
 
-                        </button>
-                        <button type="submit"
-                                [routerLink]="['/club', club.id, 'edit']"
-                                class="btn btn-primary btn-sm btn-">
-                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
-                        </button>
-                        <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'club/'+ club.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm btn-">
-                            <fa-icon [icon]="'times'"></fa-icon>
+                 <td class="text-right">
+                     <div class="btn-group flex-btn-group-container">
+                         <button type="submit"
+                                 [routerLink]="['/club', club.id, 'view' ]"
+                                 class="btn btn-info btn-sm btn-"
+                                 >
+                             <fa-icon [icon]="'eye'"></fa-icon>
 
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-            <table class="table table-striped " style="" *jhiHasAnyAuthority="'ROLE_USER'">
-                <thead>
+                         </button>
+                         <button type="submit"
+                                 [routerLink]="['/club', club.id, 'edit']"
+                                 class="btn btn-primary btn-sm btn-">
+                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                         </button>
+                         <button type="submit"
+                                 [routerLink]="['/', { outlets: { popup: 'club/'+ club.id + '/delete'} }]"
+                                 replaceUrl="true"
+                                 queryParamsHandling="merge"
+                                 class="btn btn-danger btn-sm btn-">
+                             <fa-icon [icon]="'times'"></fa-icon>
 
-                </thead>
-                <tbody>
-                <tr *ngFor="let club of UsersClubs ;trackBy: trackId">
-                    <td><fa-icon [icon]="'users'"></fa-icon></td>
-                    <td><a  style="" [routerLink]="['/club', club.id, 'view' ]">{{club.name}}</a></td>
-
-                    <td class="text-right">
-                        <div class="btn-group flex-btn-group-container">
-                            <button type="submit"
-                                    [routerLink]="['/club', club.id, 'view' ]"
-                                    class="btn btn-info btn-sm btn-"
-                            >
-                                <fa-icon [icon]="'eye'"></fa-icon>
-
-                            </button>
-                            <button type="submit"
-                                    [routerLink]="['/club', club.id, 'edit']"
-                                    class="btn btn-primary btn-sm btn-">
-                                <fa-icon [icon]="'pencil-alt'"></fa-icon>
-                            </button>
-                            <button type="submit"
-                                    [routerLink]="['/', { outlets: { popup: 'club/'+ club.id + '/delete'} }]"
-                                    replaceUrl="true"
-                                    queryParamsHandling="merge"
-                                    class="btn btn-danger btn-sm btn-">
-                                <fa-icon [icon]="'times'"></fa-icon>
-
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                         </button>
+                     </div>
+                 </td>
+             </tr>
+             </tbody>
+         </table>
         </h2>
     </div>
 </div>

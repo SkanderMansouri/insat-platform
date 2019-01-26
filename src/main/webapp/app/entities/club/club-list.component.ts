@@ -10,10 +10,10 @@ import { ClubService } from './club.service';
 
 @Component({
     selector: 'jhi-club',
-    templateUrl: './club.component.html',
+    templateUrl: './club-list.component.html',
     styleUrls: ['club.css']
 })
-export class ClubComponent implements OnInit, OnDestroy {
+export class ClubListComponent implements OnInit, OnDestroy {
     clubs: IClub[];
     currentAccount: any;
     eventSubscriber: Subscription;
@@ -86,6 +86,9 @@ export class ClubComponent implements OnInit, OnDestroy {
 
     registerChangeInClubs() {
         this.eventSubscriber = this.eventManager.subscribe('clubListModification', response => this.loadAll());
+    }
+    createJoinRequest(idClub: number) {
+        this.clubService.createRequest(idClub).subscribe(clubsList => {});
     }
 
     private onError(errorMessage: string) {

@@ -12,12 +12,20 @@ import {
     clubRoute,
     ClubUpdateComponent
 } from './';
+import { ClubListComponent } from './club-list.component';
 
 const ENTITY_STATES = [...clubRoute, ...clubPopupRoute];
 
 @NgModule({
     imports: [InsatSharedModule, InsatAdminModule, RouterModule.forChild(ENTITY_STATES)],
-    declarations: [ClubComponent, ClubDetailComponent, ClubUpdateComponent, ClubDeleteDialogComponent, ClubDeletePopupComponent],
+    declarations: [
+        ClubComponent,
+        ClubDetailComponent,
+        ClubUpdateComponent,
+        ClubDeleteDialogComponent,
+        ClubDeletePopupComponent,
+        ClubListComponent
+    ],
     entryComponents: [ClubComponent, ClubUpdateComponent, ClubDeleteDialogComponent, ClubDeletePopupComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

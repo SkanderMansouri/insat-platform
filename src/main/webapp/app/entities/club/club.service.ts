@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
 import { Club, IClub } from 'app/shared/model/club.model';
+import { IJoinClubRequest } from 'app/shared/model/join-club-request.model';
 
 type EntityResponseType = HttpResponse<IClub>;
 type EntityArrayResponseType = HttpResponse<IClub[]>;
@@ -13,6 +14,7 @@ type EntityArrayResponseType = HttpResponse<IClub[]>;
 export class ClubService {
     public resourceUrl = SERVER_API_URL + 'api/clubs';
     public resourceSearchUrl = SERVER_API_URL + 'api/_search/clubs';
+    public resourceRequestJoinUrl = SERVER_API_URL + 'api/clubs/join';
 
     constructor(private http: HttpClient) {}
 
@@ -45,5 +47,11 @@ export class ClubService {
 
     clubsList(): Observable<Club[]> {
         return this.http.get<Club[]>(SERVER_API_URL + 'api/clubs/list');
+    }
+    clubsUserList(): Observable<Club[]> {
+        return this.http.get<Club[]>(SERVER_API_URL + 'api/users/clubs');
+    }
+    createRequest(id: number): Observable<any> {
+        return this.http.get<any>(`${this.resourceRequestJoinUrl}/${id}`, { observe: 'response' });
     }
 }

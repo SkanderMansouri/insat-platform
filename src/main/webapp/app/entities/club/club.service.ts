@@ -51,6 +51,6 @@ export class ClubService {
         return this.http.get<Club[]>(SERVER_API_URL + 'api/users/clubs');
     }
     createRequest(id: number): Observable<EntityResponseType> {
-        return this.http.get<IJoinClubRequest>(SERVER_API_URL + 'api/join/clubs/{id}', { observe: 'response' });
+        return this.http.get<IJoinClubRequest>(`${'api/clubs/join'}/${id}`, { observe: 'response' });
     }
 }

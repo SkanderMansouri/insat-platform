@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
 import { Club, IClub } from 'app/shared/model/club.model';
 import { IJoinClubRequest } from 'app/shared/model/join-club-request.model';
+import { tap } from 'rxjs/operators';
 
 type EntityResponseType = HttpResponse<IClub>;
 type EntityArrayResponseType = HttpResponse<IClub[]>;
@@ -15,6 +16,7 @@ export class ClubService {
     public resourceUrl = SERVER_API_URL + 'api/clubs';
     public resourceSearchUrl = SERVER_API_URL + 'api/_search/clubs';
     public resourceRequestJoinUrl = SERVER_API_URL + 'api/clubs/join';
+    refresh: Subject<any> = new Subject();
 
     constructor(private http: HttpClient) {}
 
@@ -51,7 +53,18 @@ export class ClubService {
     clubsUserList(): Observable<Club[]> {
         return this.http.get<Club[]>(SERVER_API_URL + 'api/users/clubs');
     }
+    NotclubsUserList(): Observable<Club[]> {
+        return this.http.get<Club[]>(SERVER_API_URL + 'api/users/notClubs');
+    }
+    RequestsList(): Observable<Club[]> {
+        return this.http.get<Club[]>(SERVER_API_URL + 'api/users/Requests');
+    }
+
     createRequest(id: number): Observable<any> {
-        return this.http.get<any>(`${this.resourceRequestJoinUrl}/${id}`, { observe: 'response' });
+        return this.http.get<any>(`${this.resourceRequestJoinUrl}/${id}`, { observe: 'response' }).pipe(
+            tap(() => {
+                this.refresh.next();
+            })
+        );
     }
 }

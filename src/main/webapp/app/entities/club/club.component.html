@@ -1,6 +1,6 @@
 <div>
     <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-club btn-"
-            [routerLink]="['/club/new']">
+            [routerLink]="['/club/new']" *jhiHasAnyAuthority="'ROLE_ADMIN'">
         <fa-icon [icon]="'plus'"></fa-icon>
         <span class="hidden-sm-down" jhiTranslate="insatApp.club.home.createLabel">
             Create new Club

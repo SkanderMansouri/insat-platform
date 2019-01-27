@@ -54,8 +54,8 @@ Generic styles
 
 .jh-card {
     padding: 1.5%;
-    margin-top: 20px;
-    border: none;
+    margin-top: 50px;
+    z-index: 0;
 }
 
 .error {

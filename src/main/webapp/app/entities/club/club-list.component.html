@@ -1,5 +1,5 @@
-<div>
-    <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-club btn-"
+<div (change)="refresh.next()">
+    <button *jhiHasAnyAuthority="'ROLE_ADMIN'" id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-club btn-"
             [routerLink]="['/club/new']">
         <fa-icon [icon]="'plus'"></fa-icon>
         <span class="hidden-sm-down" jhiTranslate="insatApp.club.home.createLabel">
@@ -8,8 +8,7 @@
     </button>
     <jhi-alert></jhi-alert>
     <div >
-
-        <div class="col-lg-7" *jhiHasAnyAuthority="'ROLE_USER'" >
+        <div class="col-lg-7" >
             <form name="searchForm" class="float-right">
                 <div class="input-group float-right ">
                     <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch"
@@ -30,17 +29,20 @@
         <h2 id="page-heading">
             <div class="header">
                 <span jhiTranslate="insatApp.club.home.title">Clubs</span> </div>
-            <table class="table table-striped " style="" *jhiHasAnyAuthority="'ROLE_ADMIN'">
+            <table class="table table-striped " style="">
                 <thead>
 
                 </thead>
                 <tbody>
-                <tr *ngFor="let club of clubs ;trackBy: trackId">
+                <tr *ngFor="let club of NotUserClubs ;trackBy: trackId">
                     <td><fa-icon [icon]="'users'"></fa-icon></td>
                     <td><a  style="" [routerLink]="['/club', club.id, 'view' ]">{{club.name}}</a></td>
-                    <td><button  (click)="createJoinRequest(club.id)">
-                        <fa-icon [icon]="'search'"></fa-icon>
-                    </button></td>
+                    <td>
+
+                        <button  (click)="createJoinRequest(club.id)" (change)="refresh.next()">
+                        <fa-icon [icon]="'plus'"></fa-icon>
+                        </button>
+                    </td>
 
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
@@ -69,6 +71,39 @@
                 </tr>
                 </tbody>
             </table>
+
         </h2>
+    </div>
+</div>
+<div class="table-responsive " class="table-clubs" *ngIf="clubs">
+    <div *ngIf="usersRequest">
+    <p>
+    <span >You asked to join :  </span>
+    </p>
+    <table class="table table-striped " style="" (change)="refresh.next()">
+        <thead>
+
+        </thead>
+        <tbody>
+        <tr *ngFor="let club of usersRequest ;trackBy: trackId" (change)="refresh.next()">
+            <td><fa-icon [icon]="'users'"></fa-icon></td>
+            <td><a  style="" [routerLink]="['/club', club.id, 'view' ]">{{club.name}}</a></td>
+
+
+            <td class="text-right">
+                <div class="btn-group flex-btn-group-container">
+                    <button type="submit"
+                            [routerLink]="['/club', club.id, 'view' ]"
+                            class="btn btn-info btn-sm btn-"
+                    >
+                        <fa-icon [icon]="'eye'"></fa-icon>
+
+                    </button>
+
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
     </div>
 </div>

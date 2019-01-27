@@ -1,72 +1,60 @@
-
 <div>
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-club btn-"
-                [routerLink]="['/club/new']">
-            <fa-icon [icon]="'plus'"></fa-icon>
-            <span class="hidden-sm-down" jhiTranslate="insatApp.club.home.createLabel">
+    <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-club btn-"
+            [routerLink]="['/club/new']" *jhiHasAnyAuthority="'ROLE_ADMIN'">
+        <fa-icon [icon]="'plus'"></fa-icon>
+        <span class="hidden-sm-down" jhiTranslate="insatApp.club.home.createLabel">
             Create new Club
             </span>
-        </button>
+    </button>
+    <button class="btn btn-primary float-right jh-create-entity create-club btn-"
+            [routerLink]="['/club/list']">
+        <fa-icon [icon]="'plus'"></fa-icon>
+        <span class="hidden-sm-down">
+            list all clubs
+        </span>
+    </button>
     <jhi-alert></jhi-alert>
-    <div >
-
-        <div class="col-lg-7">
-            <form name="searchForm" class="float-right">
-                <div class="input-group float-right ">
-                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch"
-                           name="currentSearch" placeholder="{{ 'insatApp.club.home.search' | translate }}">
-                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
-                        <fa-icon [icon]="'search'"></fa-icon>
-                    </button>
-                    <button class="input-group-append btn btn-danger" (click)="clear()" *ngIf="currentSearch">
-                        <fa-icon [icon]="'trash-alt'"></fa-icon>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <br/>
-    <br/>
+    <br>
+    <br>
     <div class="table-responsive " class="table-clubs" *ngIf="clubs">
-         <h2 id="page-heading">
-             <div class="header">
-                 <span jhiTranslate="insatApp.club.home.title">Clubs</span> </div>
-         <table class="table table-striped " style="" *jhiHasAnyAuthority="'ROLE_ADMIN'">
-             <thead>
+        <h2 id="page-heading">
+            <div class="header">
+                <span jhiTranslate="insatApp.club.home.title">Clubs</span> </div>
+            <table class="table table-striped " style="" *jhiHasAnyAuthority="'ROLE_USER'">
+                <thead>
 
-             </thead>
-             <tbody>
-             <tr *ngFor="let club of clubs ;trackBy: trackId">
-                 <td><fa-icon [icon]="'users'"></fa-icon></td>
-                 <td><a  style="" [routerLink]="['/club', club.id, 'view' ]">{{club.name}}</a></td>
+                </thead>
+                <tbody>
+                <tr *ngFor="let club of UsersClubs ;trackBy: trackId">
+                    <td><fa-icon [icon]="'users'"></fa-icon></td>
+                    <td><a  style="" [routerLink]="['/club', club.id, 'view' ]">{{club.name}}</a></td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    [routerLink]="['/club', club.id, 'view' ]"
+                                    class="btn btn-info btn-sm btn-"
+                            >
+                                <fa-icon [icon]="'eye'"></fa-icon>
 
-                 <td class="text-right">
-                     <div class="btn-group flex-btn-group-container">
-                         <button type="submit"
-                                 [routerLink]="['/club', club.id, 'view' ]"
-                                 class="btn btn-info btn-sm btn-"
-                                 >
-                             <fa-icon [icon]="'eye'"></fa-icon>
+                            </button>
+                            <button type="submit"
+                                    [routerLink]="['/club', club.id, 'edit']"
+                                    class="btn btn-primary btn-sm btn-">
+                                <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            </button>
+                            <button type="submit"
+                                    [routerLink]="['/', { outlets: { popup: 'club/'+ club.id + '/delete'} }]"
+                                    replaceUrl="true"
+                                    queryParamsHandling="merge"
+                                    class="btn btn-danger btn-sm btn-">
+                                <fa-icon [icon]="'times'"></fa-icon>
 
-                         </button>
-                         <button type="submit"
-                                 [routerLink]="['/club', club.id, 'edit']"
-                                 class="btn btn-primary btn-sm btn-">
-                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
-                         </button>
-                         <button type="submit"
-                                 [routerLink]="['/', { outlets: { popup: 'club/'+ club.id + '/delete'} }]"
-                                 replaceUrl="true"
-                                 queryParamsHandling="merge"
-                                 class="btn btn-danger btn-sm btn-">
-                             <fa-icon [icon]="'times'"></fa-icon>
-
-                         </button>
-                     </div>
-                 </td>
-             </tr>
-             </tbody>
-         </table>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </h2>
     </div>
 </div>

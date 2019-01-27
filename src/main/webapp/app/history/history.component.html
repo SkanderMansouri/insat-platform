@@ -2,7 +2,7 @@
 <link href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.css" rel="stylesheet">
 <link href="https://unpkg.com/angular-calendar@0.26.4/css/angular-calendar.css" rel="stylesheet">
 <link href="https://unpkg.com/flatpickr@4.5.2/dist/flatpickr.css" rel="stylesheet">
-<div>
+<div class="cal-layout">
     <ng-template #modalContent let-close="close" >
         <div class="modal-header">
             <h5 class="modal-title">Event action occurred</h5>
@@ -178,12 +178,14 @@
             <td>
                 <input
                     type="color"
+                    class="form-control"
                     [(ngModel)]="events[index].color.primary"
                     (change)="refresh.next()">
             </td>
             <td>
                 <input
                     type="color"
+                    class="form-control"
                     [(ngModel)]="events[index].color.secondary"
                     (change)="refresh.next()">
             </td>

@@ -1,8 +1,7 @@
-h3 {
-    margin: 0 0 10px;
+.cal-layout {
+    margin-left: 35px;
 }
 
-pre {
-    background-color: #f5f5f5;
-    padding: 15px;
+.table {
+    font-size: 12px;
 }

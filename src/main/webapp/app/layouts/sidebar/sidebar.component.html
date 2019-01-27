@@ -78,13 +78,15 @@
                                 <div class="sidebar-submenu" style="display:block;">
                                     <ul>
                                         <li>
-                                            <a routerLink="insat-event" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                                                events calender
+                                            <a *jhiHasAnyAuthority="'ROLE_USER'" routerLink="userhistory"
+                                               routerLinkActive="active">
+                                                <span>User calender</span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a routerLink="insat-event" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                                                events list
+                                            <a *jhiHasAnyAuthority="'ROLE_ADMIN'" routerLink="history"
+                                               routerLinkActive="active">
+                                                <span>Admin calender</span>
                                             </a>
                                         </li>
                                     </ul>

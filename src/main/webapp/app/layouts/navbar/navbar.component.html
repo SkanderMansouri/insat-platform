@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark navbar-expand-md jh-navbar">
+<nav class="navbar navbar-dark navbar-expand-md jh-navbar" id="nav">
     <div class="jh-logo-container float-left">
         <a class="jh-navbar-toggler d-lg-none float-left" href="javascript:void(0);" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleNavbar()">
             <fa-icon icon="bars"></fa-icon>
@@ -29,17 +29,8 @@
                     </span>
                 </a>
             </li>
-            <li *ngSwitchCase="true">
-                <a *jhiHasAnyAuthority="'ROLE_USER'" class="dropdown-item" routerLink="userhistory" routerLinkActive="active" (click)="collapseNavbar()">
-                    <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
-                    <span >Usercalender</span>
-                </a>
-                <a *jhiHasAnyAuthority="'ROLE_ADMIN'" class="dropdown-item" routerLink="history" routerLinkActive="active" (click)="collapseNavbar()">
-                    <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
-                    <span >calender</span>
-                </a>
-            </li>
-            <li class="nav-item test" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" *ngSwitchCase="true">
+            <li class="nav-item test" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                *ngSwitchCase="true">
                 <a class="nav-link" routerLink="admin/user-management" (click)="collapseNavbar()">
                     <span>
                          <i class="fa fa-cog"></i>

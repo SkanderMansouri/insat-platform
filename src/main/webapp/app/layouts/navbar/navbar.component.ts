@@ -5,7 +5,7 @@ import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
 
 import { VERSION } from 'app/app.constants';
-import { JhiLanguageHelper, Principal, LoginModalService, LoginService } from 'app/core';
+import { JhiLanguageHelper, LoginModalService, LoginService, Principal } from 'app/core';
 import { ProfileService } from '../profiles/profile.service';
 
 @Component({
@@ -77,3 +77,13 @@ export class NavbarComponent implements OnInit {
         return this.isAuthenticated() ? this.principal.getImageUrl() : null;
     }
 }
+
+window.onscroll = function() {
+    if (document.body.scrollTop > 30 || document.documentElement.scrollTop > 30) {
+        document.getElementById('nav').style.backgroundColor = '#F8F8F8';
+        document.getElementById('nav').style.boxShadow = '1px 1px 8px #888888';
+    } else {
+        document.getElementById('nav').style.backgroundColor = 'transparent';
+        document.getElementById('nav').style.boxShadow = 'none';
+    }
+};

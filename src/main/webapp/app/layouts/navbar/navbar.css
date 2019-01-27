@@ -6,8 +6,22 @@ Navbar
     color: #ccc;
 }
 
-.jh-navbar {
+#nav {
     background-color: transparent;
+}
+
+.jh-navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    margin-bottom: -1.5%;
+    margin-top: -0.5%;
+    z-index: 1;
+}
+
+.jh-navbar-scroll {
+    background-color: green;
+    position: fixed;
     top: 0;
     width: 100%;
     margin-bottom: -1.5%;

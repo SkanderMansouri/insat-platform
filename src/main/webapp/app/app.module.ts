@@ -3,7 +3,7 @@ import './vendor.ts';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2Webstorage } from 'ngx-webstorage';
 import { NgJhipsterModule } from 'ng-jhipster';
 
@@ -60,6 +60,7 @@ import { UserHistoryModule } from 'app/user-history/user-history.module';
         SidebarComponent
     ],
     providers: [
+        NgbActiveModal,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,

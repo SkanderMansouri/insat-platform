@@ -21,6 +21,10 @@ import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { ActiveMenuDirective, ErrorComponent, FooterComponent, JhiMainComponent, NavbarComponent, PageRibbonComponent } from './layouts';
 import { SlackUsersListComponent } from './entities/slack-user/slack-users-list.component';
+import { SidebarComponent } from './layouts/sidebar/sidebar.component';
+import { HistoryModule } from 'app/history/history.module';
+import { InsatInsatEventModule } from 'app/entities/insat-event/insat-event.module';
+import { UserHistoryModule } from 'app/user-history/user-history.module';
 
 @NgModule({
     imports: [
@@ -39,16 +43,21 @@ import { SlackUsersListComponent } from './entities/slack-user/slack-users-list.
         InsatHomeModule,
         InsatAccountModule,
         // jhipster-needle-angular-add-module JHipster will add new module here
-        InsatEntityModule
+        InsatEntityModule,
+        HistoryModule,
+        UserHistoryModule,
+        InsatInsatEventModule
     ],
     declarations: [
         JhiMainComponent,
         NavbarComponent,
+        SidebarComponent,
         ErrorComponent,
         PageRibbonComponent,
         ActiveMenuDirective,
         FooterComponent,
-        SlackUsersListComponent
+        SlackUsersListComponent,
+        SidebarComponent
     ],
     providers: [
         {

@@ -4,6 +4,7 @@ import insat.company.platform.InsatApp;
 
 import insat.company.platform.domain.InsatEvent;
 import insat.company.platform.repository.InsatEventRepository;
+import insat.company.platform.repository.UserRepository;
 import insat.company.platform.repository.search.InsatEventSearchRepository;
 import insat.company.platform.service.InsatEventService;
 import insat.company.platform.web.rest.errors.ExceptionTranslator;
@@ -101,10 +102,12 @@ public class InsatEventResourceIntTest {
 
     private InsatEvent insatEvent;
 
+    private UserRepository userRepository;
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final InsatEventResource insatEventResource = new InsatEventResource(insatEventService);
+        final InsatEventResource insatEventResource = new InsatEventResource(insatEventService,userRepository);
         this.restInsatEventMockMvc = MockMvcBuilders.standaloneSetup(insatEventResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -195,10 +198,10 @@ public class InsatEventResourceIntTest {
             .andExpect(jsonPath("$.[*].place").value(hasItem(DEFAULT_PLACE.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
     }
-    
+
     @SuppressWarnings({"unchecked"})
     public void getAllInsatEventsWithEagerRelationshipsIsEnabled() throws Exception {
-        InsatEventResource insatEventResource = new InsatEventResource(insatEventServiceMock);
+        InsatEventResource insatEventResource = new InsatEventResource(insatEventServiceMock,userRepository);
         when(insatEventServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restInsatEventMockMvc = MockMvcBuilders.standaloneSetup(insatEventResource)
@@ -215,7 +218,7 @@ public class InsatEventResourceIntTest {
 
     @SuppressWarnings({"unchecked"})
     public void getAllInsatEventsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        InsatEventResource insatEventResource = new InsatEventResource(insatEventServiceMock);
+        InsatEventResource insatEventResource = new InsatEventResource(insatEventServiceMock,userRepository);
             when(insatEventServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restInsatEventMockMvc = MockMvcBuilders.standaloneSetup(insatEventResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)

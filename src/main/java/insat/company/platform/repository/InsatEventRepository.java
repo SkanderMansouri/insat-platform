@@ -25,6 +25,7 @@ public interface InsatEventRepository extends JpaRepository<InsatEvent, Long> {
     @Query(value = "select distinct insat_event from InsatEvent insat_event left join fetch insat_event.members left join fetch insat_event.participants  left join fetch insat_event.clubs")
     List<InsatEvent> findAllWithEagerRelationships();
 
+
     @Query("select insat_event from InsatEvent insat_event left join fetch insat_event.members left join fetch insat_event.participants where insat_event.id =:id")
     Optional<InsatEvent> findOneWithEagerRelationships(@Param("id") Long id);
 

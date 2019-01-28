@@ -6,9 +6,26 @@ Navbar
     color: #ccc;
 }
 
+#nav {
+    background-color: transparent;
+}
+
 .jh-navbar {
-    background-color: #353d47;
-    padding: 0.2em 1em;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    margin-bottom: -1.5%;
+    margin-top: -0.5%;
+    z-index: 1;
+}
+
+.jh-navbar-scroll {
+    background-color: green;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    margin-bottom: -1.5%;
+    margin-top: -0.5%;
 }
 
 .jh-navbar .profile-image {
@@ -25,19 +42,22 @@ Navbar
 }
 
 .jh-navbar .dropdown-toggle::after {
-    margin-left: 0.15em;
+    color: #31353d;
 }
 
 .jh-navbar ul.navbar-nav {
     padding: 0.5em;
+    color: #31353d;
 }
 
 .jh-navbar .navbar-nav .nav-item {
     margin-left: 1.5rem;
+    color: #31353d;
 }
 
 .jh-navbar a.nav-link {
     font-weight: 400;
+    color: #31353d;
 }
 
 .jh-navbar .jh-navbar-toggler {
@@ -76,7 +96,7 @@ Logo styles
 
 .logo-img {
     height: 100%;
-    background: url('../../../content/images/logo-jhipster.png') no-repeat center center;
+    background: url('../../../content/images/logocolor.png') no-repeat center center;
     background-size: contain;
     width: 100%;
 }
@@ -85,5 +105,65 @@ Logo styles
     height: 45px;
     display: inline-block;
     vertical-align: middle;
-    width: 70px;
+    width: 170px;
+    margin-left: -10%;
+}
+
+.test > a {
+    flex-grow: 1;
+    text-align: center;
+    height: 30px;
+    line-height: 20px;
+    position: relative;
+}
+
+.test > a .notification {
+    position: absolute;
+    top: 0;
+}
+
+.badge-sonar {
+    display: inline-block;
+    background: #980303;
+    border-radius: 50%;
+    height: 8px;
+    width: 8px;
+    position: absolute;
+    top: 5px;
+    right: 3px;
+}
+
+.badge-sonar:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 2px solid #980303;
+    opacity: 0;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    animation: sonar 1.5s infinite;
+}
+
+.profile-img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+}
+.lang-img {
+    height: 20px;
+    width: 30px;
+    border-radius: 2%;
+}
+
+.profile {
+    position: relative;
+    bottom: 10px;
+    margin-bottom: -30px;
+}
+.lang {
+    position: relative;
+    bottom: 2px;
+    margin-bottom: -30px;
 }

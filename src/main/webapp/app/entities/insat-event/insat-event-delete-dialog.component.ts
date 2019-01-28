@@ -18,6 +18,7 @@ export class InsatEventDeleteDialogComponent {
 
     clear() {
         this.activeModal.dismiss('cancel');
+        console.log('helo');
     }
 
     confirmDelete(id: number) {
@@ -27,6 +28,7 @@ export class InsatEventDeleteDialogComponent {
                 content: 'Deleted an insatEvent'
             });
             this.activeModal.dismiss(true);
+            this.insatEventService.publish({ data: 'some data' });
         });
     }
 }

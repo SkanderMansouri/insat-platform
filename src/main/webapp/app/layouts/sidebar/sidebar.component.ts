@@ -9,13 +9,13 @@ import { JhiLanguageHelper, LoginModalService, LoginService, Principal } from 'a
 import { ProfileService } from '../profiles/profile.service';
 
 @Component({
-    selector: 'jhi-navbar',
-    templateUrl: './navbar.component.html',
-    styleUrls: ['navbar.css']
+    selector: 'jhi-sidebar',
+    templateUrl: './sidebar.component.html',
+    styleUrls: ['sidebar.css']
 })
-export class NavbarComponent implements OnInit {
+export class SidebarComponent implements OnInit {
     inProduction: boolean;
-    isNavbarCollapsed: boolean;
+    issidebarCollapsed: boolean;
     languages: any[];
     swaggerEnabled: boolean;
     modalRef: NgbModalRef;
@@ -32,7 +32,7 @@ export class NavbarComponent implements OnInit {
         private router: Router
     ) {
         this.version = VERSION ? 'v' + VERSION : '';
-        this.isNavbarCollapsed = true;
+        this.issidebarCollapsed = true;
     }
 
     ngOnInit() {
@@ -51,8 +51,8 @@ export class NavbarComponent implements OnInit {
         this.languageService.changeLanguage(languageKey);
     }
 
-    collapseNavbar() {
-        this.isNavbarCollapsed = true;
+    collapsesidebar() {
+        this.issidebarCollapsed = true;
     }
 
     isAuthenticated() {
@@ -64,26 +64,20 @@ export class NavbarComponent implements OnInit {
     }
 
     logout() {
-        this.collapseNavbar();
+        this.collapsesidebar();
         this.loginService.logout();
         this.router.navigate(['']);
     }
 
-    toggleNavbar() {
-        this.isNavbarCollapsed = !this.isNavbarCollapsed;
+    togglesidebar() {
+        this.issidebarCollapsed = !this.issidebarCollapsed;
     }
 
     getImageUrl() {
         return this.isAuthenticated() ? this.principal.getImageUrl() : null;
     }
-}
 
-window.onscroll = function() {
-    if (document.body.scrollTop > 30 || document.documentElement.scrollTop > 30) {
-        document.getElementById('nav').style.backgroundColor = '#F8F8F8';
-        document.getElementById('nav').style.boxShadow = '1px 1px 8px #888888';
-    } else {
-        document.getElementById('nav').style.backgroundColor = 'transparent';
-        document.getElementById('nav').style.boxShadow = 'none';
-    }
-};
+    // myFunction(){
+    //     alert("hello");
+    // }
+}

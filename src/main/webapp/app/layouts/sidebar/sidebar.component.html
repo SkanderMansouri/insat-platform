@@ -57,11 +57,27 @@
                                     <span>Users</span>
                                 </a>
                             </li>
-                            <li class="sidebar">
-                                <a  routerLink="club" routerLinkActive="active"[routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <li class="sidebar-dropdown active">
+                                <a routerLink="club/all" routerLinkActive="active"[routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                                     <i class="fa fa-users"></i>
                                     <span>Clubs</span>
                                 </a>
+                                <div class="sidebar-submenu" style="display:block;">
+                                    <ul>
+                                        <li>
+                                            <a *jhiHasAnyAuthority="'ROLE_USER'" routerLink="club"
+                                               routerLinkActive="active">
+                                                <span>My Clubs</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a *jhiHasAnyAuthority="'ROLE_USER'" routerLink="club/list"
+                                               routerLinkActive="active">
+                                                <span>Join Clubs</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
                             <li class="sidebar">
                                 <a  routerLink="join-club-request" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">

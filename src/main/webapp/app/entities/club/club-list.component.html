@@ -1,11 +1,4 @@
 <div (change)="refresh.next()">
-    <button *jhiHasAnyAuthority="'ROLE_ADMIN'" id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-club btn-"
-            [routerLink]="['/club/new']">
-        <fa-icon [icon]="'plus'"></fa-icon>
-        <span class="hidden-sm-down" jhiTranslate="insatApp.club.home.createLabel">
-            Create new Club
-            </span>
-    </button>
     <jhi-alert></jhi-alert>
     <div >
         <div class="col-lg-7" >
@@ -13,7 +6,7 @@
                 <div class="input-group float-right ">
                     <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch"
                            name="currentSearch" placeholder="{{ 'insatApp.club.home.search' | translate }}">
-                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+                    <button class="input-group-append btn btn-info btn-" (click)="search(currentSearch)">
                         <fa-icon [icon]="'search'"></fa-icon>
                     </button>
                     <button class="input-group-append btn btn-danger" (click)="clear()" *ngIf="currentSearch">
@@ -25,11 +18,14 @@
     </div>
     <br/>
     <br/>
-    <div class="table-responsive " class="table-clubs" *ngIf="clubs">
-        <h2 id="page-heading">
+    <div class="table-responsive" class="table-clubs" *ngIf="clubs">
+        <h2>
             <div class="header">
-                <span jhiTranslate="insatApp.club.home.title">Clubs</span> </div>
-            <table class="table table-striped " style="">
+                <span jhiTranslate="insatApp.club.home.title">Clubs</span>
+            </div>
+        </h2>
+        <h2 id="page-heading">
+            <table class="table table-striped table-dark" style="">
                 <thead>
 
                 </thead>
@@ -37,13 +33,6 @@
                 <tr *ngFor="let club of NotUserClubs ;trackBy: trackId">
                     <td><fa-icon [icon]="'users'"></fa-icon></td>
                     <td><a  style="" [routerLink]="['/club', club.id, 'view' ]">{{club.name}}</a></td>
-                    <td>
-
-                        <button  (click)="createJoinRequest(club.id)" (change)="refresh.next()">
-                        <fa-icon [icon]="'plus'"></fa-icon>
-                        </button>
-                    </td>
-
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"
@@ -53,16 +42,20 @@
                                 <fa-icon [icon]="'eye'"></fa-icon>
 
                             </button>
-                            <button type="submit"
+                            <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit"
                                     [routerLink]="['/club', club.id, 'edit']"
                                     class="btn btn-primary btn-sm btn-">
                                 <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            </button>
+                            <button  class="btn btn-primary btn-sm btn- float-right" (click)="createJoinRequest(club.id)" (change)="refresh.next()">
+                                <fa-icon [icon]="'plus'"></fa-icon>
                             </button>
                             <button type="submit"
                                     [routerLink]="['/', { outlets: { popup: 'club/'+ club.id + '/delete'} }]"
                                     replaceUrl="true"
                                     queryParamsHandling="merge"
-                                    class="btn btn-danger btn-sm btn-">
+                                    class="btn btn-danger btn-sm btn-"
+                                    *jhiHasAnyAuthority="'ROLE_ADMIN'">
                                 <fa-icon [icon]="'times'"></fa-icon>
 
                             </button>
@@ -74,36 +67,38 @@
 
         </h2>
     </div>
-</div>
-<div class="table-responsive " class="table-clubs" *ngIf="clubs">
-    <div *ngIf="usersRequest">
-    <p>
-    <span >You asked to join :  </span>
-    </p>
-    <table class="table table-striped " style="" (change)="refresh.next()">
-        <thead>
+    <div class="table-responsive " class="table-clubs" *ngIf="clubs">
+            <div class="header">
+                <span class="text-sm-left">You asked to join</span>
+            </div>
+        <h2 *ngIf="usersRequest">
+            <table class="table table-striped table-dark" style="" (change)="refresh.next()">
+                <thead>
 
-        </thead>
-        <tbody>
-        <tr *ngFor="let club of usersRequest ;trackBy: trackId" (change)="refresh.next()">
-            <td><fa-icon [icon]="'users'"></fa-icon></td>
-            <td><a  style="" [routerLink]="['/club', club.id, 'view' ]">{{club.name}}</a></td>
+                </thead>
+                <tbody>
+                <tr *ngFor="let club of usersRequest ;trackBy: trackId" (change)="refresh.next()">
+                    <td><fa-icon [icon]="'users'"></fa-icon></td>
+                    <td><a  style="" [routerLink]="['/club', club.id, 'view' ]">{{club.name}}</a></td>
 
 
-            <td class="text-right">
-                <div class="btn-group flex-btn-group-container">
-                    <button type="submit"
-                            [routerLink]="['/club', club.id, 'view' ]"
-                            class="btn btn-info btn-sm btn-"
-                    >
-                        <fa-icon [icon]="'eye'"></fa-icon>
-
-                    </button>
-
-                </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container" >
+                            <button type="submit"
+                                    [routerLink]="['/club', club.id, 'view' ]"
+                                    class="btn btn-info btn-sm btn-">
+                                <fa-icon [icon]="'eye'"></fa-icon>
+                            </button>
+                            <button type="submit"
+                                    [routerLink]="['/club', club.id, 'view' ]"
+                                    class="btn btn-info btn-sm btn-">
+                                <fa-icon [icon]="'times'"></fa-icon>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </h2>
     </div>
 </div>

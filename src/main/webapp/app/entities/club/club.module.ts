@@ -13,6 +13,7 @@ import {
     ClubUpdateComponent
 } from './';
 import { ClubListComponent } from './club-list.component';
+import { AllClubComponent } from './all-club.component';
 
 const ENTITY_STATES = [...clubRoute, ...clubPopupRoute];
 
@@ -24,7 +25,8 @@ const ENTITY_STATES = [...clubRoute, ...clubPopupRoute];
         ClubUpdateComponent,
         ClubDeleteDialogComponent,
         ClubDeletePopupComponent,
-        ClubListComponent
+        ClubListComponent,
+        AllClubComponent
     ],
     entryComponents: [ClubComponent, ClubUpdateComponent, ClubDeleteDialogComponent, ClubDeletePopupComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]

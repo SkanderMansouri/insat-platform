@@ -5,9 +5,12 @@ import insat.company.platform.domain.Authority;
 import insat.company.platform.domain.Club;
 import insat.company.platform.domain.User;
 import insat.company.platform.repository.ClubRepository;
+import insat.company.platform.repository.JoinClubRequestRepository;
 import insat.company.platform.repository.UserRepository;
 import insat.company.platform.repository.search.UserSearchRepository;
 import insat.company.platform.security.AuthoritiesConstants;
+import insat.company.platform.service.ClubService;
+import insat.company.platform.service.JoinClubRequestService;
 import insat.company.platform.service.MailService;
 import insat.company.platform.service.UserService;
 import insat.company.platform.service.dto.UserDTO;
@@ -131,11 +134,22 @@ public class UserResourceIntTest {
 
     private User user;
 
+    @Autowired
+    private JoinClubRequestResource joinClubRequestResource;
+
+    @Autowired
+    private JoinClubRequestService joinClubRequestService;
+
+    @Autowired
+    private JoinClubRequestRepository joinClubRequestRepository;
+
+    @Autowired
+    private ClubService clubService;
     @Before
     public void setup() {
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
         cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).clear();
-        UserResource userResource = new UserResource(userService, userRepository, mailService, mockUserSearchRepository,clubRepository,clubResource);
+        UserResource userResource = new UserResource(userService, userRepository, mailService, mockUserSearchRepository,clubRepository,clubResource,clubService,joinClubRequestResource,joinClubRequestService,joinClubRequestRepository);
 
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)

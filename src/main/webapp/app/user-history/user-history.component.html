@@ -140,11 +140,11 @@
     <br><br><br>
 
     <h3>
-        Events
+        My Events
         <div class="clearfix"></div>
     </h3>
 
-    <table class="table table-bordered">
+    <table [mfData]="events" #mf="mfDataTable" [mfRowsOnPage]="2" class="table table-bordered">
 
         <thead>
         <tr>
@@ -153,14 +153,11 @@
             <th>Secondary color</th>
             <th>Starts at</th>
             <th>Manage</th>
+            <th>Details</th>
         </tr>
         </thead>
-
-
-
-
         <tbody>
-        <tr *ngFor="let event of events; let index = index">
+        <tr *ngFor="let event of mf.data; let index = index">
             <td>
                 <input
                     type="text"
@@ -201,52 +198,98 @@
                     Not going !
                 </button>
             </td>
-            </td>
-        </tr>
-        <tr *ngFor="let event of allEvents; let index = index">
-            <td>
-                <input
-                    type="text"
-                    class="form-control"
-                    [(ngModel)]="event.title"
-                    (keyup)="refresh.next()"
-                    readonly>
-            </td>
-            <td>
-                <input
-                    class="form-control"
-                    type="color"
-                    [(ngModel)]="allEvents[index].color.primary"
-                    (change)="refresh.next()">
-            </td>
-            <td>
-                <input
-                    class="form-control"
-                    type="color"
-                    [(ngModel)]="allEvents[index].color.secondary"
-                    (change)="refresh.next()">
-            </td>
-            <td>
-                <p class="form-control"
-                   type="text"
-                   mwlFlatpickr
-                   (ngModelChange)="refresh.next()"
-                   placeholder="Not set"
-                >
-                    {{event.start}}
-                </p>
-            </td>
             <td>
                 <button
-                    class="btn btn-primary"
-                    (click)="clickparticpate(index)"
-                >
-                    participate!
+                    class="btn btn-secondary pull-right"
+                    [routerLink]="['/insat-event', event.id, 'view']">
+                     view
                 </button>
-            </td>
             </td>
         </tr>
         </tbody>
+        <tfoot>
+        <tr>
+        <td colspan="6">
+            <mfBootstrapPaginator></mfBootstrapPaginator>
+        </tr>
+    </tfoot>
+    </table>
+
+    <h3>
+        All Events
+        <div class="clearfix"></div>
+    </h3>
+
+    <table [mfData]="allEvents" #second="mfDataTable" [mfRowsOnPage]="2" class="table table-bordered">
+
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Primary color</th>
+            <th>Secondary color</th>
+            <th>Starts at</th>
+            <th>Manage</th>
+            <th>Details</th>
+        </tr>
+        </thead>
+        <tbody>
+    <tr *ngFor="let event of second.data; let index = index">
+        <td>
+            <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="event.title"
+                (keyup)="refresh.next()"
+                readonly>
+        </td>
+        <td>
+            <input
+                class="form-control"
+                type="color"
+                [(ngModel)]="allEvents[index].color.primary"
+                (change)="refresh.next()">
+        </td>
+        <td>
+            <input
+                class="form-control"
+                type="color"
+                [(ngModel)]="allEvents[index].color.secondary"
+                (change)="refresh.next()">
+        </td>
+        <td>
+            <p class="form-control"
+               type="text"
+               mwlFlatpickr
+               (ngModelChange)="refresh.next()"
+               placeholder="Not set"
+            >
+                {{event.start}}
+            </p>
+        </td>
+        <td>
+            <button
+                class="btn btn-success"
+                (click)="clickparticpate(index)"
+            >
+                participate!
+            </button>
+        </td>
+        <td>
+            <button
+                class="btn btn-secondary pull-right"
+                [routerLink]="['/insat-event', event.id, 'view']">
+               view
+            </button>
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="6">
+            <mfBootstrapPaginator></mfBootstrapPaginator>
+        </td>
+    </tr>
+    </tfoot>
     </table>
 </div>
 

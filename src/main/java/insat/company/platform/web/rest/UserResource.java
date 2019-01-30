@@ -325,9 +325,10 @@ public class UserResource {
                 result.add(club);
         }
         for(JoinClubRequest request :Requests ) {
-
+            if (request.getStatus().toString().equals("PENDING")){
+                log.debug("here , Pending");
             Club club = request.getClub();
-            result.remove(club);
+            result.remove(club);}
         }
 
         log.debug(result+"flag!!");
@@ -341,9 +342,10 @@ public class UserResource {
         List<Club> result=new ArrayList<>();
 
         for(JoinClubRequest request :Requests ) {
-
-            Club club = request.getClub();
-            result.add(club);
+            if (request.getStatus().toString().equals("PENDING")) {
+                Club club = request.getClub();
+                result.add(club);
+            }
         }
 
 

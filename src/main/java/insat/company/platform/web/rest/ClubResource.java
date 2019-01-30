@@ -185,7 +185,7 @@ public class ClubResource {
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/deleteJoin/clubs/{id}")
+    @GetMapping("/clubs/deleteJoin/{id}")
     @Timed
     public ResponseEntity<?> deleteRequestJoinClub(@PathVariable Long id) throws URISyntaxException {
         log.debug("REST  to delete a joinClubRequest  : {}", id);

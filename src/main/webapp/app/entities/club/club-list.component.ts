@@ -117,7 +117,9 @@ export class ClubListComponent implements OnInit, OnDestroy {
     createJoinRequest(idClub: number) {
         this.clubService.createRequest(idClub).subscribe(request => {});
     }
-
+    deleteJoinRequest(idClub: number) {
+        this.clubService.deleteRequest(idClub).subscribe(request => {});
+    }
     private onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }

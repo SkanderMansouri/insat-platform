@@ -16,6 +16,7 @@ export class ClubService {
     public resourceUrl = SERVER_API_URL + 'api/clubs';
     public resourceSearchUrl = SERVER_API_URL + 'api/_search/clubs';
     public resourceRequestJoinUrl = SERVER_API_URL + 'api/clubs/join';
+    public resourceDeleteRequestJoinUrl = SERVER_API_URL + 'api/clubs/deleteJoin';
     refresh: Subject<any> = new Subject();
 
     constructor(private http: HttpClient) {}
@@ -62,6 +63,13 @@ export class ClubService {
 
     createRequest(id: number): Observable<any> {
         return this.http.get<any>(`${this.resourceRequestJoinUrl}/${id}`, { observe: 'response' }).pipe(
+            tap(() => {
+                this.refresh.next();
+            })
+        );
+    }
+    deleteRequest(id: number): Observable<any> {
+        return this.http.get<any>(`${this.resourceDeleteRequestJoinUrl}/${id}`, { observe: 'response' }).pipe(
             tap(() => {
                 this.refresh.next();
             })

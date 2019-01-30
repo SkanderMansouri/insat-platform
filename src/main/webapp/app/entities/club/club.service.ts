@@ -40,7 +40,11 @@ export class ClubService {
     }
 
     delete(id: number): Observable<HttpResponse<any>> {
-        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' }).pipe(
+            tap(() => {
+                this.refresh.next();
+            })
+        );
     }
 
     search(req?: any): Observable<EntityArrayResponseType> {

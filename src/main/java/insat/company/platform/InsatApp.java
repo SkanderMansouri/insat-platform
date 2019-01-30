@@ -1,5 +1,6 @@
 package insat.company.platform;
 
+import insat.company.platform.config.AppProperties;
 import insat.company.platform.config.ApplicationProperties;
 import insat.company.platform.config.DefaultProfileUtil;
 
@@ -21,7 +22,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @SpringBootApplication
-@EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
+@EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class, AppProperties.class})
 public class InsatApp {
 
     private static final Logger log = LoggerFactory.getLogger(InsatApp.class);

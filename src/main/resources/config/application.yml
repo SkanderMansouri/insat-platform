@@ -113,3 +113,31 @@ jhipster:
 # ===================================================================
 
 # application:
+security:
+    oauth2:
+        client:
+            registration:
+                facebook:
+                    clientId: 275441369814388
+                    clientSecret: dfaca9d6ba11c38d58074038bfa6a780
+                    redirectUriTemplate: "{baseUrl}/oauth2/callback/{registrationId}"
+                    scope:
+                        - email
+                        - public_profile
+
+            provider:
+                facebook:
+                    authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
+                    tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
+                    userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,is_verified,picture.width(250).height(250)
+app:
+    auth:
+        tokenSecret: 5d573aa93fdfd36f45dac0141910fea6
+        tokenExpirationMsec: 864000000
+    oauth2:
+        # After successfully authenticating with the OAuth2 Provider,
+        # we'll be generating an auth token for the user and sending the token to the
+        # redirectUri mentioned by the frontend client in the /oauth2/authorize request.
+        # We're not using cookies because they won't work well in mobile clients.
+        authorizedRedirectUris:
+            - http://localhost:8080/oauth2/redirect

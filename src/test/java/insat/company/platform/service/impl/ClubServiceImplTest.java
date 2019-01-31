@@ -9,6 +9,7 @@ import insat.company.platform.domain.enumeration.Status;
 import insat.company.platform.repository.ClubRepository;
 import insat.company.platform.repository.UserRepository;
 import insat.company.platform.service.ClubService;
+import insat.company.platform.service.exceptions.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = InsatApp.class)
@@ -44,17 +45,17 @@ public class ClubServiceImplTest {
     @WithMockUser(roles = "USER")
     public void shouldRefuseAccessToVerifyJoinClubRequest() {
         Optional<JoinClubRequest> joinClubRequest = Optional.empty();
-        boolean acessApproval = clubService.verifyAccessToJoinClubRequest(joinClubRequest);
+        clubService.verifyAccessToJoinClubRequest(joinClubRequest);
     }
 
-    @Test
+    @Test(expected = InexistantJoinRequestException.class)
     @WithMockUser(roles = "PRESIDENT")
     public void shouldExpectANullJoinClubRequest() {
         Optional<JoinClubRequest> joinClubRequest = Optional.empty();
-        assertFalse(clubService.verifyAccessToJoinClubRequest(joinClubRequest));
+        clubService.verifyAccessToJoinClubRequest(joinClubRequest);
     }
 
-    @Test
+    @Test(expected = InexistantLoggedUserException.class)
     @WithMockUser(username = "UnexistingUser", roles = "PRESIDENT")
     public void shouldExpectLoggedUserNotInDatabase() {
         User user = new User();
@@ -71,10 +72,10 @@ public class ClubServiceImplTest {
         joinClubRequest.setUser(user);
         joinClubRequest.setClub(club);
         Optional<JoinClubRequest> optJoinClubRequest = Optional.of(joinClubRequest);
-        assertFalse(clubService.verifyAccessToJoinClubRequest(optJoinClubRequest));
+        clubService.verifyAccessToJoinClubRequest(optJoinClubRequest);
     }
 
-    @Test
+    @Test(expected = InexistantUserException.class)
     @WithMockUser(username = "test", roles = "PRESIDENT")
     public void shouldExpectUserInRequestNotFound() {
         User user = new User();
@@ -97,10 +98,10 @@ public class ClubServiceImplTest {
         joinClubRequest.setUser(user2);
         joinClubRequest.setClub(club);
         Optional<JoinClubRequest> optJoinClubRequest = Optional.of(joinClubRequest);
-        assertFalse(clubService.verifyAccessToJoinClubRequest(optJoinClubRequest));
+        clubService.verifyAccessToJoinClubRequest(optJoinClubRequest);
     }
 
-    @Test
+    @Test(expected = InexistantClubException.class)
     @WithMockUser(username = "test", roles = "PRESIDENT")
     public void shouldExpectClubNotFound() {
         User user = new User();
@@ -118,10 +119,10 @@ public class ClubServiceImplTest {
         joinClubRequest.setUser(user);
         joinClubRequest.setClub(club);
         Optional<JoinClubRequest> optJoinClubRequest = Optional.of(joinClubRequest);
-        assertFalse(clubService.verifyAccessToJoinClubRequest(optJoinClubRequest));
+        clubService.verifyAccessToJoinClubRequest(optJoinClubRequest);
     }
 
-    @Test
+    @Test(expected = NotClubPresidentException.class)
     @WithMockUser(username = "notclubpresident", roles = "PRESIDENT")
     public void shouldExpectUserNotPresident() {
         User user = new User();
@@ -131,7 +132,7 @@ public class ClubServiceImplTest {
         user.setPassword("$2y$12$ZYPDAI1tNHe07AS.w5m28.BsSHCrTj4AOp34n/euJx0MfoVjG/Zla");
         Authority authority = new Authority();
         authority.setName("ROLE_PRESIDENT");
-        Set<Authority> autho = new HashSet<Authority>();
+        Set<Authority> autho = new HashSet<>();
         autho.add(authority);
         user.setAuthorities(autho);
         userRepository.save(user);
@@ -152,10 +153,10 @@ public class ClubServiceImplTest {
         joinClubRequest.setUser(user);
         joinClubRequest.setClub(club);
         Optional<JoinClubRequest> optJoinClubRequest = Optional.of(joinClubRequest);
-        assertFalse(clubService.verifyAccessToJoinClubRequest(optJoinClubRequest));
+        clubService.verifyAccessToJoinClubRequest(optJoinClubRequest);
     }
 
-    @Test
+    @Test(expected = JoinRequestNotPendingException.class)
     @WithMockUser(username = "president", roles = "PRESIDENT")
     public void shouldExpectRequestNotPending() {
         User president = new User();
@@ -177,7 +178,7 @@ public class ClubServiceImplTest {
         joinClubRequest.setRequestTime(LocalDate.now());
         joinClubRequest.setStatus(Status.ACCEPTED);
         Optional<JoinClubRequest> optJoinClubRequest = Optional.of(joinClubRequest);
-        assertFalse(clubService.verifyAccessToJoinClubRequest(optJoinClubRequest));
+        clubService.verifyAccessToJoinClubRequest(optJoinClubRequest);
     }
 
     @Test
@@ -209,6 +210,8 @@ public class ClubServiceImplTest {
         joinClubRequest.setStatus(Status.PENDING);
         Optional<JoinClubRequest> optJoinClubRequest = Optional.of(joinClubRequest);
         clubService.acceptJoinClubRequest(optJoinClubRequest);
+        assertTrue(club.getMembers().contains(user));
+        assertEquals(joinClubRequest.getStatus(), Status.ACCEPTED);
     }
 
     @Test
@@ -240,5 +243,7 @@ public class ClubServiceImplTest {
         joinClubRequest.setStatus(Status.PENDING);
         Optional<JoinClubRequest> optJoinClubRequest = Optional.of(joinClubRequest);
         clubService.declineJoinClubRequest(optJoinClubRequest);
+        assertFalse(club.getMembers().contains(user));
+        assertEquals(joinClubRequest.getStatus(), Status.REJECTED);
     }
 }

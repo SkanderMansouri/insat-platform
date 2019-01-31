@@ -210,7 +210,7 @@ public class ClubResource {
 
     @GetMapping("/acceptJoin/joinClubRequests/{id}")
     @Timed
-    public ResponseEntity<?> acceptJoinClub(@PathVariable Long id) throws URISyntaxException {
+    public ResponseEntity<?> acceptJoinClub(@PathVariable Long id) {
         log.debug("REST request to accept the joinClubRequest {}", id);
 
         if (!SecurityUtils.isAuthenticated()) {
@@ -221,24 +221,23 @@ public class ClubResource {
         Optional<JoinClubRequest> joinClubRequest = joinClubRequestRepository.findOneById(id);
 
         return joinClubRequest.map(joinClubRequestExists -> {
-            if (clubService.verifyAccessToJoinClubRequest(joinClubRequest)) {
-                clubService.acceptJoinClubRequest(joinClubRequest);
-                log.info("joinClubRequest {} successfully accepted !", id);
-                return new ResponseEntity<>(HttpStatus.OK);
-            } else {
+            try {
+                if (clubService.verifyAccessToJoinClubRequest(joinClubRequest)) {
+                    clubService.acceptJoinClubRequest(joinClubRequest);
+                    log.info("joinClubRequest {} successfully accepted !", id);
+                    return new ResponseEntity<>(HttpStatus.OK);
+                }
+            } catch (Exception e) {
                 log.error("conditions to accept joinClubRequest {} not fulfilled !", id);
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         })
-            .orElseGet(() -> {
-                log.error("joinClubRequest {} not found !", id);
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            });
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/declineJoin/joinClubRequests/{id}")
     @Timed
-    public ResponseEntity<?> declineJoinClub(@PathVariable Long id) throws URISyntaxException {
+    public ResponseEntity<?> declineJoinClub(@PathVariable Long id) {
         log.debug("REST request to decline the joinClubRequest {}", id);
 
         if (!SecurityUtils.isAuthenticated()) {
@@ -249,12 +248,15 @@ public class ClubResource {
         Optional<JoinClubRequest> joinClubRequest = joinClubRequestRepository.findOneById(id);
 
         return joinClubRequest.map(joinClubRequestExists -> {
-            if (clubService.verifyAccessToJoinClubRequest(joinClubRequest)) {
-                clubService.declineJoinClubRequest(joinClubRequest);
-                return new ResponseEntity<>(HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            try {
+                if (clubService.verifyAccessToJoinClubRequest(joinClubRequest)) {
+                    clubService.declineJoinClubRequest(joinClubRequest);
+                    return new ResponseEntity<>(HttpStatus.OK);
+                }
+            } catch (Exception e) {
+                log.error("conditions to decline joinClubRequest {} not fulfilled !", id);
             }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         })
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

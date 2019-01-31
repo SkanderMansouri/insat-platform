@@ -527,7 +527,7 @@ public class ClubResourceIntTest {
         club.setPresident(president);
         clubRepository.save(club);
         JoinClubRequest joinClubRequest = new JoinClubRequest();
-        joinClubRequest.setId(new Long(1));
+        joinClubRequest.setId((long) 1);
         joinClubRequest.setUser(user);
         joinClubRequest.setClub(club);
         joinClubRequest.setRequestTime(LocalDate.now());
@@ -562,7 +562,7 @@ public class ClubResourceIntTest {
         club.setPresident(president);
         clubRepository.save(club);
         JoinClubRequest joinClubRequest = new JoinClubRequest();
-        joinClubRequest.setId(new Long(1));
+        joinClubRequest.setId((long) 1);
         joinClubRequest.setUser(user);
         joinClubRequest.setClub(club);
         joinClubRequest.setRequestTime(LocalDate.now());
@@ -596,7 +596,7 @@ public class ClubResourceIntTest {
         club.setPresident(president);
         clubRepository.save(club);
         JoinClubRequest joinClubRequest = new JoinClubRequest();
-        joinClubRequest.setId(new Long(1));
+        joinClubRequest.setId((long) 1);
         joinClubRequest.setUser(user);
         joinClubRequest.setClub(club);
         joinClubRequest.setRequestTime(LocalDate.now());

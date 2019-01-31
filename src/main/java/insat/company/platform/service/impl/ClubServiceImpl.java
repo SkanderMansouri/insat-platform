@@ -12,6 +12,7 @@ import insat.company.platform.repository.search.UserSearchRepository;
 import insat.company.platform.security.SecurityUtils;
 import insat.company.platform.service.ClubService;
 import insat.company.platform.service.JoinClubRequestService;
+import insat.company.platform.service.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -187,89 +188,75 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @PreAuthorize("hasRole('ROLE_PRESIDENT')")
-    public boolean verifyAccessToJoinClubRequest(Optional<JoinClubRequest> joinClubRequest) {
-        boolean result = joinClubRequest.map(joinClubRequestExists -> {
-            boolean result2 = SecurityUtils.getCurrentUserLogin()
+    public boolean verifyAccessToJoinClubRequest(Optional<JoinClubRequest> joinClubRequest) throws InexistantClubException, NotClubPresidentException, JoinRequestNotPendingException, InexistantUserException, InexistantLoggedUserException, InexistantJoinRequestException {
+        // checks if the join request is not null
+        joinClubRequest.map(joinClubRequestExists -> {
+            SecurityUtils.getCurrentUserLogin()
                 .flatMap(userRepository::findOneByLogin)
+                // checks if the logged user exists in the database
                 .map(user -> {
-                    boolean result3 = Optional.ofNullable(joinClubRequestExists.getUser().getLogin())
+                    Optional.ofNullable(joinClubRequestExists.getUser().getLogin())
                         .flatMap(userRepository::findOneByLogin)
+                        // checks if the user in the join request still exists in the database
                         .map(joinClubRequestUser -> {
-                            log.info("Accepting {}'s request to join {}", joinClubRequestExists.getUser().getFirstName(), joinClubRequestExists.getClub().getName());
-                            if (!(clubRepository.findOneById(joinClubRequestExists.getClub().getId()).isPresent())) {
-                                log.error("the club {} no longer exists", joinClubRequestExists.getClub().getName());
-                                return false;
+                            // checks if the club in the join request still exists in the database
+                            if (!(clubRepository.findById(joinClubRequestExists.getClub().getId()).isPresent())) {
+                                throw new InexistantClubException(joinClubRequestExists.getClub().getName());
+                                // checks if the logged user is the president of the club in the join request
                             } else if (!(user.equals(joinClubRequestExists.getClub().getPresident()))) {
-                                log.error("{} {} is not the president of {}", user.getFirstName(), user.getLastName(), joinClubRequestExists.getClub().getName());
-                                return false;
+                                throw new NotClubPresidentException(user.getFirstName() + " " + user.getLastName(), joinClubRequestExists.getClub().getName());
+                                // checks if the join request is still pending
                             } else if (!(joinClubRequestExists.getStatus().equals(Status.PENDING))) {
-                                switch (joinClubRequestExists.getStatus()) {
-                                    case ACCEPTED:
-                                        log.error("the request is already accepted");
-                                        break;
-                                    case REJECTED:
-                                        log.error("the request is already rejected");
-                                        break;
-                                    case DELETED:
-                                        log.error("the request was deleted by the user");
-                                        break;
-                                    default:
-                                        log.error("Error while treating the request status");
-                                }
-                                return false;
+                                throw new JoinRequestNotPendingException();
                             }
-                            log.info("No errors found");
                             return true;
                         })
-                        .orElseGet(() -> {
-                            log.error("User in the joinClubRequest doesn't exist in the database !");
-                            return false;
-                        });
-                    return result3;
+                        .orElseThrow(InexistantUserException::new);
+                    return true;
                 })
-                .orElseGet(() -> {
-                    log.error("Logged user doesn't exist in the database !");
-                    return false;
-                });
-            return result2;
+                .orElseThrow(InexistantLoggedUserException::new);
+            return true;
         })
-            .orElseGet(() -> {
-                log.error("this JoinClubRequest doesn't exist !");
-                return false;
-            });
-        return result;
+            .orElseThrow(InexistantJoinRequestException::new);
+        return true;
     }
 
     @PreAuthorize("hasRole('ROLE_PRESIDENT')")
     public void acceptJoinClubRequest(Optional<JoinClubRequest> joinClubRequest) {
         joinClubRequest.map(joinClubRequestExists -> {
-            if (verifyAccessToJoinClubRequest(joinClubRequest)) {
-                Club club = joinClubRequestExists.getClub();
-                User user = joinClubRequestExists.getUser();
-                joinClubRequestExists.setStatus(Status.ACCEPTED);
-                club.addMember(user);
-                user.getClubs().add(club);
-                userRepository.save(user);
-                clubRepository.save(club);
-                joinClubRequestRepository.save(joinClubRequestExists);
-                log.info("{} {} joined {} successfully !", user.getFirstName(), user.getLastName(), club.getName());
-            } else log.error("There was an error while accepting the request !");
+            try {
+                if (verifyAccessToJoinClubRequest(joinClubRequest)) {
+                    Club club = joinClubRequestExists.getClub();
+                    User user = joinClubRequestExists.getUser();
+                    joinClubRequestExists.setStatus(Status.ACCEPTED);
+                    club.addMember(user);
+                    user.getClubs().add(club);
+                    userRepository.save(user);
+                    clubRepository.save(club);
+                    joinClubRequestRepository.save(joinClubRequestExists);
+                    log.info("{} {} joined {} successfully !", user.getFirstName(), user.getLastName(), club.getName());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return null;
-        })
-            .orElse(null);
+        });
     }
 
     @PreAuthorize("hasRole('ROLE_PRESIDENT')")
     public void declineJoinClubRequest(Optional<JoinClubRequest> joinClubRequest) {
         joinClubRequest.map(joinClubRequestExists -> {
-            if (verifyAccessToJoinClubRequest(joinClubRequest)) {
-                joinClubRequestExists.setStatus(Status.REJECTED);
-                joinClubRequestRepository.save(joinClubRequestExists);
-                log.info("The request was rejected successfully !");
-            } else log.error("There was an error while rejecting the request !");
+            try {
+                if (verifyAccessToJoinClubRequest(joinClubRequest)) {
+                    joinClubRequestExists.setStatus(Status.REJECTED);
+                    joinClubRequestRepository.save(joinClubRequestExists);
+                    log.info("The request was rejected successfully !");
+                } else log.error("There was an error while rejecting the request !");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return null;
-        })
-            .orElse(null);
+        });
     }
 
 }

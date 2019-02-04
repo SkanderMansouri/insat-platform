@@ -22,8 +22,12 @@ public interface JoinClubRequestRepository extends JpaRepository<JoinClubRequest
     @Query("select join_club_request from JoinClubRequest join_club_request where join_club_request.user.login = ?#{principal.username}")
     List<JoinClubRequest> findByUserIsCurrentUser();
 
+    List<JoinClubRequest> findAllByClub(Club club);
+
+
 
     Optional<JoinClubRequest> findOneByUserAndClubAndStatusNot(User user, Club club, Status status);
 
     Optional<JoinClubRequest> findOneByUserAndClubAndStatus(User user, Club club, Status pending);
+
 }

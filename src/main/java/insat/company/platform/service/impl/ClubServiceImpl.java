@@ -112,6 +112,11 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Club : {}", id);
+       Optional<Club> club = clubRepository.findById(id);
+        List<JoinClubRequest> Requests =joinClubRequestRepository.findAllByClub(club.get());
+        for(JoinClubRequest request :Requests ) {
+            joinClubRequestRepository.delete(request);
+            }
         clubRepository.deleteById(id);
         clubSearchRepository.deleteById(id);
     }

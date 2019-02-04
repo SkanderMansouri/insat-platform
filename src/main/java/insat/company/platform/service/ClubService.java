@@ -3,6 +3,7 @@ package insat.company.platform.service;
 import insat.company.platform.domain.Club;
 import insat.company.platform.domain.JoinClubRequest;
 import insat.company.platform.domain.User;
+import insat.company.platform.service.exceptions.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -66,4 +67,9 @@ public interface ClubService {
 
     void deleteJoinRequest(Club club, User user);
 
+    boolean verifyAccessToJoinClubRequest(Optional<JoinClubRequest> joinClubRequest) throws InexistantClubException, NotClubPresidentException, JoinRequestNotPendingException, InexistantUserException, InexistantLoggedUserException, InexistantJoinRequestException;
+
+    void acceptJoinClubRequest(Optional<JoinClubRequest> joinClubRequest);
+
+    void declineJoinClubRequest(Optional<JoinClubRequest> joinClubRequest);
 }

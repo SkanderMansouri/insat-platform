@@ -24,10 +24,9 @@ public interface JoinClubRequestRepository extends JpaRepository<JoinClubRequest
 
     List<JoinClubRequest> findAllByClub(Club club);
 
-
-
     Optional<JoinClubRequest> findOneByUserAndClubAndStatusNot(User user, Club club, Status status);
 
     Optional<JoinClubRequest> findOneByUserAndClubAndStatus(User user, Club club, Status pending);
 
+    Optional<JoinClubRequest> findOneById(Long id);
 }

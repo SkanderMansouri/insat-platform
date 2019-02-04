@@ -38,6 +38,9 @@ const colors: any = {
     templateUrl: 'history.component.html'
 })
 export class HistoryComponent implements OnInit {
+    @ViewChild('dataTable')
+    table;
+    dataTable: any;
     @ViewChild('modalContent')
     modalContent: TemplateRef<any>;
     num: number;

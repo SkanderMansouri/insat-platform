@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { insatEventPopupRoute, insatEventRoute } from 'app/entities/insat-event';
 import { UserHistoryComponent } from 'app/user-history/user-history.component';
+import { DataTableModule } from 'angular-6-datatable';
 const ENTITY_STATES = [...insatEventRoute, ...insatEventPopupRoute];
 @NgModule({
     imports: [
@@ -16,6 +17,7 @@ const ENTITY_STATES = [...insatEventRoute, ...insatEventPopupRoute];
         BrowserAnimationsModule,
         FormsModule,
         NgbModalModule,
+        DataTableModule,
         FlatpickrModule.forRoot(),
         CalendarModule.forRoot({
             provide: DateAdapter,

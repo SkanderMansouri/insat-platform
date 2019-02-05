@@ -176,7 +176,6 @@ public class ClubResource {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             JoinClubRequest joinClubRequest= clubService.sendClubJoinRequest(club, currentUser);
             if(joinClubRequest.getId() >= 0L){
-                log.error("created");
                 return new ResponseEntity<>(HttpStatus.OK);
             }
             else

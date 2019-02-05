@@ -330,6 +330,7 @@ public class UserResource {
 
         return result;
     }
+
     @GetMapping("/users/Requests")
     @Timed
     public List<Club> getRequests() {

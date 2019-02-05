@@ -161,8 +161,7 @@ public class ClubResource {
     @GetMapping("/clubs/join/{id}")
     @Timed
     public ResponseEntity<?> joinClub(@PathVariable Long id) throws URISyntaxException {
-        log.debug("REST request to create a joinClubRequest to join a shouldReturnOkAndCreateAJoinClubRequest\nclub   : {}", id);
-        log.error("here !!!!!!!!!!!!!!!!!");
+        log.debug("REST request to create a joinClubRequest: {}", id);
 
         if (!SecurityUtils.isAuthenticated()) {
             log.error("User should be logged in");

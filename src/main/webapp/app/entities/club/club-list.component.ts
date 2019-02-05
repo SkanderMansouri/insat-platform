@@ -19,7 +19,7 @@ export class ClubListComponent implements OnInit, OnDestroy {
     eventSubscriber: Subscription;
     currentSearch: string;
     UsersClubs: IClub[];
-    NotUserClubs: IClub[];
+    notMemberClubsList: IClub[];
     usersRequest: IClub[];
     refresh: Subject<any> = new Subject();
 
@@ -77,9 +77,9 @@ export class ClubListComponent implements OnInit, OnDestroy {
         this.clubService.clubsUserList().subscribe(clubsList => {
             this.UsersClubs = clubsList;
         });
-        this.NotUserClubs = [];
-        this.clubService.NotclubsUserList().subscribe(clubsList => {
-            this.NotUserClubs = clubsList;
+        this.notMemberClubsList = [];
+        this.clubService.NotMemberClubList().subscribe(clubsList => {
+            this.notMemberClubsList = clubsList;
         });
         this.usersRequest = [];
         this.clubService.RequestsList().subscribe(clubsList => {
@@ -89,13 +89,13 @@ export class ClubListComponent implements OnInit, OnDestroy {
             this.getAllRequest();
         });
         this.clubService.refresh.subscribe(() => {
-            this.getAllNonClubs();
+            this.getAllNonMemberClubs();
         });
     }
 
-    getAllNonClubs() {
-        this.clubService.NotclubsUserList().subscribe(clubsList => {
-            this.NotUserClubs = clubsList;
+    getAllNonMemberClubs() {
+        this.clubService.NotMemberClubList().subscribe(clubsList => {
+            this.notMemberClubsList = clubsList;
         });
     }
     getAllRequest() {

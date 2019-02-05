@@ -37,7 +37,6 @@ public interface ClubService {
      */
     Page<Club> findAllWithEagerRelationships(Pageable pageable);
 
-
     /**
      * Get the "id" club.
      *

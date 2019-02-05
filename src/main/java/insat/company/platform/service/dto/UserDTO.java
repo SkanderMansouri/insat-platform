@@ -60,9 +60,6 @@ public class UserDTO {
 
     private Set<Club> clubs;
 
-
-
-
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }

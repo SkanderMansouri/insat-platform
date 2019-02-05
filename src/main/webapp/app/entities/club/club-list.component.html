@@ -32,7 +32,7 @@
 
                     </thead>
                     <tbody>
-                    <tr *ngFor="let club of NotUserClubs ;trackBy: trackId">
+                    <tr *ngFor="let club of notMemberClubsList ;trackBy: trackId">
                         <td><fa-icon [icon]="'users'"></fa-icon></td>
                         <td><a  style="" [routerLink]="['/club', club.id, 'view' ]">{{club.name}}</a></td>
                         <td class="text-right">

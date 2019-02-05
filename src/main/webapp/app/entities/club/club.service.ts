@@ -26,7 +26,6 @@ export class ClubService {
     }
 
     update(club: IClub): Observable<EntityResponseType> {
-        console.log('i was hereeeee {}', club.id);
         return this.http.put<IClub>(this.resourceUrl, club, { observe: 'response' });
     }
 
@@ -58,7 +57,7 @@ export class ClubService {
     clubsUserList(): Observable<Club[]> {
         return this.http.get<Club[]>(SERVER_API_URL + 'api/users/clubs');
     }
-    NotclubsUserList(): Observable<Club[]> {
+    NotMemberClubList(): Observable<Club[]> {
         return this.http.get<Club[]>(SERVER_API_URL + 'api/users/notClubs');
     }
     RequestsList(): Observable<Club[]> {

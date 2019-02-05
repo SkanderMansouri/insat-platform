@@ -293,7 +293,6 @@ public class UserResource {
     @GetMapping("/users/clubs")
     @Timed
     public List<Club> getClubs() {
-
         String userLogin = SecurityUtils.getCurrentUserLogin().get();
         User currentUser = userService.getUserWithAuthoritiesByLogin(userLogin).get();
         List<Club> clubs= clubService.findAll();
@@ -311,8 +310,7 @@ public class UserResource {
     }
     @GetMapping("/users/notClubs")
     @Timed
-    public List<Club> getNotClubs() {
-
+    public List<Club> getNotMemberClubsList() {
         String userLogin = SecurityUtils.getCurrentUserLogin().get();
         User currentUser = userService.getUserWithAuthoritiesByLogin(userLogin).get();
         List<Club> clubs= clubService.findAll();
@@ -326,18 +324,15 @@ public class UserResource {
         }
         for(JoinClubRequest request :Requests ) {
             if (request.getStatus().toString().equals("PENDING")){
-                log.debug("here , Pending");
             Club club = request.getClub();
             result.remove(club);}
         }
 
-        log.debug(result+"flag!!");
         return result;
     }
     @GetMapping("/users/Requests")
     @Timed
     public List<Club> getRequests() {
-
         List<JoinClubRequest> Requests= joinClubRequestRepository.findByUserIsCurrentUser();
         List<Club> result=new ArrayList<>();
 
@@ -347,8 +342,6 @@ public class UserResource {
                 result.add(club);
             }
         }
-
-
         return result;
     }
 

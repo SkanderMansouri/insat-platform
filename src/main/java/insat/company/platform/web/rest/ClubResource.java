@@ -158,10 +158,10 @@ public class ClubResource {
      * @param id the id of the club  to join
      * @return the ResponseEntity with status 200 (OK), or with status 404 (Not Found) or with status 401 (unauthorized)
      */
-    @GetMapping("/join/clubs/{id}")
+    @GetMapping("/clubs/join/{id}")
     @Timed
     public ResponseEntity<?> joinClub(@PathVariable Long id) throws URISyntaxException {
-        log.debug("REST request to create a joinClubRequest to join a shouldReturnOkAndCreateAJoinClubRequest\nclub   : {}", id);
+        log.debug("REST request to create a joinClubRequest: {}", id);
 
         if (!SecurityUtils.isAuthenticated()) {
             log.error("User should be logged in");
@@ -175,14 +175,15 @@ public class ClubResource {
             if(club.hasMember(currentUser))
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             JoinClubRequest joinClubRequest= clubService.sendClubJoinRequest(club, currentUser);
-            if(joinClubRequest.getId() >= 0L)
+            if(joinClubRequest.getId() >= 0L){
                 return new ResponseEntity<>(HttpStatus.OK);
+            }
             else
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/deleteJoin/clubs/{id}")
+    @GetMapping("/clubs/deleteJoin/{id}")
     @Timed
     public ResponseEntity<?> deleteRequestJoinClub(@PathVariable Long id) throws URISyntaxException {
         log.debug("REST  to delete a joinClubRequest  : {}", id);

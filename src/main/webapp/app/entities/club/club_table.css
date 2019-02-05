@@ -1,0 +1,11 @@
+.col-centered {
+    float: none;
+    margin: 0 auto;
+}
+table {
+    border-radius: 10px;
+}
+a {
+    text-decoration: none;
+    color: black;
+}

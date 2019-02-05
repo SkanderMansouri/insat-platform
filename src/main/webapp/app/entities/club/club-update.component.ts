@@ -10,7 +10,8 @@ import { IUser, UserService } from 'app/core';
 
 @Component({
     selector: 'jhi-club-update',
-    templateUrl: './club-update.component.html'
+    templateUrl: './club-update.component.html',
+    styleUrls: ['clubUpdate.css']
 })
 export class ClubUpdateComponent implements OnInit {
     club: IClub;

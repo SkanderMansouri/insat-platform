@@ -375,7 +375,7 @@ public class ClubResourceIntTest {
         int joinClubRequestBeforeCreateTheRequest = joinClubRequestRepository.findAll().size();
         clubService.save(club);
 
-        restClubMockMvc.perform(get("/api/join/clubs/{id}", club.getId())
+        restClubMockMvc.perform(get("/api/clubs/join/{id}", club.getId())
             .contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
@@ -393,7 +393,7 @@ public class ClubResourceIntTest {
         int joinClubRequestBeforeCreateTheRequest = joinClubRequestRepository.findAll().size();
         Long NotAClubId = 3000L;
 
-        restClubMockMvc.perform(get("/api/join/clubs/{id}", NotAClubId)
+        restClubMockMvc.perform(get("/api/clubs/join/{id}", NotAClubId)
             .contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isNotFound());
         List<JoinClubRequest> joinClubRequestsList = joinClubRequestRepository.findAll();
@@ -405,7 +405,7 @@ public class ClubResourceIntTest {
     @Test
     public void shouldReturnBadRequestWhenUserIsNotAuthenticated() throws Exception {
         clubService.save(club);
-        restClubMockMvc.perform(get("/api/join/clubs/{id}", club.getId())
+        restClubMockMvc.perform(get("/api/clubs/join/{id}", club.getId())
             .contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isUnauthorized());
     }
@@ -425,7 +425,7 @@ public class ClubResourceIntTest {
         request1.setStatus(Status.PENDING);
         joinClubRequestService.save(request1);
         assertThat(joinClubRequestRepository.findAll().size()).isEqualTo(joinClubRequestBeforeCreateTheRequestSize + 1);
-        restClubMockMvc.perform(get("/api/join/clubs/{id}", club.getId())
+        restClubMockMvc.perform(get("/api/clubs/join/{id}", club.getId())
             .contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isBadRequest());
         assertThat(joinClubRequestRepository.findAll().size()).isEqualTo(joinClubRequestBeforeCreateTheRequestSize + 1);
@@ -453,7 +453,7 @@ public class ClubResourceIntTest {
         joinClubRequestRepository.save(joinClubRequest);
         joinClubRequestService.save(joinClubRequest);
         assertThat(joinClubRequestRepository.findAll().size()).isEqualTo(size + 1);
-        restClubMockMvc.perform(get("/api/deleteJoin/clubs/{id}", club.getId())
+        restClubMockMvc.perform(get("/api/clubs/deleteJoin/{id}", club.getId())
             .contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
         assertThat(joinClubRequest.getStatus().equals(Status.DELETED));
@@ -473,7 +473,7 @@ public class ClubResourceIntTest {
         club = clubService.save(club);
         assertThat(clubRepository.findAll().size()).isEqualTo(clubsCount + 1);
 
-        restClubMockMvc.perform(get("/api/join/clubs/{id}", club.getId())
+        restClubMockMvc.perform(get("/api/clubs/join/{id}", club.getId())
             .contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isBadRequest());
 
@@ -496,7 +496,7 @@ public class ClubResourceIntTest {
         joinClubRequestRepository.save(joinClubRequestADMIN);
         assertThat(joinClubRequestRepository.findAll().size()).isEqualTo(joinRequestCount + 1);
 
-        restClubMockMvc.perform(get("/api/deleteJoin/clubs/{id}", club.getId())
+        restClubMockMvc.perform(get("/api/clubs/deleteJoin/{id}", club.getId())
             .contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isBadRequest());
 

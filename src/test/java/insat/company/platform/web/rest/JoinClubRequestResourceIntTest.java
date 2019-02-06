@@ -8,7 +8,9 @@ import insat.company.platform.domain.Club;
 import insat.company.platform.domain.enumeration.Status;
 import insat.company.platform.repository.JoinClubRequestRepository;
 import insat.company.platform.repository.search.JoinClubRequestSearchRepository;
+import insat.company.platform.service.ClubService;
 import insat.company.platform.service.JoinClubRequestService;
+import insat.company.platform.service.UserService;
 import insat.company.platform.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -61,6 +63,12 @@ public class JoinClubRequestResourceIntTest {
     @Autowired
     private JoinClubRequestService joinClubRequestService;
 
+    @Autowired
+    private ClubService clubService;
+
+    @Autowired
+    private  UserService userService;
+
     /**
      * This repository is mocked in the insat.company.platform.repository.search test package.
      *
@@ -88,7 +96,7 @@ public class JoinClubRequestResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final JoinClubRequestResource joinClubRequestResource = new JoinClubRequestResource(joinClubRequestService);
+        final JoinClubRequestResource joinClubRequestResource = new JoinClubRequestResource(joinClubRequestService,clubService,userService);
         this.restJoinClubRequestMockMvc = MockMvcBuilders.standaloneSetup(joinClubRequestResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

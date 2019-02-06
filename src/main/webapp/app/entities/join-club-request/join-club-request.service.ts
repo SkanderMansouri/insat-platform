@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import * as moment from 'moment';
 import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 import { map } from 'rxjs/operators';
@@ -16,6 +16,7 @@ type EntityArrayResponseType = HttpResponse<IJoinClubRequest[]>;
 export class JoinClubRequestService {
     public resourceUrl = SERVER_API_URL + 'api/join-club-requests';
     public resourceSearchUrl = SERVER_API_URL + 'api/_search/join-club-requests';
+    refresh: Subject<any> = new Subject();
 
     constructor(private http: HttpClient) {}
 
@@ -81,5 +82,10 @@ export class JoinClubRequestService {
             });
         }
         return res;
+    }
+
+    RequestsPendingList(): Observable<IJoinClubRequest[]> {
+        return this.http.get<IJoinClubRequest[]>(SERVER_API_URL + 'api/pending-join-club-requests');
+        console.log('here!!!!!!!!!!!');
     }
 }

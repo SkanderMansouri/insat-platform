@@ -1,8 +1,13 @@
 package insat.company.platform.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import insat.company.platform.domain.Club;
 import insat.company.platform.domain.JoinClubRequest;
+import insat.company.platform.domain.User;
+import insat.company.platform.security.SecurityUtils;
+import insat.company.platform.service.ClubService;
 import insat.company.platform.service.JoinClubRequestService;
+import insat.company.platform.service.UserService;
 import insat.company.platform.web.rest.errors.BadRequestAlertException;
 import insat.company.platform.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -15,11 +20,9 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing JoinClubRequest.
@@ -34,8 +37,14 @@ public class JoinClubRequestResource {
 
     private final JoinClubRequestService joinClubRequestService;
 
-    public JoinClubRequestResource(JoinClubRequestService joinClubRequestService) {
+    private final ClubService clubService;
+
+    private final UserService userService ;
+
+    public JoinClubRequestResource(JoinClubRequestService joinClubRequestService, ClubService clubService, UserService userService) {
         this.joinClubRequestService = joinClubRequestService;
+        this.clubService = clubService;
+        this.userService = userService;
     }
 
     /**
@@ -132,6 +141,23 @@ public class JoinClubRequestResource {
     public List<JoinClubRequest> searchJoinClubRequests(@RequestParam String query) {
         log.debug("REST request to search JoinClubRequests for query {}", query);
         return joinClubRequestService.search(query);
+    }
+    @GetMapping("/pending-join-club-requests")
+    @Timed
+    public List<JoinClubRequest> getAllPendingJoinClubRequests() {
+        log.debug("REST request to get all Pending JoinClubRequests");
+        String userLogin = SecurityUtils.getCurrentUserLogin().get();
+        User currentUser = userService.getUserWithAuthoritiesByLogin(userLogin).get();
+        List<JoinClubRequest> Requests= joinClubRequestService.findAll();
+        List<JoinClubRequest> result = new ArrayList<>();
+        for(JoinClubRequest Request : Requests){
+            if ((Request.getClub().getPresident().equals(currentUser))&&(Request.getStatus().toString().equals("PENDING"))){
+                result.add(Request);
+            }
+
+        }
+        return result ;
+
     }
 
 

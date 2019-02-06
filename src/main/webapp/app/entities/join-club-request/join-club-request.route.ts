@@ -10,6 +10,7 @@ import { JoinClubRequestComponent } from './join-club-request.component';
 import { JoinClubRequestDetailComponent } from './join-club-request-detail.component';
 import { JoinClubRequestUpdateComponent } from './join-club-request-update.component';
 import { JoinClubRequestDeletePopupComponent } from './join-club-request-delete-dialog.component';
+import { ManageClubRequestComponent } from './manage-club-request.component';
 import { IJoinClubRequest } from 'app/shared/model/join-club-request.model';
 
 @Injectable({ providedIn: 'root' })
@@ -68,6 +69,15 @@ export const joinClubRequestRoute: Routes = [
         resolve: {
             joinClubRequest: JoinClubRequestResolve
         },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'insatApp.joinClubRequest.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    },
+    {
+        path: 'manage-request',
+        component: ManageClubRequestComponent,
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'insatApp.joinClubRequest.home.title'

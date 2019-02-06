@@ -144,7 +144,8 @@
         <button
             class="btn btn-primary pull-right"
             [routerLink]="['/insat-event/new']">
-            Add new
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span>Add new event</span>
         </button>
         <div class="clearfix"></div>
     </h3>
@@ -205,21 +206,24 @@
                     class="btn btn-danger"
                     (click)="clickdel(index)"
                     [routerLink]= "['/', { outlets: { popup: 'insat-event/'+ event.id + '/delete'} }]">
-                    Delete
+                    <fa-icon [icon]="'times'"></fa-icon>
+                    <span>Delete</span>
                 </button>
             </td>
             <td>
                 <button
                     class="btn btn-primary pull-right"
                     [routerLink]="['/insat-event', event.id, 'edit']">
-                    Edit event
+                    <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                    <span>Edit</span>
                 </button>
             </td>
             <td>
                 <button
                     class="btn btn-success pull-right"
                     [routerLink]="['/insat-event', event.id, 'view']">
-                    View event
+                    <fa-icon [icon]="'eye'"></fa-icon>
+                    <span>View</span>
                 </button>
             </td>
             </tr>

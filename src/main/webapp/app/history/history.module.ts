@@ -10,9 +10,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { insatEventPopupRoute, insatEventRoute } from 'app/entities/insat-event';
 import { DataTableModule } from 'angular-6-datatable';
+import { InsatSharedModule } from 'app/shared';
 const ENTITY_STATES = [...insatEventRoute, ...insatEventPopupRoute];
 @NgModule({
     imports: [
+        InsatSharedModule,
         CommonModule,
         BrowserAnimationsModule,
         FormsModule,

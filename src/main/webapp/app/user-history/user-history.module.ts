@@ -10,10 +10,12 @@ import { RouterModule } from '@angular/router';
 import { insatEventPopupRoute, insatEventRoute } from 'app/entities/insat-event';
 import { UserHistoryComponent } from 'app/user-history/user-history.component';
 import { DataTableModule } from 'angular-6-datatable';
+import { InsatSharedModule } from 'app/shared';
 const ENTITY_STATES = [...insatEventRoute, ...insatEventPopupRoute];
 @NgModule({
     imports: [
         CommonModule,
+        InsatSharedModule,
         BrowserAnimationsModule,
         FormsModule,
         NgbModalModule,

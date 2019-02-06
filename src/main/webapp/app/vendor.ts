@@ -6,6 +6,7 @@ import '../content/css/vendor.css';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
+    faCheck,
     faUser,
     faUsers,
     faSort,
@@ -85,3 +86,4 @@ library.add(faTrashAlt);
 library.add(faAsterisk);
 library.add(faEnvelope);
 library.add(faKey);
+library.add(faCheck);

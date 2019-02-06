@@ -195,14 +195,16 @@
                     class="btn btn-danger"
                     (click)="clickdel(index)"
                 >
-                    Not going !
+                    <fa-icon [icon]="'times'"></fa-icon>
+                    <span>Not going</span>
                 </button>
             </td>
             <td>
                 <button
                     class="btn btn-secondary pull-right"
                     [routerLink]="['/insat-event', event.id, 'view']">
-                     view
+                    <fa-icon [icon]="'eye'"></fa-icon>
+                    <span>view</span>
                 </button>
             </td>
         </tr>
@@ -271,14 +273,16 @@
                 class="btn btn-success"
                 (click)="clickparticpate(index)"
             >
-                participate!
+                <fa-icon [icon]="'check'"></fa-icon>
+                <span>participate</span>
             </button>
         </td>
         <td>
             <button
                 class="btn btn-secondary pull-right"
                 [routerLink]="['/insat-event', event.id, 'view']">
-               view
+                <fa-icon [icon]="'eye'"></fa-icon>
+                <span>view</span>
             </button>
         </td>
     </tr>

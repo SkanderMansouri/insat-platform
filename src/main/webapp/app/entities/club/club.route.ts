@@ -10,6 +10,8 @@ import { ClubComponent } from './club.component';
 import { ClubDetailComponent } from './club-detail.component';
 import { ClubUpdateComponent } from './club-update.component';
 import { ClubDeletePopupComponent } from './club-delete-dialog.component';
+import { ClubListComponent } from './club-list.component';
+import { AllClubComponent } from './all-club.component';
 
 @Injectable({ providedIn: 'root' })
 export class ClubResolve implements Resolve<IClub> {
@@ -64,6 +66,30 @@ export const clubRoute: Routes = [
     {
         path: 'club/:id/edit',
         component: ClubUpdateComponent,
+        resolve: {
+            club: ClubResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'insatApp.club.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    },
+    {
+        path: 'club/list',
+        component: ClubListComponent,
+        resolve: {
+            club: ClubResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'insatApp.club.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    },
+    {
+        path: 'club/all',
+        component: AllClubComponent,
         resolve: {
             club: ClubResolve
         },

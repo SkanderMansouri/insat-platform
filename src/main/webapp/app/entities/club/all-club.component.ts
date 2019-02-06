@@ -9,11 +9,11 @@ import { Principal } from 'app/core';
 import { ClubService } from './club.service';
 
 @Component({
-    selector: 'jhi-club',
-    templateUrl: './club.component.html',
+    selector: 'jhi-all-club',
+    templateUrl: './all-club.component.html',
     styleUrls: ['club.css']
 })
-export class ClubComponent implements OnInit, OnDestroy {
+export class AllClubComponent implements OnInit, OnDestroy {
     clubs: IClub[];
     currentAccount: any;
     eventSubscriber: Subscription;

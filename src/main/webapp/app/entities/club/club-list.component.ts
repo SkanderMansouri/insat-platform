@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
 
 import { IClub } from 'app/shared/model/club.model';
@@ -10,15 +10,18 @@ import { ClubService } from './club.service';
 
 @Component({
     selector: 'jhi-club',
-    templateUrl: './club.component.html',
+    templateUrl: './club-list.component.html',
     styleUrls: ['club.css']
 })
-export class ClubComponent implements OnInit, OnDestroy {
+export class ClubListComponent implements OnInit, OnDestroy {
     clubs: IClub[];
     currentAccount: any;
     eventSubscriber: Subscription;
     currentSearch: string;
     UsersClubs: IClub[];
+    notMemberClubsList: IClub[];
+    usersRequest: IClub[];
+    refresh: Subject<any> = new Subject();
 
     constructor(
         private clubService: ClubService,
@@ -74,8 +77,32 @@ export class ClubComponent implements OnInit, OnDestroy {
         this.clubService.clubsUserList().subscribe(clubsList => {
             this.UsersClubs = clubsList;
         });
+        this.notMemberClubsList = [];
+        this.clubService.NotMemberClubList().subscribe(clubsList => {
+            this.notMemberClubsList = clubsList;
+        });
+        this.usersRequest = [];
+        this.clubService.RequestsList().subscribe(clubsList => {
+            this.usersRequest = clubsList;
+        });
+        this.clubService.refresh.subscribe(() => {
+            this.getAllRequest();
+        });
+        this.clubService.refresh.subscribe(() => {
+            this.getAllNonMemberClubs();
+        });
     }
 
+    getAllNonMemberClubs() {
+        this.clubService.NotMemberClubList().subscribe(clubsList => {
+            this.notMemberClubsList = clubsList;
+        });
+    }
+    getAllRequest() {
+        this.clubService.RequestsList().subscribe(clubsList => {
+            this.usersRequest = clubsList;
+        });
+    }
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
     }
@@ -88,9 +115,11 @@ export class ClubComponent implements OnInit, OnDestroy {
         this.eventSubscriber = this.eventManager.subscribe('clubListModification', response => this.loadAll());
     }
     createJoinRequest(idClub: number) {
-        this.clubService.createRequest(idClub);
+        this.clubService.createRequest(idClub).subscribe(request => {});
     }
-
+    deleteJoinRequest(idClub: number) {
+        this.clubService.deleteRequest(idClub).subscribe(request => {});
+    }
     private onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }

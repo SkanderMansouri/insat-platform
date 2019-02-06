@@ -11,7 +11,7 @@
             </div>
 
             <div class="alert alert-success" *ngIf="success === 'OK'">
-                <p >email sent !!</p>
+                <p> email sent !!</p>
             </div>
 
             <form *ngIf="!success" name="form" role="form" (ngSubmit)="requestReset()" #resetRequestForm="ngForm">

@@ -7,7 +7,6 @@ import insat.company.platform.domain.enumeration.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +20,7 @@ public interface JoinClubRequestRepository extends JpaRepository<JoinClubRequest
     @Query("select join_club_request from JoinClubRequest join_club_request where join_club_request.user.login = ?#{principal.username}")
     List<JoinClubRequest> findByUserIsCurrentUser();
 
+    List<JoinClubRequest> findAllByClub(Club club);
 
     Optional<JoinClubRequest> findOneByUserAndClubAndStatusNot(User user, Club club, Status status);
 

@@ -5,7 +5,8 @@ import { IClub } from 'app/shared/model/club.model';
 
 @Component({
     selector: 'jhi-club-detail',
-    templateUrl: './club-detail.component.html'
+    templateUrl: './club-detail.component.html',
+    styleUrls: ['ClubDetail.css']
 })
 export class ClubDetailComponent implements OnInit {
     club: IClub;

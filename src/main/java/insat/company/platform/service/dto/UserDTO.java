@@ -3,6 +3,7 @@ package insat.company.platform.service.dto;
 import insat.company.platform.config.Constants;
 
 import insat.company.platform.domain.Authority;
+import insat.company.platform.domain.Club;
 import insat.company.platform.domain.User;
 
 import javax.validation.constraints.Email;
@@ -57,6 +58,8 @@ public class UserDTO {
 
     private Set<String> authorities;
 
+    private Set<Club> clubs;
+
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -77,6 +80,7 @@ public class UserDTO {
         this.authorities = user.getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());
+        this.clubs=user.getClubs();
     }
 
     public Long getId() {
@@ -196,6 +200,14 @@ public class UserDTO {
 
     public void setAuthorities(Set<String> authorities) {
         this.authorities = authorities;
+    }
+
+    public Set<Club> getClubs() {
+        return clubs;
+    }
+
+    public void setClubs(Set<Club> clubs) {
+        this.clubs = clubs;
     }
 
     @Override

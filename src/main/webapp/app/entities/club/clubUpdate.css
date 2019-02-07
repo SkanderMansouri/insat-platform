@@ -12,7 +12,7 @@
 /* Style the form icons */
 .icon {
     padding: 10px;
-    background: #327a81;
+    background: #861e28;
     color: white;
     min-width: 50px;
     text-align: center;
@@ -32,7 +32,7 @@
 
 /* Set a style for the submit button */
 .btn {
-    background-color: #0c3171;
+    background-color: #272c34;
 }
 
 .btn:hover {

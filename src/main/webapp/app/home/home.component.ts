@@ -6,6 +6,9 @@ import { LoginModalService, Principal, Account } from 'app/core';
 import { LoginService } from 'app/core/login/login.service';
 import { Router } from '@angular/router';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
+import { FacebookService } from 'ngx-facebook';
+import { LoginResponse } from 'ngx-facebook';
+import { Subject } from 'rxjs/index';
 
 @Component({
     selector: 'jhi-home',
@@ -19,6 +22,8 @@ export class HomeComponent implements OnInit {
     rememberMe: boolean;
     username: string;
     authenticationError: boolean;
+    response: LoginResponse;
+    refresh: Subject<any> = new Subject();
 
     constructor(
         private principal: Principal,
@@ -27,10 +32,32 @@ export class HomeComponent implements OnInit {
         private router: Router,
         private stateStorageService: StateStorageService,
         public activeModal: NgbActiveModal,
-        private loginService: LoginService
+        private loginService: LoginService,
+        private FB: FacebookService
     ) {}
 
     ngOnInit() {
+        (window as any).fbAsyncInit = function() {
+            this.FB.init({
+                appId: '379044816243314',
+                cookie: true,
+                xfbml: true,
+                version: 'v3.1'
+            });
+            this.FB.AppEvents.logPageView();
+        };
+
+        (function(d, s, id) {
+            var js,
+                fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = 'https://connect.facebook.net/en_US/sdk.js';
+            fjs.parentNode.insertBefore(js, fjs);
+        })(document, 'script', 'facebook-jssdk');
         this.principal.identity().then(account => {
             this.account = account;
         });
@@ -84,5 +111,23 @@ export class HomeComponent implements OnInit {
     register() {
         this.activeModal.dismiss('to state register');
         this.router.navigate(['/register']);
+    }
+    loginWithFacebook(): void {
+        console.log('submit login to facebook');
+        // FB.login();
+        this.FB.login().then(response => {
+            console.log('submitLogin', response);
+            if (response.authResponse) {
+                this.loginService.facebooklogin(response.authResponse.accessToken).subscribe(res => {
+                    this.loginService.loginWithToken(res.body.id_token, false);
+                    console.log(res.body);
+                    console.log(this.principal.isAuthenticated());
+                    window.location.reload();
+                    this.router.navigate(['/']);
+                });
+            } else {
+                console.log('User login failed');
+            }
+        });
     }
 }

@@ -12,6 +12,7 @@ import {
     joinClubRequestRoute,
     joinClubRequestPopupRoute
 } from './';
+import { ManageClubRequestComponent } from './manage-club-request.component';
 
 const ENTITY_STATES = [...joinClubRequestRoute, ...joinClubRequestPopupRoute];
 
@@ -22,7 +23,8 @@ const ENTITY_STATES = [...joinClubRequestRoute, ...joinClubRequestPopupRoute];
         JoinClubRequestDetailComponent,
         JoinClubRequestUpdateComponent,
         JoinClubRequestDeleteDialogComponent,
-        JoinClubRequestDeletePopupComponent
+        JoinClubRequestDeletePopupComponent,
+        ManageClubRequestComponent
     ],
     entryComponents: [
         JoinClubRequestComponent,

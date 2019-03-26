@@ -9,10 +9,11 @@ import { Principal } from 'app/core';
 import { JoinClubRequestService } from './join-club-request.service';
 
 @Component({
-    selector: 'jhi-join-club-request',
-    templateUrl: './join-club-request.component.html'
+    selector: 'jhi-manage-club-request',
+    templateUrl: './manage-club-request.component.html',
+    styles: []
 })
-export class JoinClubRequestComponent implements OnInit, OnDestroy {
+export class ManageClubRequestComponent implements OnInit, OnDestroy {
     joinClubRequests: IJoinClubRequest[];
     currentAccount: any;
     eventSubscriber: Subscription;
@@ -73,6 +74,7 @@ export class JoinClubRequestComponent implements OnInit, OnDestroy {
             this.currentAccount = account;
         });
         this.registerChangeInJoinClubRequests();
+
         this.joinClubRequestPendings = [];
         this.joinClubRequestService.RequestsPendingList().subscribe(requestsList => {
             this.joinClubRequestPendings = requestsList;
@@ -84,6 +86,7 @@ export class JoinClubRequestComponent implements OnInit, OnDestroy {
             this.joinClubRequestPendings = requestsList;
         });
     }
+
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
     }

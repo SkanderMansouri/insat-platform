@@ -79,12 +79,28 @@
                                     </ul>
                                 </div>
                             </li>
-                            <li class="sidebar">
+                            <li class="sidebar-dropdown active">
                                 <a  routerLink="join-club-request" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                                     <i class="fa fa-question"></i>
                                     <span>Requests</span>
                                     <span class="badge badge-pill badge-danger">3</span>
                                 </a>
+                                <div class="sidebar-submenu" style="display:block;">
+                                    <ul>
+                                        <li>
+                                            <a *jhiHasAnyAuthority="'ROLE_USER'" routerLink="manage-request"
+                                               routerLinkActive="active">
+                                                <span>Club Requests</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a *jhiHasAnyAuthority="'ROLE_ADMIN'" routerLink="join-club-request"
+                                               routerLinkActive="active">
+                                                <span>Admin Requests</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
                             <li class="sidebar-dropdown active">
                                 <a routerLink="insat-event" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
